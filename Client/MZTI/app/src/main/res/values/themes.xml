@@ -3,7 +3,31 @@
     <style name="Base.Theme.MZTI" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/white</item>
+        <!-- Customize your theme here. -->
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="Theme.MZTI" parent="Base.Theme.MZTI" />
+
+    <style name="ProgressDialogTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowFullscreen">false</item>
+    </style>
+
+    <style name="PADAIDialog" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:background">@color/transparent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>
