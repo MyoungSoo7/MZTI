@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">MZTI</string>
+    <string name="team_name">MZC</string>
 
     <string name="dialog_msg_001">잠시만 기다려 주세요.</string>
     <string name="dialog_msg_002">네트워크 연결이 필요합니다.\n네트워크 연결 후에 다시 실행해주세요.</string>
