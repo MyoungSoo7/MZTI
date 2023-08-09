@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.mzc.mzti.intro.viewmodel.IntroViewModel
 
 
 open class BaseViewModel : ViewModel() {
@@ -46,10 +47,13 @@ open class BaseViewModel : ViewModel() {
 
     class Factory(private val application: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(IntroViewModel::class.java)) {
+                return IntroViewModel(application) as T
+            }
             // 식별되지 않은 ViewModel
-//            else {
-            throw IllegalArgumentException("Unknown ViewModel Class!")
-//            }
+            else {
+                throw IllegalArgumentException("Unknown ViewModel Class!")
+            }
         }
     }
 

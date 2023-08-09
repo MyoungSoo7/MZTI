@@ -5,12 +5,21 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.view.View
+import androidx.lifecycle.ViewModelProvider
 import com.mzc.mzti.R
 import com.mzc.mzti.base.BaseActivity
+import com.mzc.mzti.base.BaseViewModel
 import com.mzc.mzti.databinding.ActivityIntroBinding
+import com.mzc.mzti.intro.viewmodel.IntroViewModel
 
 class IntroActivity : BaseActivity() {
 
+    private val model: IntroViewModel by lazy {
+        ViewModelProvider(
+            this,
+            BaseViewModel.Factory(application)
+        )[IntroViewModel::class.java]
+    }
     private val binding: ActivityIntroBinding by lazy {
         ActivityIntroBinding.inflate(layoutInflater)
     }
@@ -20,8 +29,7 @@ class IntroActivity : BaseActivity() {
             when (msg.obj) {
                 IntroAnim.I_DOWN -> {
                     binding.ivIntroI.post {
-                        val deltaY = binding.ivIntroI.measuredHeight.toFloat()
-                        binding.ivIntroI.animateDown(deltaY) {
+                        binding.ivIntroI.animateDown {
                             val sendMsg = Message.obtain().apply {
                                 obj = IntroAnim.M_UP
                             }
@@ -32,8 +40,7 @@ class IntroActivity : BaseActivity() {
 
                 IntroAnim.M_UP -> {
                     binding.ivIntroM.post {
-                        val deltaY = -binding.ivIntroM.measuredHeight.toFloat()
-                        binding.ivIntroM.animateUp(deltaY) {
+                        binding.ivIntroM.animateUp {
                             val sendMsg = Message.obtain().apply {
                                 obj = IntroAnim.T_RIGHT
                             }
@@ -44,8 +51,7 @@ class IntroActivity : BaseActivity() {
 
                 IntroAnim.T_RIGHT -> {
                     binding.ivIntroT.post {
-                        val deltaX = binding.ivIntroT.measuredWidth.toFloat()
-                        binding.ivIntroT.animateRight(deltaX) {
+                        binding.ivIntroT.animateRight {
                             val sendMsg = Message.obtain().apply {
                                 obj = IntroAnim.M_RIGHT
                             }
@@ -56,8 +62,7 @@ class IntroActivity : BaseActivity() {
 
                 IntroAnim.M_RIGHT -> {
                     binding.ivIntroM.post {
-                        val deltaX = binding.ivIntroM.measuredWidth.toFloat()
-                        binding.ivIntroM.animateRight(deltaX) {
+                        binding.ivIntroM.animateRight {
                             val sendMsg = Message.obtain().apply {
                                 obj = IntroAnim.T_LEFT
                             }
@@ -68,8 +73,7 @@ class IntroActivity : BaseActivity() {
 
                 IntroAnim.T_LEFT -> {
                     binding.ivIntroT.post {
-                        val deltaX = 0f
-                        binding.ivIntroT.animateLeft(deltaX) {
+                        binding.ivIntroT.animateLeft {
                             val sendMsg = Message.obtain().apply {
                                 obj = IntroAnim.M_LEFT
                             }
@@ -80,8 +84,7 @@ class IntroActivity : BaseActivity() {
 
                 IntroAnim.M_LEFT -> {
                     binding.ivIntroM.post {
-                        val deltaX = 0f
-                        binding.ivIntroM.animateLeft(deltaX) {
+                        binding.ivIntroM.animateLeft {
                             val sendMsg = Message.obtain().apply {
                                 obj = IntroAnim.I_UP
                             }
@@ -92,8 +95,7 @@ class IntroActivity : BaseActivity() {
 
                 IntroAnim.I_UP -> {
                     binding.ivIntroI.post {
-                        val deltaY = 0f
-                        binding.ivIntroI.animateUp(deltaY) {
+                        binding.ivIntroI.animateUp {
                             val sendMsg = Message.obtain().apply {
                                 obj = IntroAnim.M_DOWN
                             }
@@ -104,8 +106,7 @@ class IntroActivity : BaseActivity() {
 
                 IntroAnim.M_DOWN -> {
                     binding.ivIntroM.post {
-                        val deltaY = 0f
-                        binding.ivIntroM.animateDown(deltaY) {
+                        binding.ivIntroM.animateDown {
                             val sendMsg = Message.obtain().apply {
                                 obj = IntroAnim.I_DOWN
                             }
@@ -121,11 +122,12 @@ class IntroActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        init()
+        setObserver()
+        startAnimation()
     }
 
-    private fun init() {
-        startAnimation()
+    private fun setObserver() {
+
     }
 
     private fun startAnimation() {
@@ -135,30 +137,34 @@ class IntroActivity : BaseActivity() {
         animHandler.sendMessage(sendMsg)
     }
 
-    private fun View.animateDown(deltaY: Float, endListener: () -> Unit) {
+    private fun View.animateDown(endListener: () -> Unit) {
+        val height = measuredHeight.toFloat()
         animate().setDuration(DURATION)
-            .translationY(deltaY)
+            .translationYBy(height)
             .withEndAction(endListener)
             .start()
     }
 
-    private fun View.animateUp(deltaY: Float, endListener: () -> Unit) {
+    private fun View.animateUp(endListener: () -> Unit) {
+        val height = measuredHeight.toFloat()
         animate().setDuration(DURATION)
-            .translationY(deltaY)
+            .translationYBy(-height)
             .withEndAction(endListener)
             .start()
     }
 
-    private fun View.animateLeft(deltaX: Float, endListener: () -> Unit) {
+    private fun View.animateLeft(endListener: () -> Unit) {
+        val width = measuredWidth.toFloat()
         animate().setDuration(DURATION)
-            .translationX(deltaX)
+            .translationXBy(-width)
             .withEndAction(endListener)
             .start()
     }
 
-    private fun View.animateRight(deltaX: Float, endListener: () -> Unit) {
+    private fun View.animateRight(endListener: () -> Unit) {
+        val width = measuredWidth.toFloat()
         animate().setDuration(DURATION)
-            .translationX(deltaX)
+            .translationXBy(width)
             .withEndAction(endListener)
             .start()
     }
