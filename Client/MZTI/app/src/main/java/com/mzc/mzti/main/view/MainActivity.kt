@@ -1,6 +1,5 @@
 package com.mzc.mzti.main.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.mzc.mzti.R
 import com.mzc.mzti.base.BaseActivity
