@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/tv_mbtiCard_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="18dp"
+        android:fontFamily="@font/noto_sans_kr_medium"
+        android:includeFontPadding="false"
+        android:letterSpacing="-0.05"
+        android:text="@string/mbtiCard_title"
+        android:textColor="@color/text_black"
+        android:textSize="18dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/ib_mbtiCard_download"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:background="@null"
+        android:padding="10dp"
+        android:src="@drawable/icon_download"
+        app:layout_constraintBottom_toBottomOf="@id/tv_mbtiCard_title"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_mbtiCard_title" />
+
+    <View
+        android:id="@+id/view_mbtiCard_divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/border"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_mbtiCard_title" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_mbtiCard"
+        android:layout_width="320dp"
+        android:layout_height="210dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/background_profile_enfj"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingBottom="4dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_mbtiCard_divider">
+
+        <TextView
+            android:id="@+id/tv_mbtiCard_mzti"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/noto_sans_kr_medium"
+            android:includeFontPadding="false"
+            android:letterSpacing="-0.05"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="12dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_mbtiCard_userId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/noto_sans_kr_medium"
+            android:gravity="right"
+            android:includeFontPadding="false"
+            android:letterSpacing="-0.05"
+            android:text="@string/mbtiCard_id"
+            android:textColor="@color/white"
+            android:textSize="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_mbtiCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <com.mzc.mzti.common.custom.MztiCircleView
+            android:id="@+id/cv_mbtiCard_profileBorder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/gl_mbtiCard"
+            app:layout_constraintTop_toTopOf="parent"
+            app:mztiColor="@color/enfj" />
+
+        <ImageView
+            android:id="@+id/iv_mbtiCard_userProfile"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            app:layout_constraintBottom_toBottomOf="@id/cv_mbtiCard_profileBorder"
+            app:layout_constraintLeft_toLeftOf="@id/cv_mbtiCard_profileBorder"
+            app:layout_constraintRight_toRightOf="@id/cv_mbtiCard_profileBorder"
+            app:layout_constraintTop_toTopOf="@id/cv_mbtiCard_profileBorder" />
+
+        <TextView
+            android:id="@+id/tv_mbtiCard_userName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="15dp"
+            android:fontFamily="@font/noto_sans_kr_medium"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:letterSpacing="-0.05"
+            android:text="신짱구"
+            android:textColor="@color/text_black"
+            android:textSize="28dp"
+            app:layout_constraintBottom_toTopOf="@id/tv_mbtiCard_userMbti"
+            app:layout_constraintLeft_toRightOf="@id/gl_mbtiCard"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/tv_mbtiCard_userMbti"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:fontFamily="@font/righteous_regular"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:letterSpacing="-0.05"
+            android:text="ENFJ"
+            android:textColor="@color/text_black"
+            android:textSize="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/gl_mbtiCard"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_mbtiCard_userName" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_mbtiCard_shareMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="30dp"
+        android:fontFamily="@font/noto_sans_kr_regular"
+        android:gravity="right"
+        android:includeFontPadding="false"
+        android:letterSpacing="-0.05"
+        android:text="@string/mbtiCard_shareMsg"
+        android:textColor="@color/text_black"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_mbtiCard" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
