@@ -1,16 +1,24 @@
 package com.mzc.mzti.intro.view
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.view.View
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mzc.mzti.R
 import com.mzc.mzti.base.BaseActivity
 import com.mzc.mzti.base.BaseViewModel
 import com.mzc.mzti.databinding.ActivityIntroBinding
 import com.mzc.mzti.intro.viewmodel.IntroViewModel
+import com.mzc.mzti.main.view.MainActivity
+
+private const val TAG: String = "IntroActivity"
 
 class IntroActivity : BaseActivity() {
 
@@ -124,10 +132,19 @@ class IntroActivity : BaseActivity() {
 
         setObserver()
         startAnimation()
+        requestRequiredPermission()
     }
 
     private fun setObserver() {
-
+        model.isAllRequiredPermissionGranted.observe(this, Observer { isGranted ->
+            if (isGranted) {
+                binding.root.postDelayed({
+                    val mainIntent = Intent(this@IntroActivity, MainActivity::class.java)
+                    startActivity(mainIntent)
+                    finish()
+                }, 2000)
+            }
+        })
     }
 
     private fun startAnimation() {
@@ -136,6 +153,88 @@ class IntroActivity : BaseActivity() {
         }
         animHandler.sendMessage(sendMsg)
     }
+
+    // region 권한 요청 관리
+    private fun requestRequiredPermission() {
+        // 저장공간 권한이 허용되지 않은 경우
+        if (!checkStoragePermission()) {
+        }
+        // 카메라 권한이 허용되지 않은 경우
+        else if (!checkCameraPermission()) {
+        }
+    }
+
+    /**
+     * 저장공간 권한이 있는지 여부를 확인하는 함수
+     *
+     * 만약 저장공간 권한이 없다면, 사용자에게 저장공간 권한을 요청함
+     *
+     * @return 저장공간 권한이 있다면 true, 없다면 false
+     */
+    private fun checkStoragePermission(): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val permissionReadResult =
+                checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES)
+
+            return if (permissionReadResult == PackageManager.PERMISSION_GRANTED) {
+                model.setStoragePermissionState(true)
+                true
+            } else {
+                model.setStoragePermissionState(false)
+                requestPermissions(
+                    arrayOf(Manifest.permission.READ_MEDIA_IMAGES),
+                    PERMISSION_READ_MEDIA
+                )
+                false
+            }
+        } else {
+            val permissionReadResult =
+                checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+            val permissionWriteResult =
+                checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+            return if (permissionReadResult == PackageManager.PERMISSION_GRANTED
+                && permissionWriteResult == PackageManager.PERMISSION_GRANTED
+            ) {
+                model.setStoragePermissionState(true)
+                true
+            } else {
+                model.setStoragePermissionState(false)
+                requestPermissions(
+                    arrayOf(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ),
+                    PERMISSION_STORAGE
+                )
+                false
+            }
+        }
+    }
+
+    /**
+     * 카메라 권한이 있는지 여부를 확인하는 함수
+     *
+     * 만약 카메라 권한이 없다면, 사용자에게 카메라 권한을 요청함
+     *
+     * @return 카메라 권한이 있다면 true, 없다면 false
+     */
+    private fun checkCameraPermission(): Boolean {
+        val permissionResult = checkSelfPermission(Manifest.permission.CAMERA)
+
+        return if (permissionResult == PackageManager.PERMISSION_GRANTED) {
+            model.setCameraPermissionState(true)
+            true
+        } else {
+            model.setCameraPermissionState(false)
+            requestPermissions(
+                arrayOf(Manifest.permission.CAMERA),
+                PERMISSION_CAMERA
+            )
+            false
+        }
+    }
+    // endregion 권한 요청 관리
 
     private fun View.animateDown(endListener: () -> Unit) {
         val height = measuredHeight.toFloat()
@@ -170,7 +269,9 @@ class IntroActivity : BaseActivity() {
     }
 
     companion object {
-        private const val TAG: String = "IntroActivity"
+        private const val PERMISSION_STORAGE: Int = 100
+        private const val PERMISSION_READ_MEDIA: Int = 101
+        private const val PERMISSION_CAMERA: Int = 102
 
         private const val DURATION: Long = 300
     }
