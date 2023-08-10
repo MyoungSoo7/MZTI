@@ -5,5 +5,40 @@
     <color name="transparent">#00FFFFFF</color>
     <color name="dim60">#99000000</color>
 
-    <color name="text_black">#FF202020</color>
+    <color name="intj">#FFC6B0E9</color>
+    <color name="intj_opacity50">#80C6B0E9</color>
+    <color name="intp">#FFE8A7F3</color>
+    <color name="intp_opacity50">#80E8A7F3</color>
+    <color name="entj">#FF8850E1</color>
+    <color name="entj_opacity50">#808850E1</color>
+    <color name="entp">#FFFB83E8</color>
+    <color name="entp_opacity50">#80FB83E8</color>
+    <color name="infj">#FFA9E46D</color>
+    <color name="infj_opacity50">#80A9E46D</color>
+    <color name="infp">#FF68DDAC</color>
+    <color name="infp_opacity50">#8068DDAC</color>
+    <color name="enfj">#FF369834</color>
+    <color name="enfj_opacity50">#80369834</color>
+    <color name="enfp">#FF7CAE3C</color>
+    <color name="enfp_opacity50">#807CAE3C</color>
+    <color name="istj">#FFAAD7FF</color>
+    <color name="istj_opacity50">#80AAD7FF</color>
+    <color name="isfj">#FF6F94F4</color>
+    <color name="isfj_opacity50">#806F94F4</color>
+    <color name="estj">#FF4472E8</color>
+    <color name="estj_opacity50">#804472E8</color>
+    <color name="esfj">#FF4555E8</color>
+    <color name="esfj_opacity50">#804555E8</color>
+    <color name="istp">#FFFFDDA0</color>
+    <color name="istp_opacity50">#80FFDDA0</color>
+    <color name="isfp">#FFF8AB7F</color>
+    <color name="isfp_opacity50">#80F8AB7F</color>
+    <color name="estp">#FFFF8126</color>
+    <color name="estp_opacity50">#80FF8126</color>
+    <color name="esfp">#FFFF7373</color>
+    <color name="esfp_opacity50">#80FF7373</color>
+
+    <color name="border">#FFDADADA</color>
+
+    <color name="text_black">#FF1D1D1F</color>
 </resources>

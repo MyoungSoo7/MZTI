@@ -11,7 +11,6 @@ import android.os.Message
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.mzc.mzti.R
 import com.mzc.mzti.base.BaseActivity
 import com.mzc.mzti.base.BaseViewModel
 import com.mzc.mzti.databinding.ActivityIntroBinding
@@ -142,7 +141,7 @@ class IntroActivity : BaseActivity() {
                     val mainIntent = Intent(this@IntroActivity, MainActivity::class.java)
                     startActivity(mainIntent)
                     finish()
-                }, 2000)
+                }, 2500)
             }
         })
     }

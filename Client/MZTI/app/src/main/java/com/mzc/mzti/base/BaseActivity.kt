@@ -1,5 +1,10 @@
 package com.mzc.mzti.base
 
+import android.content.Context
+import android.graphics.Rect
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -53,5 +58,26 @@ open class BaseActivity : AppCompatActivity() {
         transaction.replace(frameLayoutID, fragment, tag).commit()
     }
     // endregion Fragment 관리
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (ev?.action == MotionEvent.ACTION_DOWN) {
+            val view = currentFocus
+
+            if (view is EditText) {
+                val outRect = Rect()
+                view.getGlobalVisibleRect(outRect)
+
+                if (!outRect.contains(ev.rawX.toInt(), ev.rawY.toInt())) {
+                    view.post {
+                        view.clearFocus()
+                        val imm: InputMethodManager =
+                            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.hideSoftInputFromWindow(view.windowToken, 0)
+                    }
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }
 
 }
