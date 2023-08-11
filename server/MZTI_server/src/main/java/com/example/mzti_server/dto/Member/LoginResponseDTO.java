@@ -1,0 +1,13 @@
+package com.example.mzti_server.dto.Member;
+
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+
+@Data
+@RequiredArgsConstructor
+public class LoginResponseDTO {
+
+    private final String loginId;
+    private final String generateType;
+    private final String accessToken;
+}
