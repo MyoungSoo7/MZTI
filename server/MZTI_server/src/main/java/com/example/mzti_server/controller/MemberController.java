@@ -1,5 +1,7 @@
 package com.example.mzti_server.controller;
 
+import com.example.mzti_server.domain.Member;
+import com.example.mzti_server.dto.FriendListDTO;
 import com.example.mzti_server.dto.Member.LoginRequestDTO;
 import com.example.mzti_server.dto.Member.LoginResponseDTO;
 import com.example.mzti_server.dto.Member.SignupRequestDTO;
@@ -15,9 +17,9 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/")
-    public String userInfo() {
-        return null;
+    @GetMapping("")
+    public Member userInfo(@RequestParam String loginId) {
+        return memberService.findMemberByLoginId(loginId);
     }
 
     @PostMapping("/login")
@@ -28,6 +30,11 @@ public class MemberController {
     @PostMapping("/signup")
     public String signup(@RequestBody SignupRequestDTO signupRequestDTO) {
         return memberService.signup(signupRequestDTO.getLoginId(), signupRequestDTO.getPassword(), signupRequestDTO.getUsername(), signupRequestDTO.getMbti());
+    }
+
+    @GetMapping("/friendList")
+    public FriendListDTO friendlist(@RequestParam String loginId){
+        return memberService.findFriendListByLoginId(loginId);
     }
 
 //    @PostMapping("/signup")
