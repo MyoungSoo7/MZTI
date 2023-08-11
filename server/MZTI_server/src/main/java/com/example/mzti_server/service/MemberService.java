@@ -97,6 +97,15 @@ public class MemberService {
         }
         return null;
     }
+
+    public Member findMemberByToken(String accessToken) {
+        Optional<Member> member = memberRepository.findById(jwtTokenProvider.getMemberId(accessToken));
+        if (member.isPresent()) {
+            return member.get();
+        }else{
+            throw new RuntimeException("토큰에 해당하는 멤버가 없습니다.");
+        }
+    }
 }
 
 //    public String signup(String id, String password, String nickname, String mbti, MultipartFile profileImage) {

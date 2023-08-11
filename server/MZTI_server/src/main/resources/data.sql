@@ -6,16 +6,3 @@ values (1, 1, '빵빵이', null, 'SEXY');
 insert into FriendRelationShip(id, memberId, username, profileImage, mbti)
 values (2, 1, '김옥지', null, 'ININ');
 
-
-
-#     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-#     private Long id;
-#
-# @ManyToOne
-#     @JoinColumn(name = "memberId")
-#     private Member member;
-#
-# private String username;
-# private String profileImage;
-# private String mbti;
-

@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/members")
@@ -17,9 +19,14 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("")
+    @GetMapping("/info")
     public Member userInfo(@RequestParam String loginId) {
         return memberService.findMemberByLoginId(loginId);
+    }
+
+    @GetMapping("")
+    public Member userInfoByToken(HttpServletRequest request){
+        return memberService.findMemberByToken(request.getHeader("Authorization"));
     }
 
     @PostMapping("/login")
