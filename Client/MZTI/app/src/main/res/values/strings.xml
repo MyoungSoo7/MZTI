@@ -10,6 +10,9 @@
     <string name="mbtiCard_title">#MBTI증</string>
     <string name="mbtiCard_id">ID: %1$s</string>
     <string name="mbtiCard_shareMsg">MBTI증을 친구들과 함께 공유해 보세요!</string>
+    <string name="userProfile_profileEdit">프로필 수정하기</string>
+    <string name="userProfile_mbtiTest">MBTI 검사하러 가기</string>
+    <string name="mbtiBadge_title">#MBTI 뱃지</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
