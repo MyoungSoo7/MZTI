@@ -1,13 +1,10 @@
 package com.mzc.mzti.intro.viewmodel
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mzc.mzti.base.BaseViewModel
 
-class IntroViewModel(
-    private val application: Application
-) : BaseViewModel() {
+class IntroViewModel() : BaseViewModel() {
 
     /**
      * 저장공간 권한이 허용되었는지 여부

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.mzc.mzti.intro.viewmodel.IntroViewModel
+import com.mzc.mzti.main.viewmodel.MainViewModel
 
 
 open class BaseViewModel : ViewModel() {
@@ -47,8 +48,13 @@ open class BaseViewModel : ViewModel() {
 
     class Factory(private val application: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            // Intro ViewModel
             if (modelClass.isAssignableFrom(IntroViewModel::class.java)) {
-                return IntroViewModel(application) as T
+                return IntroViewModel() as T
+            }
+            // Main ViewModel
+            else if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
+                return MainViewModel() as T
             }
             // 식별되지 않은 ViewModel
             else {

@@ -1,13 +1,5 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="27dp"
-    android:viewportWidth="24"
-    android:viewportHeight="27">
-    <path
-        android:fillColor="#1D1D1F"
-        android:fillType="evenOdd"
-        android:pathData="M18.545,6.545C18.545,10.16 15.615,13.091 12,13.091C8.385,13.091 5.455,10.16 5.455,6.545C5.455,2.931 8.385,0 12,0C15.615,0 18.545,2.931 18.545,6.545ZM16.364,6.545C16.364,8.955 14.41,10.909 12,10.909C9.59,10.909 7.636,8.955 7.636,6.545C7.636,4.135 9.59,2.182 12,2.182C14.41,2.182 16.364,4.135 16.364,6.545Z" />
-    <path
-        android:fillColor="#1D1D1F"
-        android:pathData="M2.182,25.091C2.182,23.868 2.651,21.958 4.084,20.366C5.485,18.809 7.9,17.455 12,17.455C16.1,17.455 18.515,18.809 19.916,20.366C21.349,21.958 21.818,23.868 21.818,25.091C21.818,25.693 22.307,26.182 22.909,26.182C23.512,26.182 24,25.693 24,25.091C24,23.404 23.378,20.951 21.538,18.907C19.666,16.827 16.628,15.273 12,15.273C7.372,15.273 4.334,16.827 2.462,18.907C0.622,20.951 0,23.404 0,25.091C0,25.693 0.488,26.182 1.091,26.182C1.693,26.182 2.182,25.693 2.182,25.091Z" />
-</vector>
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/icon_tab_profile_selected" android:state_selected="true" />
+    <item android:drawable="@drawable/icon_tab_profile_unselected" />
+</selector>

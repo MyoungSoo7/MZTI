@@ -1,10 +1,5 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="26dp"
-    android:viewportWidth="24"
-    android:viewportHeight="26">
-    <path
-        android:fillColor="#1D1D1F"
-        android:fillType="evenOdd"
-        android:pathData="M12.673,3.037C12.291,2.69 11.709,2.69 11.327,3.037L2,11.517V23.074H8V17.574C8,16.746 8.672,16.074 9.5,16.074H14.5C15.328,16.074 16,16.746 16,17.574V23.074H22V11.517L12.673,3.037ZM9.982,1.557C11.126,0.517 12.874,0.517 14.018,1.557L23.509,10.186C23.822,10.47 24,10.873 24,11.295V23.574C24,24.403 23.328,25.074 22.5,25.074H15.5C14.672,25.074 14,24.403 14,23.574V18.074H10V23.574C10,24.403 9.328,25.074 8.5,25.074H1.5C0.672,25.074 0,24.403 0,23.574V11.295C0,10.873 0.178,10.47 0.491,10.186L9.982,1.557Z" />
-</vector>
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/icon_tab_friends_selected" android:state_selected="true" />
+    <item android:drawable="@drawable/icon_tab_friends_unselected" />
+</selector>
