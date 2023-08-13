@@ -5,4 +5,54 @@
         <attr name="mztiColor" format="color|reference" />
     </declare-styleable>
 
+    <declare-styleable name="MztiBadgeView">
+        <attr name="badgeSize" format="enum">
+            <enum name="small" value="0" />
+            <enum name="large" value="1" />
+        </attr>
+        <attr name="mbti" format="enum">
+            <enum name="ENFJ" value="0" />
+            <enum name="ENFP" value="1" />
+            <enum name="ENTJ" value="2" />
+            <enum name="ENTP" value="3" />
+            <enum name="ESFJ" value="4" />
+            <enum name="ESFP" value="5" />
+            <enum name="ESTJ" value="6" />
+            <enum name="ESTP" value="7" />
+            <enum name="INFJ" value="8" />
+            <enum name="INFP" value="9" />
+            <enum name="INTJ" value="10" />
+            <enum name="INTP" value="11" />
+            <enum name="ISFJ" value="12" />
+            <enum name="ISFP" value="13" />
+            <enum name="ISTJ" value="14" />
+            <enum name="ISTP" value="15" />
+            <enum name="MZTI" value="16" />
+        </attr>
+        <attr name="mbtiSize0" format="enum">
+            <enum name="XL" value="0" />
+            <enum name="L" value="1" />
+            <enum name="M" value="2" />
+            <enum name="S" value="3" />
+        </attr>
+        <attr name="mbtiSize1" format="enum">
+            <enum name="XL" value="0" />
+            <enum name="L" value="1" />
+            <enum name="M" value="2" />
+            <enum name="S" value="3" />
+        </attr>
+        <attr name="mbtiSize2" format="enum">
+            <enum name="XL" value="0" />
+            <enum name="L" value="1" />
+            <enum name="M" value="2" />
+            <enum name="S" value="3" />
+        </attr>
+        <attr name="mbtiSize3" format="enum">
+            <enum name="XL" value="0" />
+            <enum name="L" value="1" />
+            <enum name="M" value="2" />
+            <enum name="S" value="3" />
+        </attr>
+    </declare-styleable>
+
 </resources>
