@@ -8,15 +8,12 @@ import android.graphics.Rect
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
-import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.mzc.mzti.R
 import com.mzc.mzti.dp2px
-import com.mzc.mzti.model.data.MBTI
+import com.mzc.mzti.model.data.mbti.MBTI
+import com.mzc.mzti.model.data.mbti.MbtiSize
 import kotlin.math.max
 
 private const val TAG: String = "MztiBadgeView"
@@ -251,10 +248,6 @@ class MztiBadgeView : View {
 
     private enum class BadgeSize {
         SMALL, LARGE
-    }
-
-    enum class MbtiSize {
-        XL, L, M, S
     }
 
 }
