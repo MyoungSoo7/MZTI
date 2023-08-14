@@ -8,9 +8,12 @@ import com.example.mzti_server.dto.Question.QuestionDTO;
 import com.example.mzti_server.repository.AnswerRepository;
 import com.example.mzti_server.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,19 +25,26 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
 
-    public QuestionDTO getQuestion(Long qId) {
+    private static ResponseEntity<LinkedHashMap<String, Object>> getResponse(Object saveMember) {
+        LinkedHashMap<String, Object> response = new LinkedHashMap<>();
+        response.put("result_code", "200");
+        response.put("result_data", saveMember);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    public ResponseEntity<LinkedHashMap<String, Object>> getQuestion(Long qId) {
         Question question = questionRepository.findById(qId).get();
         List<Answer> answers = answerRepository.findAllByQuestionId(qId);
         List<String> answersList = answers.stream()
                 .map(answer -> answer.getAnswerContent() + " (" + answer.getMbti() + ")")
                 .collect(Collectors.toList());
-        return QuestionDTO.builder()
+        return getResponse(QuestionDTO.builder()
                 .questionContent(question.getQuestionContent())
                 .answer(answersList)
-                .build();
+                .build());
     }
 
-    public QuestionAnswerResponseDTO getQuestionAnswers(int questionCount, String mbti) {
+    public ResponseEntity<LinkedHashMap<String, Object>> getQuestionAnswers(int questionCount, String mbti) {
         List<Question> randomQuestions = questionRepository.findRandomQuestions(questionCount);
         List<QuestionAnswer> qa = new ArrayList<>();
         for (int i = 0; i < questionCount; i++) {
@@ -51,6 +61,6 @@ public class QuestionService {
                     .build());
         }
         QuestionAnswerResponseDTO questionAnswerResponseDTO = new QuestionAnswerResponseDTO(mbti, qa);
-        return questionAnswerResponseDTO;
+        return getResponse(questionAnswerResponseDTO);
     }
 }
