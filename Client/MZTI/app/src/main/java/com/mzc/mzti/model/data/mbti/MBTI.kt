@@ -1,4 +1,4 @@
-package com.mzc.mzti.model.data
+package com.mzc.mzti.model.data.mbti
 
 enum class MBTI {
     ENFJ,
