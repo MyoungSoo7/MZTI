@@ -4,6 +4,8 @@
 
     <string name="dialog_msg_001">잠시만 기다려 주세요.</string>
     <string name="dialog_msg_002">네트워크 연결이 필요합니다.\n네트워크 연결 후에 다시 실행해주세요.</string>
+
+    <string name="toast_msg_success_save_mbti_card">MBTI 증을 저장했어요.</string>
     <string name="toast_msg_error_001">예기치 못한 오류가 발생했습니다. 잠시 후에 다시 시도해 주세요.</string>
 
     <string name="userProfile_title">프로필</string>
@@ -13,6 +15,10 @@
     <string name="userProfile_profileEdit">프로필 수정하기</string>
     <string name="userProfile_mbtiTest">MBTI 검사하러 가기</string>
     <string name="mbtiBadge_title">#MBTI 뱃지</string>
+    <string name="mbtiBadge_badgeInfo">MBTI 학습을 통해 뱃지를 모을 수 있어요!</string>
+    <string name="mbtiBadge_letsGoTest">뱃지 모으러 가기</string>
+    <string name="appVersion_title">앱 버전</string>
+    <string name="appVersion_versionName">ver %1$s</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

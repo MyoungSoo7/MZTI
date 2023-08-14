@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.mzc.mzti.intro.viewmodel.IntroViewModel
 import com.mzc.mzti.main.viewmodel.MainViewModel
+import com.mzc.mzti.model.repository.download.DownloadRepository
 
 
 open class BaseViewModel : ViewModel() {
@@ -54,7 +55,9 @@ open class BaseViewModel : ViewModel() {
             }
             // Main ViewModel
             else if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-                return MainViewModel() as T
+                return MainViewModel(
+                    DownloadRepository(application)
+                ) as T
             }
             // 식별되지 않은 ViewModel
             else {

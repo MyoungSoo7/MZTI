@@ -112,9 +112,7 @@ class MztiCircleView : View {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        if (canvas != null) {
-            canvas.drawOval(getRect(), mPaint)
-        }
+        canvas?.drawOval(getRect(), mPaint)
     }
 
     fun setDiningColor(@ColorInt pColorInt: Int) {

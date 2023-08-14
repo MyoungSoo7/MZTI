@@ -1,5 +1,6 @@
 package com.mzc.mzti.main.view
 
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.Observer
@@ -11,7 +12,9 @@ import com.mzc.mzti.common.util.DLog
 import com.mzc.mzti.databinding.ActivityMainBinding
 import com.mzc.mzti.intro.viewmodel.IntroViewModel
 import com.mzc.mzti.main.viewmodel.MainViewModel
+import com.mzc.mzti.model.data.download.DownloadResult
 import com.mzc.mzti.model.data.router.MztiTabRouter
+import com.mzc.mzti.profile.view.UserProfileFragment
 
 private const val TAG: String = "MainActivity"
 
@@ -26,6 +29,8 @@ class MainActivity : BaseActivity() {
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
+
+    private val userProfileFragment: UserProfileFragment = UserProfileFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +64,7 @@ class MainActivity : BaseActivity() {
                 }
 
                 MztiTabRouter.TAB_PROFILE -> {
-
+                    setFragment(R.id.fl_main, userProfileFragment)
                 }
 
                 else -> {
@@ -67,10 +72,61 @@ class MainActivity : BaseActivity() {
                 }
             }
         })
+
+        model.saveBmpResult.observe(this, Observer { result ->
+            when (result) {
+                is DownloadResult.Success<Uri?> -> {
+                    model.setProgressFlag(false)
+                    showToastMsg(getString(R.string.toast_msg_success_save_mbti_card))
+                }
+
+                is DownloadResult.Fail -> {
+                    model.setProgressFlag(false)
+                    DLog.e(TAG, result.msg)
+                }
+
+                is DownloadResult.Error -> {
+                    model.setProgressFlag(false)
+                    DLog.e(TAG, result.exception.stackTraceToString())
+                }
+
+                else -> {
+                }
+            }
+        })
     }
 
     private fun init() {
+        binding.apply {
+            navMain.setOnItemSelectedListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.menu_friends -> {
+                        model.setTabRouter(MztiTabRouter.TAB_FRIENDS)
+                        true
+                    }
 
+                    R.id.menu_compare -> {
+                        model.setTabRouter(MztiTabRouter.TAB_COMPARE)
+                        true
+                    }
+
+                    R.id.menu_learning -> {
+                        model.setTabRouter(MztiTabRouter.TAB_LEARNING)
+                        true
+                    }
+
+                    R.id.menu_profile -> {
+                        model.setTabRouter(MztiTabRouter.TAB_PROFILE)
+                        true
+                    }
+
+                    else -> {
+                        DLog.e(TAG, "Unrecognized menuItem, ${menuItem.itemId}")
+                        false
+                    }
+                }
+            }
+        }
     }
 
     override fun onBackPressed() {

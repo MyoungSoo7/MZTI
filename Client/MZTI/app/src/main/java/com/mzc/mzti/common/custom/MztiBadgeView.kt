@@ -245,7 +245,7 @@ class MztiBadgeView : View {
         _mbtiSize1 = pMbtiSize1
         _mbtiSize2 = pMbtiSize2
         _mbtiSize3 = pMbtiSize3
-        
+
         _mbti = pMbti
     }
 
