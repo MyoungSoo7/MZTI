@@ -32,4 +32,6 @@ public class QuestionController {
     public ResponseEntity<LinkedHashMap<String, Object>> getQuestionAnswers(@RequestBody QuestionCountMbtiDTO dto){
         return questionService.getQuestionAnswers(dto.getQuestionCount(), dto.getMbti());
     }
+
+    // @Operation(summary = "문제 모두 가져오기", description = "mbti와 문제 개수를 받으면 모든 문제들의 보기와 정답을 제공합니다.")
 }
