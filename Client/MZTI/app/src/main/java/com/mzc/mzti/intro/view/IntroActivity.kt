@@ -13,9 +13,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mzc.mzti.base.BaseActivity
 import com.mzc.mzti.base.BaseViewModel
+import com.mzc.mzti.common.session.MztiSession
+import com.mzc.mzti.common.util.DLog
 import com.mzc.mzti.databinding.ActivityIntroBinding
 import com.mzc.mzti.intro.viewmodel.IntroViewModel
 import com.mzc.mzti.main.view.MainActivity
+import com.mzc.mzti.model.data.network.NetworkResult
+import com.mzc.mzti.model.data.user.UserInfoData
+import com.mzc.mzti.sign.view.SignActivity
 
 private const val TAG: String = "IntroActivity"
 
@@ -130,20 +135,62 @@ class IntroActivity : BaseActivity() {
         setContentView(binding.root)
 
         setObserver()
-        startAnimation()
-        requestRequiredPermission()
+        init()
     }
 
     private fun setObserver() {
+        model.userInfoData.observe(this, Observer { result ->
+            when (result) {
+                is NetworkResult.Success<UserInfoData> -> {
+                    val userInfoData = result.data
+                    MztiSession.login(
+                        pUserId = userInfoData.id,
+                        pGenerateType = userInfoData.generateType,
+                        pUserToken = userInfoData.token,
+                        pUserNickname = userInfoData.nickname,
+                        pUserMBTI = userInfoData.mbti,
+                        pUserProfileImg = userInfoData.profileImg
+                    )
+                    requestRequiredPermission()
+                }
+
+                is NetworkResult.Fail,
+                is NetworkResult.Error -> {
+                    MztiSession.logout()
+                    requestRequiredPermission()
+                }
+
+                else -> {
+                }
+            }
+        })
+
         model.isAllRequiredPermissionGranted.observe(this, Observer { isGranted ->
+            DLog.d(TAG, "isGranted=$isGranted")
             if (isGranted) {
-                binding.root.postDelayed({
+                if (MztiSession.isLogin) {
                     val mainIntent = Intent(this@IntroActivity, MainActivity::class.java)
                     startActivity(mainIntent)
                     finish()
-                }, 2500)
+                } else {
+                    val signIntent = Intent(this@IntroActivity, SignActivity::class.java)
+                    startActivity(signIntent)
+                    finish()
+                }
             }
         })
+    }
+
+    private fun init() {
+        startAnimation()
+
+        if (MztiSession.isLogin) {
+            val token = MztiSession.userToken
+            val generateType = MztiSession.generateType
+            model.requestUserInfo(token, generateType)
+        } else {
+            requestRequiredPermission()
+        }
     }
 
     private fun startAnimation() {
