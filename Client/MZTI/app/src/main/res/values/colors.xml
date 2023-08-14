@@ -5,6 +5,11 @@
     <color name="transparent">#00FFFFFF</color>
     <color name="dim60">#99000000</color>
 
+    <color name="logo_m_purple">#FFC6B0E9</color>
+    <color name="logo_z_orange">#FFFFDDA0</color>
+    <color name="logo_t_green">#FF9ADC99</color>
+    <color name="logo_i_blue">#FFAAD7FF</color>
+
     <color name="intj">#FFC6B0E9</color>
     <color name="intj_opacity50">#80C6B0E9</color>
     <color name="intp">#FFE8A7F3</color>
@@ -39,6 +44,14 @@
     <color name="esfp_opacity50">#80FF7373</color>
 
     <color name="border">#FFDADADA</color>
+    <color name="c_eaeaea">#FFEAEAEA</color>
+
+    <color name="black_button_deactivated">#991D1D1F</color>
+    <color name="black_button_activated">#FF1D1D1F</color>
 
     <color name="text_black">#FF1D1D1F</color>
+    <color name="text_hint">#FF7E7E7E</color>
+
+    <color name="confirm_blue">#FF1A6CBD</color>
+    <color name="cancel_red">#FFB95338</color>
 </resources>

@@ -1,0 +1,86 @@
+package com.mzc.mzti.model.repository.network
+
+import android.content.Context
+import com.mzc.mzti.R
+import com.mzc.mzti.base.BaseNetworkRepository
+import com.mzc.mzti.common.util.DLog
+import com.mzc.mzti.model.data.network.NetworkResult
+import com.mzc.mzti.model.data.user.UserInfoData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.json.JSONException
+import org.json.JSONObject
+
+private const val TAG: String = "MztiNetworkRepository"
+
+class MztiRepository(
+    private val context: Context
+) : BaseNetworkRepository(context, TAG) {
+
+    suspend fun makeLoginRequest(
+        pLoginId: String,
+        pLoginPw: String
+    ): NetworkResult<UserInfoData> {
+        return withContext(Dispatchers.IO) {
+            val hsParams = hashMapOf<String, Any>().apply {
+                put("loginId", pLoginId)
+                put("password", pLoginPw)
+            }
+
+            val loginUrl = "${BASE_URL}members/login"
+            val message = sendRequestToMztiServer(loginUrl, hsParams, POST)
+            DLog.d(TAG, "message=$message")
+
+            if (message.isNotEmpty()) {
+                try {
+                    val jsonRoot = JSONObject(message)
+                    val data = jsonParserUtil.getLoginResponseDTO(jsonRoot)
+
+                    if (data != null) {
+                        NetworkResult.Success(data)
+                    } else {
+                        NetworkResult.Fail("resultCode 확인 필요")
+                    }
+                } catch (e: JSONException) {
+                    DLog.e(TAG, e.stackTraceToString())
+                    NetworkResult.Error(e)
+                }
+            } else {
+                NetworkResult.Fail(
+                    context.getString(R.string.api_connection_fail_msg)
+                )
+            }
+        }
+    }
+
+    suspend fun makeCheckIdRequest(pSignUpId: String): NetworkResult<Boolean> {
+        return withContext(Dispatchers.IO) {
+            val hsParams = hashMapOf<String, Any>().apply {
+                put("id", pSignUpId)
+            }
+
+            val checkIdUrl = "${BASE_URL}"
+            val message = sendRequestToMztiServer(checkIdUrl, hsParams, POST)
+            DLog.d(TAG, "message=$message")
+
+            if (message.isNotEmpty()) {
+                try {
+                    val jsonRoot = JSONObject(message)
+
+                } catch (e: JSONException) {
+                    DLog.e(TAG, e.stackTraceToString())
+                    NetworkResult.Error(e)
+                }
+            } else {
+                NetworkResult.Fail(
+                    context.getString(R.string.api_connection_fail_msg)
+                )
+            }
+
+            NetworkResult.Fail(
+                context.getString(R.string.api_connection_fail_msg)
+            )
+        }
+    }
+
+}

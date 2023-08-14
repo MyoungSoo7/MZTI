@@ -1,7 +1,9 @@
 package com.mzc.mzti.base
 
-import android.app.Application
+import android.content.Context
 import com.mzc.mzti.common.util.DLog
+import com.mzc.mzti.common.util.JsonParserUtil
+import org.json.JSONObject
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.BufferedWriter
@@ -21,13 +23,15 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.X509TrustManager
 
 open class BaseNetworkRepository(
-    private val application: Application,
+    private val context: Context,
     private val TAG: String
 ) {
 
+    protected val jsonParserUtil = JsonParserUtil()
+
     protected fun sendRequest(
         strUrl: String,
-        hsParams: HashMap<String, String>,
+        hsParams: HashMap<String, Any>,
         urlState: String
     ): String {
         val connection: HttpURLConnection
@@ -90,6 +94,69 @@ open class BaseNetworkRepository(
         return message
     }
 
+    protected fun sendRequestToMztiServer(
+        strUrl: String,
+        hsParams: HashMap<String, Any>,
+        urlState: String,
+        authorization: String = ""
+    ): String {
+        val connection: HttpURLConnection
+        var message: String = ""
+        try {
+            val url: URL =
+                if (urlState == "GET") URL("${strUrl}?${getParams(hsParams)}") else URL(strUrl)
+
+            DLog.d(TAG, "strUrl=$strUrl")
+            // Https Protocol Check
+            connection = if (url.protocol == "https") {
+                trustAllHosts()
+                val https = url.openConnection() as HttpsURLConnection
+                https.hostnameVerifier = DO_NOT_VERIFY
+                https
+            } else {
+                url.openConnection() as HttpURLConnection
+            }
+
+            connection.apply {
+                readTimeout = TIME_OUT
+                connectTimeout = TIME_OUT
+                requestMethod = urlState
+                setRequestProperty("Accept", "application/json")
+                setRequestProperty("Content-Type", "application/json")
+
+                if (authorization.isNotEmpty()) {
+                    setRequestProperty("Authorization", authorization)
+                }
+            }
+
+            if (hsParams.isNotEmpty()) {
+                connection.doOutput = true
+
+                val os = connection.outputStream
+                val writer = BufferedWriter(OutputStreamWriter(os, "UTF-8"))
+
+                val jsonParams = getParamsToJson(hsParams)
+                DLog.d(TAG, "jsonParams=$jsonParams")
+                writer.write(jsonParams)
+
+                writer.flush()
+                writer.close()
+
+                os.flush()
+                os.close()
+            }
+
+            val bis = BufferedInputStream(connection.inputStream)
+            message = getMessage(bis)
+
+        } catch (e: Exception) {
+            DLog.e(TAG, "msg=${e.message}", e)
+            message = ""
+        }
+
+        return message
+    }
+
     private fun getMessage(inputStream: InputStream?): String {
         val builder = java.lang.StringBuilder()
         var reader: BufferedReader? = null
@@ -112,7 +179,7 @@ open class BaseNetworkRepository(
         return builder.toString()
     }
 
-    private fun getParams(hsParams: HashMap<String, String>): String {
+    private fun getParams(hsParams: HashMap<String, Any>): String {
         val sb = StringBuilder()
 
         val iterator = hsParams.entries.iterator()
@@ -124,14 +191,26 @@ open class BaseNetworkRepository(
 
             sb.append(URLEncoder.encode(entry.key, "UTF-8"))
             sb.append("=")
-            sb.append(URLEncoder.encode(entry.value, "UTF-8"))
+            sb.append(URLEncoder.encode(entry.value.toString(), "UTF-8"))
         }
 
         return sb.toString()
     }
 
+    private fun getParamsToJson(hsParams: HashMap<String, Any>): String {
+        val jsonObj = JSONObject()
+
+        val iterator = hsParams.entries.iterator()
+        while (iterator.hasNext()) {
+            val entry = iterator.next()
+            jsonObj.put(entry.key, entry.value)
+        }
+
+        return jsonObj.toString()
+    }
+
     companion object {
-        const val BASE_URL: String = ""
+        const val BASE_URL: String = "http://3.35.231.108/"
 
         const val POST: String = "POST"
         const val GET: String = "GET"

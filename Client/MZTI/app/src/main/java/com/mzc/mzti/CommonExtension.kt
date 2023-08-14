@@ -6,6 +6,8 @@ import android.text.SpannedString
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -148,3 +150,14 @@ fun String.applyTextSize(
     }
 }
 
+fun EditText.clearFocus(pIsHideKeyboard: Boolean = true) {
+    post {
+        this.clearFocus()
+
+        if (pIsHideKeyboard) {
+            val imm: InputMethodManager =
+                context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(this.windowToken, 0)
+        }
+    }
+}

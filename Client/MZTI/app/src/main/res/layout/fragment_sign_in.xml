@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".sign.view.SignInFragment">
+
+    <ImageView
+        android:id="@+id/iv_signIn_m"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="126dp"
+        android:padding="2dp"
+        android:src="@drawable/icon_logo_m"
+        app:layout_constraintBottom_toTopOf="@id/iv_signIn_t"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/iv_signIn_z"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <ImageView
+        android:id="@+id/iv_signIn_z"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        android:src="@drawable/icon_logo_z"
+        app:layout_constraintBottom_toBottomOf="@id/iv_signIn_m"
+        app:layout_constraintLeft_toRightOf="@id/iv_signIn_m"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_signIn_m" />
+
+    <ImageView
+        android:id="@+id/iv_signIn_t"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        android:src="@drawable/icon_logo_t"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/iv_signIn_i"
+        app:layout_constraintTop_toBottomOf="@id/iv_signIn_m" />
+
+    <ImageView
+        android:id="@+id/iv_signIn_i"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        android:src="@drawable/icon_logo_i"
+        app:layout_constraintBottom_toBottomOf="@id/iv_signIn_t"
+        app:layout_constraintLeft_toRightOf="@id/iv_signIn_t"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_signIn_t" />
+
+    <EditText
+        android:id="@+id/et_signIn_id"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/background_mzti_content"
+        android:fontFamily="@font/noto_sans_kr_regular"
+        android:hint="@string/signIn_idHint"
+        android:imeOptions="actionNext"
+        android:includeFontPadding="false"
+        android:inputType="text"
+        android:letterSpacing="-0.05"
+        android:paddingLeft="20dp"
+        android:paddingTop="15dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="15dp"
+        android:textColor="@color/text_black"
+        android:textColorHint="@color/text_hint"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toTopOf="@id/et_signIn_pw"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <EditText
+        android:id="@+id/et_signIn_pw"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/background_mzti_content"
+        android:fontFamily="@font/noto_sans_kr_regular"
+        android:hint="@string/signIn_pwHint"
+        android:imeOptions="actionDone"
+        android:includeFontPadding="false"
+        android:inputType="textPassword"
+        android:letterSpacing="-0.05"
+        android:paddingLeft="20dp"
+        android:paddingTop="15dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="15dp"
+        android:textColor="@color/text_black"
+        android:textColorHint="@color/text_hint"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_signIn_id" />
+
+    <Button
+        android:id="@+id/btn_signIn"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/background_black_button"
+        android:enabled="false"
+        android:fontFamily="@font/noto_sans_kr_medium"
+        android:includeFontPadding="false"
+        android:letterSpacing="-0.05"
+        android:text="@string/signIn"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_signIn_pw" />
+
+    <TextView
+        android:id="@+id/tv_signIn_letsGoSignUp"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@drawable/background_border_top"
+        android:fontFamily="@font/noto_sans_kr_regular"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:letterSpacing="-0.05"
+        android:text="@string/signIn_letsGoSignUp"
+        android:textColor="@color/text_hint"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

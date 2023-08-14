@@ -3,13 +3,11 @@ package com.mzc.mzti.profile.view
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mzc.mzti.R
 import com.mzc.mzti.base.BaseFragment
 import com.mzc.mzti.common.custom.WrapContentLinearLayoutManager
 import com.mzc.mzti.databinding.FragmentUserProfileBinding

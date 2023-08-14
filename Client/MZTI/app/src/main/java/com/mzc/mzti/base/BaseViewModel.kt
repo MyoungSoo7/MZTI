@@ -8,6 +8,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.mzc.mzti.intro.viewmodel.IntroViewModel
 import com.mzc.mzti.main.viewmodel.MainViewModel
 import com.mzc.mzti.model.repository.download.DownloadRepository
+import com.mzc.mzti.model.repository.network.MztiRepository
+import com.mzc.mzti.profileedit.viewmodel.UserProfileEditViewModel
+import com.mzc.mzti.sign.viewmodel.SignViewModel
 
 
 open class BaseViewModel : ViewModel() {
@@ -51,12 +54,24 @@ open class BaseViewModel : ViewModel() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             // Intro ViewModel
             if (modelClass.isAssignableFrom(IntroViewModel::class.java)) {
-                return IntroViewModel() as T
+                return IntroViewModel(
+                    MztiRepository(application)
+                ) as T
             }
             // Main ViewModel
             else if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
                 return MainViewModel(
                     DownloadRepository(application)
+                ) as T
+            }
+            // UserProfileEdit ViewModel
+            else if (modelClass.isAssignableFrom(UserProfileEditViewModel::class.java)) {
+                return UserProfileEditViewModel() as T
+            }
+            // Sign ViewModel
+            else if (modelClass.isAssignableFrom(SignViewModel::class.java)) {
+                return SignViewModel(
+                    MztiRepository(application)
                 ) as T
             }
             // 식별되지 않은 ViewModel

@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".profileedit.view.UserProfileEditActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_userProfileEdit_title"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/ib_userProfileEdit_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:background="@null"
+            android:padding="10dp"
+            android:src="@drawable/icon_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_userProfileEdit_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="17dp"
+            android:fontFamily="@font/noto_sans_kr_medium"
+            android:includeFontPadding="false"
+            android:letterSpacing="-0.05"
+            android:text="@string/userProfileEdit_title"
+            android:textColor="@color/text_black"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@id/ib_userProfileEdit_back"
+            app:layout_constraintLeft_toRightOf="@id/ib_userProfileEdit_back"
+            app:layout_constraintRight_toLeftOf="@id/tv_userProfileEdit_confirm"
+            app:layout_constraintTop_toTopOf="@id/ib_userProfileEdit_back" />
+
+        <TextView
+            android:id="@+id/tv_userProfileEdit_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:fontFamily="@font/noto_sans_kr_medium"
+            android:includeFontPadding="false"
+            android:letterSpacing="-0.05"
+            android:padding="10dp"
+            android:text="@string/confirm_btn"
+            android:textColor="@color/confirm_blue"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/tv_userProfileEdit_title"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_userProfileEdit_mbtiCard"
+        android:layout_width="320dp"
+        android:layout_height="210dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/background_profile_enfj_test"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_userProfileEdit_title">
+
+        <com.mzc.mzti.common.custom.MztiCircleView
+            android:id="@+id/cv_userProfileEdit_profileBorder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            app:layout_constraintBottom_toTopOf="@id/tv_userProfileEdit_changeProfileImg"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:mztiColor="@color/enfj" />
+
+        <ImageView
+            android:id="@+id/iv_userProfileEdit_userProfile"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            app:layout_constraintBottom_toBottomOf="@id/cv_userProfileEdit_profileBorder"
+            app:layout_constraintLeft_toLeftOf="@id/cv_userProfileEdit_profileBorder"
+            app:layout_constraintRight_toRightOf="@id/cv_userProfileEdit_profileBorder"
+            app:layout_constraintTop_toTopOf="@id/cv_userProfileEdit_profileBorder" />
+
+        <TextView
+            android:id="@+id/tv_userProfileEdit_changeProfileImg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/noto_sans_kr_medium"
+            android:includeFontPadding="false"
+            android:letterSpacing="-0.05"
+            android:text="@string/userProfileEdit_changeProfileImg"
+            android:textColor="@color/confirm_blue"
+            android:textSize="14dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cv_userProfileEdit_profileBorder" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/view_userProfileEdit_topDivider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/border"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_userProfileEdit_mbtiCard" />
+
+
+    <TextView
+        android:id="@+id/tv_userProfileEdit_idTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/noto_sans_kr_medium"
+        android:includeFontPadding="false"
+        android:letterSpacing="-0.05"
+        android:text="@string/userProfileEdit_id"
+        android:textColor="@color/text_black"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_userProfileEdit_topDivider" />
+
+    <TextView
+        android:id="@+id/tv_userProfileEdit_id"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:fontFamily="@font/noto_sans_kr_medium"
+        android:includeFontPadding="false"
+        android:letterSpacing="-0.05"
+        android:text="kimbsu00"
+        android:textColor="@color/text_hint"
+        android:textSize="18dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_userProfileEdit_idTitle" />
+
+    <View
+        android:id="@+id/view_userProfileEdit_divider1"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/border"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_userProfileEdit_id" />
+
+    <TextView
+        android:id="@+id/tv_userProfileEdit_nicknameTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/noto_sans_kr_medium"
+        android:includeFontPadding="false"
+        android:letterSpacing="-0.05"
+        android:text="@string/userProfileEdit_nickname"
+        android:textColor="@color/text_black"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_userProfileEdit_divider1" />
+
+    <EditText
+        android:id="@+id/et_userProfileEdit_nickname"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:background="@null"
+        android:fontFamily="@font/noto_sans_kr_medium"
+        android:imeOptions="actionDone"
+        android:includeFontPadding="false"
+        android:inputType="text"
+        android:letterSpacing="-0.05"
+        android:text="네모세모"
+        android:textColor="@color/text_black"
+        android:textSize="18dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_userProfileEdit_nicknameTitle" />
+
+    <View
+        android:id="@+id/view_userProfileEdit_divider2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/border"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_userProfileEdit_nickname" />
+
+    <TextView
+        android:id="@+id/tv_userProfileEdit_mbtiTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/noto_sans_kr_medium"
+        android:includeFontPadding="false"
+        android:letterSpacing="-0.05"
+        android:text="@string/userProfileEdit_mbti"
+        android:textColor="@color/text_black"
+        android:textSize="14dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_userProfileEdit_divider2" />
+
+    <TextView
+        android:id="@+id/tv_userProfileEdit_mbti"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:fontFamily="@font/noto_sans_kr_medium"
+        android:includeFontPadding="false"
+        android:letterSpacing="-0.05"
+        android:text="ISTJ"
+        android:textColor="@color/text_black"
+        android:textSize="18dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_userProfileEdit_mbtiTitle" />
+
+    <View
+        android:id="@+id/view_userProfileEdit_bottomDivider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/border"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_userProfileEdit_mbti" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

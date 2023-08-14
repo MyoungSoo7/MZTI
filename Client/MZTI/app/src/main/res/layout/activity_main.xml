@@ -20,7 +20,7 @@
         android:id="@+id/nav_main"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/back_border_top"
+        android:background="@drawable/background_border_top"
         app:itemIconTint="@drawable/tint_mzti_bottom_nav_icon"
         app:itemTextColor="@color/color_mzti_bottom_nav_selector"
         app:labelVisibilityMode="unlabeled"
