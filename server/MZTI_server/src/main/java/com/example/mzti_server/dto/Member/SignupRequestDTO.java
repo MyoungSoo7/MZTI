@@ -2,10 +2,12 @@ package com.example.mzti_server.dto.Member;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 public class SignupRequestDTO {
-    private String loginId;
-    private String password;
-    private String username;
-    private String mbti;
+    @NotNull private String loginId;
+    @NotNull private String password;
+    @NotNull private String username;
+    @NotNull private String mbti;
 }

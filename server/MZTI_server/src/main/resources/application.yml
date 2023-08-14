@@ -16,7 +16,7 @@ spring:
     driver-class-name:
       com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/MZTI
-    #url: jdbc:mysql://3.35.231.108:3306/MZTI
+    # url: jdbc:mysql://3.35.231.108:3306/MZTI
     username: root
     password: rlaxogjs8312
   jpa:

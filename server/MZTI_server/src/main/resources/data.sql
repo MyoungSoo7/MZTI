@@ -55,23 +55,23 @@ values (17, "SEXSERX", "뽀뽀부터 해야지", 1);
 #######
 
 insert into Answer(id, mbti, answerContent, questionId)
-values (18, "ESFJ", "섹스부터 해야지", 2);
+values (18, "ESFJ", "2번섹스부터 해야지", 2);
 insert into Answer(id, mbti, answerContent, questionId)
-values (19, "INFJ", "혀부터 넣어야지", 2);
+values (19, "INFJ", "2번혀부터 넣어야지", 2);
 insert into Answer(id, mbti, answerContent, questionId)
-values (20, "ESFJ", "ESFJ 답변 2", 2);
+values (20, "ESFJ", "2번ESFJ 답변 2", 2);
 insert into Answer(id, mbti, answerContent, questionId)
-values (21, "ESFJ", "ESFJ 답변 3", 2);
+values (21, "ESFJ", "2번ESFJ 답변 3", 2);
 insert into Answer(id, mbti, answerContent, questionId)
-values (22, "ESFJ", "ESFJ 답변 4", 2);
+values (22, "ESFJ", "2번ESFJ 답변 4", 2);
 insert into Answer(id, mbti, answerContent, questionId)
-values (23, "ESFJ", "ESFJ 답변 5", 2);
+values (23, "ESFJ", "2번ESFJ 답변 5", 2);
 insert into Answer(id, mbti, answerContent, questionId)
-values (24, "ESFJ", "ESFJ 답변 6", 2);
+values (24, "ESFJ", "2번ESFJ 답변 6", 2);
 insert into Answer(id, mbti, answerContent, questionId)
-values (25, "ESFJ", "ESFJ 답변 7", 2);
+values (25, "ESFJ", "2번ESFJ 답변 7", 2);
 insert into Answer(id, mbti, answerContent, questionId)
-values (26, "ESFJ", "ESFJ 답변 8", 2);
+values (26, "ESFJ", "2번ESFJ 답변 8", 2);
 
 insert into Answer(id, mbti, answerContent, questionId)
 values (27, "INFJ", "INFJ뽀뽀부터 해야지",2);
@@ -88,5 +88,5 @@ values (32, "SALAH", "으아으아부터 해야지",2);
 insert into Answer(id, mbti, answerContent, questionId)
 values (33, "HIHI", "쿠쿠부터 해야지",2);
 insert into Answer(id, mbti, answerContent, questionId)
-values (34, "SEXSERX", "쿠르투아부터 해야지",2);
+values (34, "SEXSERX", "쿠르투번부터 해야지",2);
 

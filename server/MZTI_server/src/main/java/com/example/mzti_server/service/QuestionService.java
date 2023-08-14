@@ -36,9 +36,6 @@ public class QuestionService {
 
     public QuestionAnswerResponseDTO getQuestionAnswers(int questionCount, String mbti) {
         List<Question> randomQuestions = questionRepository.findRandomQuestions(questionCount);
-        for(Question rq: randomQuestions){
-            System.out.println(rq.getQuestionContent());
-        }
         List<QuestionAnswer> qa = new ArrayList<>();
         for (int i = 0; i < questionCount; i++) {
             Answer randomAnswer = answerRepository.findRandomAnswer(randomQuestions.get(i).getId(), mbti);

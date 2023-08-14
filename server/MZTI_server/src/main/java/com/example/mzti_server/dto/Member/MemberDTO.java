@@ -4,12 +4,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 public class MemberDTO {
 
-    private final String username;
-    private final String profileImage;
-    private final String mbti;
+    @NotNull private final String username;
+    @NotNull private final String profileImage;
+    @NotNull private final String mbti;
 
     @Builder
     public MemberDTO(String username, String profileImage, String mbti) {

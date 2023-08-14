@@ -10,6 +10,8 @@ import com.example.mzti_server.dto.token.TokenInfo;
 import com.example.mzti_server.repository.FriendRelationshipRepository;
 import com.example.mzti_server.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -18,7 +20,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.*;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,20 +38,17 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final FileService fileService;
 
-    public LoginResponseDTO login(String loginId, String password) {
+    public ResponseEntity<LinkedHashMap<String, Object>> login(String loginId, String password) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginId, password);
-
-        System.out.println("authenticationToken = " + authenticationToken);
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
-        System.out.println("authentication = " + authentication);
         Optional<Member> member = memberRepository.findByLoginId(loginId);
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(member.get());
+        LoginResponseDTO loginResponseDTO = new LoginResponseDTO(loginId, tokenInfo.getGrantType(), tokenInfo.getAccessToken());
 
-        return new LoginResponseDTO(loginId, tokenInfo.getGrantType(), tokenInfo.getAccessToken());
+        return getResponse(loginResponseDTO);
     }
 
-    public String signup(String loginId, String password, String username, String mbti) {
+    public ResponseEntity<LinkedHashMap<String, Object>> signup(String loginId, String password, String username, String mbti) {
         final boolean isExistLoginId = memberRepository.existsByLoginId(loginId);
         if (isExistLoginId) {
             throw new RuntimeException("아이디 중복입니다");
@@ -57,22 +59,23 @@ public class MemberService {
                 .username(username)
                 .mbti(mbti)
                 .build();
-        memberRepository.save(member);
-        return member.getUsername() + "님의 회원가입이 성공적으로 이루어졌습니다.";
+        Member saveMember = memberRepository.save(member);
+
+        return getResponse(saveMember);
 
     }
 
-    public Member findMemberByLoginId(String loginId) {
+    public ResponseEntity<LinkedHashMap<String, Object>> findMemberByLoginId(String loginId) {
         Optional<Member> member = memberRepository.findByLoginId(loginId);
         if (member.isPresent()) {
-            return member.get();
+            return getResponse(member.get());
         } else {
             throw new RuntimeException("아이디에 해당하는 멤버 정보가 없습니다.");
         }
     }
 
-    public FriendListDTO findFriendListByLoginId(String loginId) {
-        Optional<Member> findMember = memberRepository.findByLoginId(loginId);
+    public ResponseEntity<LinkedHashMap<String, Object>> findFriendListByLoginId(String accessToken) {
+        Optional<Member> findMember = memberRepository.findById(jwtTokenProvider.getMemberId(accessToken));
         if (findMember.isPresent()) {
             Optional<List<FriendRelationship>> friendRelationships = friendRelationshipRepository.findByMemberId(findMember.get().getId());
             if (friendRelationships.isPresent()) {
@@ -90,21 +93,63 @@ public class MemberService {
                         .username(findMember.get().getUsername())
                         .friendlist(memberDTOS)
                         .build();
-                return friendListDTO;
+                return getResponse(friendListDTO);
             }
         } else { // 친구 관계가 없는 경우
-            return null;
+            return getResponse(null);
         }
-        return null;
+        throw new RuntimeException("토큰에 해당 멤버가 없습니다");
     }
 
-    public Member findMemberByToken(String accessToken) {
+    public ResponseEntity<LinkedHashMap<String, Object>> findMemberByToken(String accessToken) {
+        Optional<Member> member = memberRepository.findById(jwtTokenProvider.getMemberId(accessToken));
+        if (member.isPresent()) {
+            return getResponse(member.get());
+        } else {
+            throw new RuntimeException("토큰에 해당하는 멤버가 없습니다.");
+        }
+    }
+
+    public Member memberByToken(String accessToken) {
         Optional<Member> member = memberRepository.findById(jwtTokenProvider.getMemberId(accessToken));
         if (member.isPresent()) {
             return member.get();
-        }else{
+        } else {
             throw new RuntimeException("토큰에 해당하는 멤버가 없습니다.");
         }
+    }
+
+    public ResponseEntity<LinkedHashMap<String, Object>> addFriend(String accessToken, String friendId) {
+        Member memberByToken = memberByToken(accessToken); // 본인
+        Optional<Member> friend = memberRepository.findByLoginId(friendId); // 친구
+        if (friend.isPresent()) {
+            FriendRelationship friendRelationship = FriendRelationship.builder()
+                    .member(memberByToken)
+                    .username(friend.get().getUsername())
+                    .profileImage(friend.get().getProfileImage())
+                    .mbti(friend.get().getMbti())
+                    .build();
+            friendRelationshipRepository.save(friendRelationship);
+            return getResponse(memberByToken.getUsername() + "님이  " + friend.get().getUsername() + "님을 추가하였습니다.");
+        } else {
+            throw new RuntimeException("아이디에 해당하는 친구가 없습니다.");
+        }
+    }
+
+    public ResponseEntity<LinkedHashMap<String, Object>> checkId(String loginId) {
+        Optional<Member> byLoginId = memberRepository.findByLoginId(loginId);
+        if(byLoginId.isPresent()){
+            return getResponse("중복");
+        }else{
+            return getResponse("중복아님");
+        }
+    }
+
+    private static ResponseEntity<LinkedHashMap<String, Object>> getResponse(Object saveMember) {
+        LinkedHashMap<String, Object> response = new LinkedHashMap<>();
+        response.put("result_code", "200");
+        response.put("result_data", saveMember);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
 
