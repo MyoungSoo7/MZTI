@@ -1,6 +1,7 @@
 package com.example.mzti_server.domain;
 
 
+import com.example.mzti_server.dto.Member.EditMemberDTO;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -31,6 +33,12 @@ public class Member extends BaseTime {
         this.username = username;
         this.mbti = mbti;
         this.profileImage = profileImage; // 이미지 경로
+    }
+
+    public void update(EditMemberDTO editMemberDTO) {
+        this.username = editMemberDTO.getUsername();
+        this.mbti = editMemberDTO.getMbti();
+        this.profileImage = editMemberDTO.getProfileImage();
     }
 
 }

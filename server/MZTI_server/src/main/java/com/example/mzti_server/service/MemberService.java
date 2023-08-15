@@ -6,6 +6,7 @@ import com.example.mzti_server.domain.Member;
 import com.example.mzti_server.domain.TestHistory;
 import com.example.mzti_server.dto.FriendListDTO;
 import com.example.mzti_server.dto.MBTIS;
+import com.example.mzti_server.dto.Member.EditMemberDTO;
 import com.example.mzti_server.dto.Member.LoginResponseDTO;
 import com.example.mzti_server.dto.Member.MemberDTO;
 import com.example.mzti_server.dto.Member.ProfileResponseDTO;
@@ -79,6 +80,27 @@ public class MemberService {
         }
     }
 
+    public ResponseEntity<LinkedHashMap<String, Object>> editMember(String accessToken, EditMemberDTO editMemberDTO) {
+        Member findByToken = memberByToken(accessToken);
+        if (editMemberDTO.getUsername() == null) {
+            editMemberDTO.setUsername(findByToken.getUsername());
+        }
+        if (editMemberDTO.getProfileImage() == null) {
+            editMemberDTO.setProfileImage(findByToken.getProfileImage());
+        }
+        if (editMemberDTO.getMbti() == null) {
+            editMemberDTO.setMbti(findByToken.getMbti());
+        }
+        findByToken.update(editMemberDTO);
+        MemberDTO changedMember = MemberDTO.builder()
+                .loginId(findByToken.getLoginId())
+                .username(findByToken.getUsername())
+                .profileImage(findByToken.getProfileImage())
+                .mbti(findByToken.getMbti())
+                .build();
+        return getResponse(changedMember);
+    }
+
     public ResponseEntity<LinkedHashMap<String, Object>> findFriendListByLoginId(String accessToken) {
         Optional<Member> findMember = memberRepository.findById(jwtTokenProvider.getMemberId(accessToken));
         if (findMember.isPresent()) {
@@ -129,7 +151,13 @@ public class MemberService {
                     .mbti(friend.get().getMbti())
                     .build();
             friendRelationshipRepository.save(friendRelationship);
-            return getResponse(memberByToken.getUsername() + "님이  " + friend.get().getUsername() + "님을 추가하였습니다.");
+            MemberDTO responseFriend = MemberDTO.builder()
+                    .loginId(friend.get().getLoginId())
+                    .username(friend.get().getUsername())
+                    .profileImage(friend.get().getProfileImage())
+                    .mbti(friend.get().getMbti())
+                    .build();
+            return getResponse(responseFriend);
         } else {
             throw new RuntimeException("아이디에 해당하는 친구가 없습니다.");
         }
@@ -201,6 +229,8 @@ public class MemberService {
         response.put("result_data", saveMember);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+
 }
 
 //    public String signup(String id, String password, String nickname, String mbti, MultipartFile profileImage) {

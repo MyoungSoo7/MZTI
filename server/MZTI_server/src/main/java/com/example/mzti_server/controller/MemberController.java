@@ -2,10 +2,7 @@ package com.example.mzti_server.controller;
 
 import com.example.mzti_server.domain.Member;
 import com.example.mzti_server.dto.FriendListDTO;
-import com.example.mzti_server.dto.Member.LoginIdDTO;
-import com.example.mzti_server.dto.Member.LoginRequestDTO;
-import com.example.mzti_server.dto.Member.LoginResponseDTO;
-import com.example.mzti_server.dto.Member.SignupRequestDTO;
+import com.example.mzti_server.dto.Member.*;
 import com.example.mzti_server.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -51,6 +48,12 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity<LinkedHashMap<String, Object>> login(@RequestBody LoginRequestDTO loginRequestDTO) {
         return memberService.login(loginRequestDTO.getLoginId(), loginRequestDTO.getPassword());
+    }
+
+    @Operation(summary = "멤버 수정", description = "멤버 정보를 수정합니다.")
+    @PostMapping("/edit")
+    public ResponseEntity<LinkedHashMap<String, Object>> editMember(HttpServletRequest request, @RequestBody EditMemberDTO editMemberDTO) {
+        return memberService.editMember(request.getHeader("Authorization"), editMemberDTO);
     }
 
     @Operation(summary = "회원가입", description = "아이디, 비밀번호, 이름, mbti를 이용하여 회원가입합니다.")
