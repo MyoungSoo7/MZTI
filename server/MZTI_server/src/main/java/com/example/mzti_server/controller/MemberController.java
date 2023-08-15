@@ -78,6 +78,12 @@ public class MemberController {
         return memberService.addFriend(request.getHeader("Authorization"), loginIdDTO.getLoginId());
     }
 
+    @Operation(summary = "친구 삭제", description = "친구 ID를 통해 친구를 삭제합니다.")
+    @PostMapping("/deleteFriend")
+    public ResponseEntity<LinkedHashMap<String, Object>> deleteFriend(HttpServletRequest request, @RequestBody LoginIdDTO loginIdDTO) {
+        return memberService.deleteFriend(request.getHeader("Authorization"), loginIdDTO.getLoginId());
+    }
+
 //    @PostMapping("/signup")
 //    public String signup(String id, String password, String nickname, String mbti, MultipartFile profileImage){
 //        return memberService.signup(id, password, nickname, mbti, profileImage);

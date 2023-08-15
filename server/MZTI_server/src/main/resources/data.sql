@@ -6,10 +6,10 @@ values (1, 1, '빵빵이', null, 'SEXY');
 insert into FriendRelationship(id, memberId, username, profileImage, mbti)
 values (2, 1, '김옥지', null, 'ININ');
 
-insert into Question(id, questionContent)
-values (1, "연애할 때 어떻게 함?");
-insert into Question(id, questionContent)
-values (2, "키스할 때 어떻게 함?");
+insert into Question(id, questionContent, questionType)
+values (1, "연애할 때 어떻게 함?", "SN");
+insert into Question(id, questionContent, questionType)
+values (2, "키스할 때 어떻게 함?", "SN");
 
 
 insert into Answer(id, mbti, answerContent, questionId)

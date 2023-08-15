@@ -29,6 +29,7 @@ public class SecurityConfig {
                 .antMatchers("/").permitAll()
                 .antMatchers("/api/members/login").permitAll()
                 .antMatchers("/api/members/signup").permitAll()
+                .antMatchers("/api/members/isDuplicate").permitAll()
                 .antMatchers(("/swagger-ui/**")).permitAll()
                 .antMatchers("/v3/api-docs/**").permitAll()
                 .antMatchers("/api/question/**").permitAll()

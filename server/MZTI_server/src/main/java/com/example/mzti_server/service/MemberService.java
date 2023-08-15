@@ -6,6 +6,7 @@ import com.example.mzti_server.domain.Member;
 import com.example.mzti_server.dto.FriendListDTO;
 import com.example.mzti_server.dto.Member.LoginResponseDTO;
 import com.example.mzti_server.dto.Member.MemberDTO;
+import com.example.mzti_server.dto.token.LoginTokenInfo;
 import com.example.mzti_server.dto.token.TokenInfo;
 import com.example.mzti_server.repository.FriendRelationshipRepository;
 import com.example.mzti_server.repository.MemberRepository;
@@ -22,10 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -104,7 +102,8 @@ public class MemberService {
     public ResponseEntity<LinkedHashMap<String, Object>> findMemberByToken(String accessToken) {
         Optional<Member> member = memberRepository.findById(jwtTokenProvider.getMemberId(accessToken));
         if (member.isPresent()) {
-            return getResponse(member.get());
+            LoginTokenInfo loginTokenInfo = new LoginTokenInfo(member.get().getLoginId(), member.get().getUsername(), member.get().getMbti(), member.get().getProfileImage(), "Bearer", accessToken);
+            return getResponse(loginTokenInfo);
         } else {
             throw new RuntimeException("토큰에 해당하는 멤버가 없습니다.");
         }
@@ -131,6 +130,23 @@ public class MemberService {
                     .build();
             friendRelationshipRepository.save(friendRelationship);
             return getResponse(memberByToken.getUsername() + "님이  " + friend.get().getUsername() + "님을 추가하였습니다.");
+        } else {
+            throw new RuntimeException("아이디에 해당하는 친구가 없습니다.");
+        }
+    }
+
+    public ResponseEntity<LinkedHashMap<String, Object>> deleteFriend(String accessToken, String friendId) {
+        Member memberByToken = memberByToken(accessToken); // 본인
+        Optional<Member> friend = memberRepository.findByLoginId(friendId); // 친구
+        if (friend.isPresent()) {
+            FriendRelationship friendRelationship = FriendRelationship.builder()
+                    .member(memberByToken)
+                    .username(friend.get().getUsername())
+                    .profileImage(friend.get().getProfileImage())
+                    .mbti(friend.get().getMbti())
+                    .build();
+            friendRelationshipRepository.delete(friendRelationship);
+            return getResponse(memberByToken.getUsername() + "님이  " + friend.get().getUsername() + "님을 삭제하였습니다.");
         } else {
             throw new RuntimeException("아이디에 해당하는 친구가 없습니다.");
         }

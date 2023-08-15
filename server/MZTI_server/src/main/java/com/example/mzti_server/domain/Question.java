@@ -17,8 +17,11 @@ public class Question {
 
     @Column(length = 5000) private String questionContent;
 
+    private String questionType;
+
     @Builder
-    public Question(String questionContent) {
+    public Question(String questionContent,String questionType) {
         this.questionContent = questionContent;
+        this.questionType = questionType;
     }
 }
