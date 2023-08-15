@@ -9,14 +9,14 @@ class FriendMbtiActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        overridePendingTransition(R.anim.enter_from_bottom_200, R.anim.exit_to_bottom_200)
+        overridePendingTransition(R.anim.enter_from_right_200, R.anim.exit_to_left_200)
 
         setContentView(R.layout.activity_friend_mbti)
     }
 
     override fun finish() {
         super.finish()
-        overridePendingTransition(R.anim.enter_from_bottom_200, R.anim.exit_to_bottom_200)
+        overridePendingTransition(R.anim.enter_from_left_200, R.anim.exit_to_right_200)
     }
 
 }

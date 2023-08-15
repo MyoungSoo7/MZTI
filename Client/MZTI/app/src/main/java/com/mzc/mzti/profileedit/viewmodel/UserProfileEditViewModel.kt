@@ -27,6 +27,14 @@ class UserProfileEditViewModel(
     private var _userProfileImg: MutableLiveData<Uri> = MutableLiveData()
     val userProfileImg: LiveData<Uri> get() = _userProfileImg
 
+    fun init(
+        pUserNickname: String,
+        pUserMBTI: MBTI
+    ) {
+        _userNickname.value = pUserNickname
+        _userMBTI.value = pUserMBTI
+    }
+
     fun setUserNickname(pUserNickname: String) {
         _userNickname.value = pUserNickname
     }

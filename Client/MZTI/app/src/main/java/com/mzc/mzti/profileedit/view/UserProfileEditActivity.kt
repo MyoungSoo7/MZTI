@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.mzc.mzti.R
 import com.mzc.mzti.base.BaseActivity
 import com.mzc.mzti.base.BaseViewModel
 import com.mzc.mzti.clearFocus
@@ -54,10 +55,16 @@ class UserProfileEditActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        overridePendingTransition(R.anim.enter_from_right_200, R.anim.exit_to_left_200)
         setContentView(binding.root)
 
         setObserver()
         init()
+    }
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.enter_from_left_200, R.anim.exit_to_right_200)
     }
 
     private fun setObserver() {
@@ -99,6 +106,7 @@ class UserProfileEditActivity : BaseActivity() {
         val id = MztiSession.userId
         val nickname = MztiSession.userNickname
         val mbti = MztiSession.userMbti
+        model.init(nickname, mbti)
 
         binding.apply {
             // ID
