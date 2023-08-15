@@ -10,6 +10,7 @@ import com.example.mzti_server.dto.Member.EditMemberDTO;
 import com.example.mzti_server.dto.Member.LoginResponseDTO;
 import com.example.mzti_server.dto.Member.MemberDTO;
 import com.example.mzti_server.dto.Member.ProfileResponseDTO;
+import com.example.mzti_server.dto.Question.TestResultDTO;
 import com.example.mzti_server.dto.token.LoginTokenInfo;
 import com.example.mzti_server.dto.token.TokenInfo;
 import com.example.mzti_server.repository.FriendRelationshipRepository;
@@ -191,15 +192,29 @@ public class MemberService {
 
     public ResponseEntity<LinkedHashMap<String, Object>> getProfile(String accessToken) {
         Member findByToken = memberByToken(accessToken);
-        // List<TestHistory> testHistories = testHistoryRepository.findByMemberId(findByToken.getId());
-        LinkedHashMap<MBTIS, String> testResults = new LinkedHashMap<>();
+        List<TestResultDTO> testResultDTOList = new ArrayList<>();
         for (MBTIS mbti : MBTIS.values()) {
             System.out.println("mbti = " + mbti);
             Optional<TestHistory> testHistoryOptional = testHistoryRepository.findTopByMbtiAndMemberIdOrderByCreatedDateDesc(mbti.toString(), findByToken.getId());
             if (testHistoryOptional.isPresent()) {
-                testResults.put(mbti, testHistoryOptional.get().getMbtiResult());
+                String mbtiResult = testHistoryOptional.get().getMbtiResult();
+                int[] intArray = new int[mbtiResult.length()];
+
+                for (int i = 0; i < mbtiResult.length(); i++) {
+                    intArray[i] = Character.getNumericValue(mbtiResult.charAt(i));
+                }
+                TestResultDTO testResultDTO = TestResultDTO.builder()
+                        .mbti(mbti.toString())
+                        .size(intArray)
+                        .build();
+                testResultDTOList.add(testResultDTO);
             } else {
-                testResults.put(mbti, "");
+                int[] intArray = new int[4];
+                TestResultDTO testResultDTO = TestResultDTO.builder()
+                        .mbti(mbti.toString())
+                        .size(intArray)
+                        .build();
+                testResultDTOList.add(testResultDTO);
             }
         }
         ProfileResponseDTO responseDTO = ProfileResponseDTO.builder()
@@ -207,7 +222,7 @@ public class MemberService {
                 .username(findByToken.getUsername())
                 .profileImage(findByToken.getProfileImage())
                 .mbti(findByToken.getMbti())
-                .testResult(testResults)
+                .testResult(testResultDTOList)
                 .build();
 
         return getResponse(responseDTO);
