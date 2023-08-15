@@ -31,6 +31,9 @@
     <string name="signUp_title_mbti">MBTI 선택</string>
     <string name="signUp_mbti_info">MBTI를 선택해 주세요.</string>
 
+    <string name="friends_title">친구</string>
+    <string name="friends_count">친구 %1$d명</string>
+
     <string name="userProfile_title">프로필</string>
     <string name="mbtiCard_title">#MBTI증</string>
     <string name="mbtiCard_id">ID: %1$s</string>
@@ -42,6 +45,7 @@
     <string name="mbtiBadge_letsGoTest">뱃지 모으러 가기</string>
     <string name="appVersion_title">앱 버전</string>
     <string name="appVersion_versionName">ver %1$s</string>
+    <string name="logout_title">로그아웃</string>
 
     <string name="userProfileEdit_title">프로필 수정</string>
     <string name="userProfileEdit_changeProfileImg">프로필 사진 변경하기</string>
