@@ -16,7 +16,9 @@ import androidx.lifecycle.Observer
 import com.mzc.mzti.R
 import com.mzc.mzti.base.BaseFragment
 import com.mzc.mzti.clearFocus
+import com.mzc.mzti.common.util.DLog
 import com.mzc.mzti.databinding.FragmentSignUpBinding
+import com.mzc.mzti.model.data.mbti.MBTI
 import com.mzc.mzti.model.data.router.SignUpState
 import com.mzc.mzti.sign.viewmodel.SignViewModel
 
@@ -68,6 +70,7 @@ class SignUpFragment : BaseFragment() {
 
         model.enableCheckPw.observe(viewLifecycleOwner, Observer { enable ->
             binding.btnSignUpPwNext.isEnabled = enable
+            binding.tvSignUpPwWarning.visibility = if (enable) View.GONE else View.VISIBLE
         })
 
         model.enableCheckNickname.observe(viewLifecycleOwner, Observer { enable ->
@@ -99,6 +102,25 @@ class SignUpFragment : BaseFragment() {
 
             btnSignUpMbtiConfirm.setOnClickListener {
                 model.checkSignUpMbti()
+            }
+
+            clSignUpSelectMbti.setOnClickListener {
+                showSelectMbtiDialog(
+                    onMbtiSelected = { mbti: MBTI ->
+                        DLog.d(TAG, "selectedMbti=$mbti")
+                        model.setSignUpMbti(mbti)
+
+                        val strMbti = mbti.name
+                        binding.apply {
+                            tvSignUpMbti0.text = strMbti[0].toString()
+                            tvSignUpMbti1.text = strMbti[1].toString()
+                            tvSignUpMbti2.text = strMbti[2].toString()
+                            tvSignUpMbti3.text = strMbti[3].toString()
+                        }
+                    },
+                    onDismissListener = {
+                    }
+                )
             }
 
             etSignUpId.addTextChangedListener(object : TextWatcher {
@@ -194,8 +216,8 @@ class SignUpFragment : BaseFragment() {
             SignUpState.PW -> {
                 binding.apply {
                     tvSignUpTitle.text = getString(R.string.signUp_title_pw)
-                    clSignUpId.slideOutToLeft()
-                    clSignUpPw.slideInFromRight()
+                    clSignUpId.gone()
+                    clSignUpPw.visible()
                     clSignUpNickname.gone()
                     clSignUpMbti.gone()
                 }
@@ -205,8 +227,8 @@ class SignUpFragment : BaseFragment() {
                 binding.apply {
                     tvSignUpTitle.text = getString(R.string.signUp_title_nickname)
                     clSignUpId.gone()
-                    clSignUpPw.slideOutToLeft()
-                    clSignUpNickname.slideInFromRight()
+                    clSignUpPw.gone()
+                    clSignUpNickname.visible()
                     clSignUpMbti.gone()
                 }
             }
@@ -216,8 +238,8 @@ class SignUpFragment : BaseFragment() {
                     tvSignUpTitle.text = getString(R.string.signUp_title_mbti)
                     clSignUpId.gone()
                     clSignUpPw.gone()
-                    clSignUpNickname.slideOutToLeft()
-                    clSignUpMbti.slideInFromRight()
+                    clSignUpNickname.gone()
+                    clSignUpMbti.visible()
                 }
             }
         }

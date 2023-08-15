@@ -5,6 +5,7 @@ import com.mzc.mzti.R
 import com.mzc.mzti.base.BaseNetworkRepository
 import com.mzc.mzti.common.util.DLog
 import com.mzc.mzti.model.data.network.NetworkResult
+import com.mzc.mzti.model.data.sign.SignUpData
 import com.mzc.mzti.model.data.user.UserInfoData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -66,7 +67,7 @@ class MztiRepository(
             if (message.isNotEmpty()) {
                 try {
                     val jsonRoot = JSONObject(message)
-
+                    jsonParserUtil.getIdCheckResult(jsonRoot)
                 } catch (e: JSONException) {
                     DLog.e(TAG, e.stackTraceToString())
                     NetworkResult.Error(e)
@@ -76,10 +77,6 @@ class MztiRepository(
                     context.getString(R.string.api_connection_fail_msg)
                 )
             }
-
-            NetworkResult.Fail(
-                context.getString(R.string.api_connection_fail_msg)
-            )
         }
     }
 
@@ -108,6 +105,36 @@ class MztiRepository(
                     } else {
                         NetworkResult.Fail("resultCode 확인 필요")
                     }
+                } catch (e: JSONException) {
+                    DLog.e(TAG, e.stackTraceToString())
+                    NetworkResult.Error(e)
+                }
+            } else {
+                NetworkResult.Fail(
+                    context.getString(R.string.api_connection_fail_msg)
+                )
+            }
+        }
+    }
+
+    suspend fun makeSignUpRequest(
+        pSignUpData: SignUpData
+    ): NetworkResult<Boolean> {
+        return withContext(Dispatchers.IO) {
+            val hsParams = hashMapOf<String, Any>().apply {
+                put("loginId", pSignUpData.signUpId)
+                put("password", pSignUpData.signUpPw)
+                put("nickname", pSignUpData.signUpNickname)
+                put("mbti", pSignUpData.signUpMbti.name)
+            }
+
+            val signUpUrl = "${BASE_URL}api/members/signup"
+            val message = sendRequestToMztiServer(signUpUrl, hsParams, POST)
+
+            if (message.isNotEmpty()) {
+                try {
+                    val jsonRoot = JSONObject(message)
+                    jsonParserUtil.getSignUpResponse(jsonRoot)
                 } catch (e: JSONException) {
                     DLog.e(TAG, e.stackTraceToString())
                     NetworkResult.Error(e)

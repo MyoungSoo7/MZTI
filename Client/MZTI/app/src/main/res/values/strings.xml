@@ -9,6 +9,7 @@
 
     <string name="toast_msg_error_001">예기치 못한 오류가 발생했습니다. 잠시 후에 다시 시도해 주세요.</string>
     <string name="toast_msg_request_permission">MZTI를 사용하려면 저장공간 권한이 필요합니다.</string>
+    <string name="toast_msg_sign_up_success">회원가입 되었습니다.</string>
 
     <string name="api_connection_fail_msg">서버로부터 응답이 없습니다. 잠시 후에 다시 시도해 주세요.</string>
 

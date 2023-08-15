@@ -2,6 +2,7 @@ package com.mzc.mzti.common.util
 
 import com.mzc.mzti.model.data.mbti.MBTI
 import com.mzc.mzti.model.data.mbti.getMBTI
+import com.mzc.mzti.model.data.network.NetworkResult
 import com.mzc.mzti.model.data.user.UserInfoData
 import org.json.JSONArray
 import org.json.JSONException
@@ -132,11 +133,11 @@ class JsonParserUtil {
             return null
         }
 
-        val resultDataObj = getJsonObject(jsonRoot, KEY_RESULT_DATA)
-        return if (resultDataObj != null) {
-            val loginId: String = getString(resultDataObj, KEY_LOGIN_ID)
-            val generateType: String = getString(resultDataObj, KEY_GENERATE_TYPE)
-            val accessToken: String = getString(resultDataObj, KEY_ACCESS_TOKEN)
+        val resultData = getJsonObject(jsonRoot, KEY_RESULT_DATA)
+        return if (resultData != null) {
+            val loginId: String = getString(resultData, KEY_LOGIN_ID)
+            val generateType: String = getString(resultData, KEY_GENERATE_TYPE)
+            val accessToken: String = getString(resultData, KEY_ACCESS_TOKEN)
 
             UserInfoData(
                 id = loginId,
@@ -157,14 +158,14 @@ class JsonParserUtil {
             return null
         }
 
-        val resultDataObj = getJsonObject(jsonRoot, KEY_RESULT_DATA)
-        return if (resultDataObj != null) {
-            val loginId = getString(resultDataObj, KEY_LOGIN_ID)
-            val generateType = getString(resultDataObj, KEY_GENERATE_TYPE)
-            val accessToken = getString(resultDataObj, KEY_ACCESS_TOKEN)
-            val nickname = getString(resultDataObj, KEY_USER_NAME)
-            val mbti = getString(resultDataObj, KEY_MBTI)
-            val profileImg = getString(resultDataObj, KEY_PROFILE_IMG)
+        val resultData = getJsonObject(jsonRoot, KEY_RESULT_DATA)
+        return if (resultData != null) {
+            val loginId = getString(resultData, KEY_LOGIN_ID)
+            val generateType = getString(resultData, KEY_GENERATE_TYPE)
+            val accessToken = getString(resultData, KEY_ACCESS_TOKEN)
+            val nickname = getString(resultData, KEY_USER_NAME)
+            val mbti = getString(resultData, KEY_MBTI)
+            val profileImg = getString(resultData, KEY_PROFILE_IMG)
 
             UserInfoData(
                 id = loginId,
@@ -176,6 +177,29 @@ class JsonParserUtil {
             )
         } else {
             null
+        }
+    }
+
+    fun getIdCheckResult(jsonRoot: JSONObject): NetworkResult<Boolean> {
+        val resultCode = getInt(jsonRoot, KEY_RESULT_CODE)
+        if (resultCode != 200) {
+            return NetworkResult.Fail("API Request Fail, resultCode=$resultCode")
+        }
+
+        return when (val resultData = getString(jsonRoot, KEY_RESULT_DATA)) {
+            "중복" -> NetworkResult.Success(false)
+            "중복아님" -> NetworkResult.Success(true)
+            else -> NetworkResult.Fail("resultData=$resultData")
+        }
+    }
+
+    fun getSignUpResponse(jsonRoot: JSONObject): NetworkResult<Boolean> {
+        val resultCode = getInt(jsonRoot, KEY_RESULT_CODE)
+        return if (resultCode != 200) {
+            val failMsg = getString(jsonRoot, KEY_RESULT_DATA)
+            NetworkResult.Fail(failMsg)
+        } else {
+            NetworkResult.Success(true)
         }
     }
 

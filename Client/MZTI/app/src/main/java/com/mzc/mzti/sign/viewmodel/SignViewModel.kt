@@ -50,6 +50,9 @@ class SignViewModel(
     private val _enableCheckMbti: MutableLiveData<Boolean> = MutableLiveData(false)
     val enableCheckMbti: LiveData<Boolean> get() = _enableCheckMbti
 
+    private val _signUpResult: MutableLiveData<Boolean> = MutableLiveData(false)
+    val signUpResult: LiveData<Boolean> get() = _signUpResult
+
     fun setSignRouter(pSignRouter: SignRouter) {
         if (signRouter.value != pSignRouter) {
             _signRouter.value = pSignRouter
@@ -203,7 +206,20 @@ class SignViewModel(
     private fun requestSignUp() {
         setProgressFlag(true)
         viewModelScope.launch {
+            when (val result = mztiRepository.makeSignUpRequest(signUpData)) {
+                is NetworkResult.Success<Boolean> -> {
+                    val data = result.data
+                    _signUpResult.value = data
+                }
 
+                is NetworkResult.Fail -> {
+                    setApiFailMsg(result.msg)
+                }
+
+                is NetworkResult.Error -> {
+                    setExceptionData(result.exception)
+                }
+            }
         }
     }
 

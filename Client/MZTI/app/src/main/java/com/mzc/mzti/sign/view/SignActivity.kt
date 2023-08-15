@@ -65,6 +65,8 @@ class SignActivity : BaseActivity() {
                 SignRouter.SIGN_IN -> {
                     if (getTopFragment() !is SignInFragment) {
                         setFragment(R.id.fl_sign, signInFragment)
+                    } else {
+                        popNaviStack()
                     }
                 }
 
@@ -83,6 +85,14 @@ class SignActivity : BaseActivity() {
             val mainIntent = Intent(this, MainActivity::class.java)
             startActivity(mainIntent)
             finish()
+        })
+
+        model.signUpResult.observe(this, Observer { result ->
+            if (result) {
+                model.setProgressFlag(false)
+                showToastMsg(getString(R.string.toast_msg_sign_up_success))
+                model.setSignRouter(SignRouter.SIGN_IN)
+            }
         })
     }
 

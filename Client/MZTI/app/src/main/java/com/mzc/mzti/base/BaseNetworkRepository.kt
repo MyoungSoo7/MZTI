@@ -104,7 +104,7 @@ open class BaseNetworkRepository(
         var message: String = ""
         try {
             val url: URL =
-                if (urlState == "GET") URL("${strUrl}?${getParams(hsParams)}") else URL(strUrl)
+                if (urlState == GET) URL("${strUrl}?${getParams(hsParams)}") else URL(strUrl)
 
             DLog.d(TAG, "strUrl=$strUrl")
             // Https Protocol Check
@@ -130,7 +130,7 @@ open class BaseNetworkRepository(
                 }
             }
 
-            if (hsParams.isNotEmpty()) {
+            if (hsParams.isNotEmpty() && urlState != GET) {
                 connection.doOutput = true
 
                 val os = connection.outputStream

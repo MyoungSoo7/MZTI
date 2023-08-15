@@ -3,7 +3,9 @@ package com.mzc.mzti.base
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.mzc.mzti.R
+import com.mzc.mzti.common.dialog.SelectMbtiDialog
 import com.mzc.mzti.common.util.VibrateManager
+import com.mzc.mzti.model.data.mbti.MBTI
 
 open class BaseFragment : Fragment() {
 
@@ -21,6 +23,19 @@ open class BaseFragment : Fragment() {
 
     protected fun vibrate() {
         VibrateManager.requestVibrate(requireContext(), VibrateManager.VibrationType.TICK)
+    }
+
+    protected fun showSelectMbtiDialog(
+        onMbtiSelected: (mbti: MBTI) -> Unit,
+        onDismissListener: () -> Unit
+    ) {
+        for (fragment in childFragmentManager.fragments) {
+            if (fragment is SelectMbtiDialog) {
+                return
+            }
+        }
+
+        SelectMbtiDialog(onMbtiSelected, onDismissListener).show(childFragmentManager, null)
     }
 
 }
