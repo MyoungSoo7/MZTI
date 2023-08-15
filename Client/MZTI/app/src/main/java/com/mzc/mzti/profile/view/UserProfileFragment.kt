@@ -78,6 +78,10 @@ class UserProfileFragment : BaseFragment() {
                 override fun letsGoMztiTest() {
                     model.setTabRouter(MztiTabRouter.TAB_LEARNING)
                 }
+
+                override fun logout() {
+
+                }
             }
         }
 
