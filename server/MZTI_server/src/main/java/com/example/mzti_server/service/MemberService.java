@@ -206,6 +206,7 @@ public class MemberService {
                 TestResultDTO testResultDTO = TestResultDTO.builder()
                         .mbti(mbti.toString())
                         .size(intArray)
+                        .isFlag(Boolean.TRUE)
                         .build();
                 testResultDTOList.add(testResultDTO);
             } else {
@@ -213,6 +214,7 @@ public class MemberService {
                 TestResultDTO testResultDTO = TestResultDTO.builder()
                         .mbti(mbti.toString())
                         .size(intArray)
+                        .isFlag(Boolean.FALSE)
                         .build();
                 testResultDTOList.add(testResultDTO);
             }

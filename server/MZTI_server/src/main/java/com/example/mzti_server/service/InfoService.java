@@ -14,7 +14,6 @@ public class InfoService {
     private final MbtiInfoRepository mbtiInfoRepository;
     private final MbtiDescriptionRepository mbtiDescriptionRepository;
 
-
     // MBTI 1개 조회
     public ResponseEntity<LinkedHashMap<String, Object>> getMBTIInfo(String mbti) {
         return null;
