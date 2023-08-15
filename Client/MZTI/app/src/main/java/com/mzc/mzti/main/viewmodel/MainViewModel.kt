@@ -14,6 +14,7 @@ import com.mzc.mzti.model.data.friends.FriendsLayoutType
 import com.mzc.mzti.model.data.friends.FriendsOtherProfileData
 import com.mzc.mzti.model.data.network.NetworkResult
 import com.mzc.mzti.model.data.router.MztiTabRouter
+import com.mzc.mzti.model.data.user.UserProfileData
 import com.mzc.mzti.model.repository.download.DownloadRepository
 import com.mzc.mzti.model.repository.network.MztiRepository
 import kotlinx.coroutines.launch
@@ -53,6 +54,9 @@ class MainViewModel(
     private var _removeFriendId: String = ""
     private val removeFriendId: String get() = _removeFriendId
 
+    private val _userProfileData: MutableLiveData<UserProfileData?> = MutableLiveData(null)
+    val userProfileData: LiveData<UserProfileData?> get() = _userProfileData
+
     fun setTabRouter(pTabRouter: MztiTabRouter) {
         if (tabRouter.value != pTabRouter) {
             _tabRouter.value = pTabRouter
@@ -67,25 +71,27 @@ class MainViewModel(
 
     // region Friends Tab
     fun requestFriendsList() {
-        setProgressFlag(true)
-        viewModelScope.launch {
-            val result = mztiRepository.makeFriendListRequest(
-                MztiSession.userToken,
-                MztiSession.generateType
-            )
+        if (friendsList.value?.isEmpty() != false) {
+            setProgressFlag(true)
+            viewModelScope.launch {
+                val result = mztiRepository.makeFriendListRequest(
+                    MztiSession.userToken,
+                    MztiSession.generateType
+                )
 
-            when (result) {
-                is NetworkResult.Success<List<FriendsDataWrapper>> -> {
-                    val data = result.data
-                    _friendsList.value = data
-                }
+                when (result) {
+                    is NetworkResult.Success<List<FriendsDataWrapper>> -> {
+                        val data = result.data
+                        _friendsList.value = data
+                    }
 
-                is NetworkResult.Fail -> {
-                    setApiFailMsg(result.msg)
-                }
+                    is NetworkResult.Fail -> {
+                        setApiFailMsg(result.msg)
+                    }
 
-                is NetworkResult.Error -> {
-                    setExceptionData(result.exception)
+                    is NetworkResult.Error -> {
+                        setExceptionData(result.exception)
+                    }
                 }
             }
         }
@@ -198,6 +204,34 @@ class MainViewModel(
         viewModelScope.launch {
             val result = downloadRepository.saveBitmap(pBitmap)
             _saveBmpResult.postValue(result)
+        }
+    }
+
+    fun requestUserProfile() {
+        if (userProfileData.value == null) {
+            setProgressFlag(true)
+
+            viewModelScope.launch {
+                val result = mztiRepository.makeUserProfileRequest(
+                    MztiSession.userToken,
+                    MztiSession.generateType
+                )
+
+                when (result) {
+                    is NetworkResult.Success<UserProfileData> -> {
+                        val data = result.data
+                        _userProfileData.value = data
+                    }
+
+                    is NetworkResult.Fail -> {
+                        setApiFailMsg(result.msg)
+                    }
+
+                    is NetworkResult.Error -> {
+                        setExceptionData(result.exception)
+                    }
+                }
+            }
         }
     }
     // endregion UserProfile Tab

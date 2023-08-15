@@ -11,12 +11,12 @@ import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.google.android.material.imageview.ShapeableImageView
+import com.google.android.material.shape.ShapeAppearanceModel
 import com.mzc.mzti.R
 import com.mzc.mzti.dp2px
 import com.mzc.mzti.model.data.mbti.MBTI
+import com.mzc.mzti.model.data.mbti.getProfileImgResId
 
 class MbtiItemView : ViewGroup {
 
@@ -53,25 +53,7 @@ class MbtiItemView : ViewGroup {
             field = value
 
             tvMbti.text = value.name
-            _mbtiImgResId = when (value) {
-                MBTI.ENFJ -> R.drawable.icon_mbti_profile_test
-                MBTI.ENFP -> R.drawable.icon_mbti_profile_test
-                MBTI.ENTJ -> R.drawable.icon_mbti_profile_test
-                MBTI.ENTP -> R.drawable.icon_mbti_profile_test
-                MBTI.ESFJ -> R.drawable.icon_mbti_profile_test
-                MBTI.ESFP -> R.drawable.icon_mbti_profile_test
-                MBTI.ESTJ -> R.drawable.icon_mbti_profile_test
-                MBTI.ESTP -> R.drawable.icon_mbti_profile_test
-                MBTI.INFJ -> R.drawable.icon_mbti_profile_test
-                MBTI.INFP -> R.drawable.icon_mbti_profile_test
-                MBTI.INTJ -> R.drawable.icon_mbti_profile_test
-                MBTI.INTP -> R.drawable.icon_mbti_profile_test
-                MBTI.ISFJ -> R.drawable.icon_mbti_profile_test
-                MBTI.ISFP -> R.drawable.icon_mbti_profile_test
-                MBTI.ISTJ -> R.drawable.icon_mbti_profile_test
-                MBTI.ISTP -> R.drawable.icon_mbti_profile_test
-                MBTI.MZTI -> R.drawable.icon_mbti_profile_test
-            }
+            _mbtiImgResId = getProfileImgResId(value)
         }
     private val mbti: MBTI get() = _mbti
 
@@ -80,13 +62,7 @@ class MbtiItemView : ViewGroup {
         set(value) {
             field = value
 
-            Glide.with(ivProfileImg.context)
-                .load(value)
-                .transform(CircleCrop())
-                .fallback(R.drawable.icon_mbti_profile_test)
-                .placeholder(R.drawable.icon_mbti_profile_test)
-                .error(R.drawable.icon_mbti_profile_test)
-                .into(ivProfileImg)
+            ivProfileImg.setImageResource(value)
         }
     private val mbtiImgResId: Int get() = _mbtiImgResId
 
@@ -107,6 +83,8 @@ class MbtiItemView : ViewGroup {
             140.dp2px(context),
             140.dp2px(context)
         )
+        shapeAppearanceModel =
+            ShapeAppearanceModel.builder(context, 0, R.style.circleImageView).build()
         scaleType = ImageView.ScaleType.FIT_XY
     }
 

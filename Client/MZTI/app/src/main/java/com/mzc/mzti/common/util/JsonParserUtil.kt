@@ -6,12 +6,16 @@ import com.mzc.mzti.model.data.friends.FriendsLayoutType
 import com.mzc.mzti.model.data.friends.FriendsMyProfileData
 import com.mzc.mzti.model.data.friends.FriendsOtherProfileData
 import com.mzc.mzti.model.data.mbti.MBTI
+import com.mzc.mzti.model.data.mbti.MbtiBadgeData
+import com.mzc.mzti.model.data.mbti.MbtiSize
 import com.mzc.mzti.model.data.mbti.getMBTI
 import com.mzc.mzti.model.data.network.NetworkResult
 import com.mzc.mzti.model.data.user.UserInfoData
+import com.mzc.mzti.model.data.user.UserProfileData
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.lang.Exception
 import java.util.Locale
 
 private const val TAG: String = "JsonParserUtil"
@@ -28,6 +32,10 @@ private const val KEY_MBTI: String = "mbti"
 private const val KEY_PROFILE_IMG: String = "profileImage"
 
 private const val KEY_FRIEND_LIST: String = "friendlist"
+
+private const val KEY_TEST_RESULT: String = "testResult"
+private const val KEY_IS_FLAG: String = "isFlag"
+private const val KEY_SIZE: String = "size"
 
 class JsonParserUtil {
 
@@ -145,14 +153,17 @@ class JsonParserUtil {
             val loginId: String = getString(resultData, KEY_LOGIN_ID)
             val generateType: String = getString(resultData, KEY_GENERATE_TYPE)
             val accessToken: String = getString(resultData, KEY_ACCESS_TOKEN)
+            val nickname: String = getString(resultData, KEY_USER_NAME)
+            val strMbti: String = getString(resultData, KEY_MBTI)
+            val profileImg: String = getString(resultData, KEY_PROFILE_IMG)
 
             UserInfoData(
                 id = loginId,
                 generateType = generateType,
                 token = accessToken,
-                nickname = "",
-                mbti = MBTI.MZTI,
-                profileImg = ""
+                nickname = nickname,
+                mbti = getMBTI(strMbti),
+                profileImg = profileImg
             )
         } else {
             null
@@ -311,6 +322,75 @@ class JsonParserUtil {
             NetworkResult.Success(resultData)
         } else {
             NetworkResult.Fail(resultData)
+        }
+    }
+
+    fun getUserProfileResponse(jsonRoot: JSONObject): NetworkResult<UserProfileData> {
+        val resultCode = getInt(jsonRoot, KEY_RESULT_CODE)
+        if (resultCode != 200) {
+            return NetworkResult.Fail("API Request Fail, resultCode=$resultCode")
+        }
+
+        val resultData = getJsonObject(jsonRoot, KEY_RESULT_DATA)
+        return if (resultData != null) {
+            val loginId = getString(resultData, KEY_LOGIN_ID)
+            val userName = getString(resultData, KEY_USER_NAME)
+            val profileImg = getString(resultData, KEY_PROFILE_IMG)
+            val strMBTI = getString(resultData, KEY_MBTI)
+
+            val mbtiBadgeList = arrayListOf<MbtiBadgeData>()
+            val testResultArray = getJSONArray(resultData, KEY_TEST_RESULT)
+            if (testResultArray != null) {
+                for (idx in 0 until testResultArray.length()) {
+                    if (!testResultArray.isNull(idx)) {
+                        val obj = testResultArray.getJSONObject(idx)
+
+                        if (obj != null) {
+                            val strBadgeMbti = getString(obj, KEY_MBTI)
+                            val isFlag = getBoolean(obj, KEY_IS_FLAG)
+                            val sizeArray = getJSONArray(obj, KEY_SIZE)
+
+                            if (sizeArray != null) {
+                                var mbtiSize0 = 0
+                                var mbtiSize1 = 0
+                                var mbtiSize2 = 0
+                                var mbtiSize3 = 0
+
+                                try {
+                                    mbtiSize0 = sizeArray.getInt(0)
+                                    mbtiSize1 = sizeArray.getInt(1)
+                                    mbtiSize2 = sizeArray.getInt(2)
+                                    mbtiSize3 = sizeArray.getInt(3)
+                                } catch (e: Exception) {
+                                    DLog.e(TAG, e.stackTraceToString())
+                                }
+
+                                mbtiBadgeList.add(
+                                    MbtiBadgeData(
+                                        mbti = getMBTI(strBadgeMbti),
+                                        isFlag = isFlag,
+                                        mbtiSize0 = MbtiSize.values()[mbtiSize0],
+                                        mbtiSize1 = MbtiSize.values()[mbtiSize1],
+                                        mbtiSize2 = MbtiSize.values()[mbtiSize2],
+                                        mbtiSize3 = MbtiSize.values()[mbtiSize3]
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            val userProfileData = UserProfileData(
+                id = loginId,
+                nickname = userName,
+                mbti = getMBTI(strMBTI),
+                profileImg = profileImg,
+                mbtiBadgeList = mbtiBadgeList
+            )
+            NetworkResult.Success(userProfileData)
+        } else {
+            NetworkResult.Fail("ResultData=$resultData")
         }
     }
 

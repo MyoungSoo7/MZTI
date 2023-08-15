@@ -4,6 +4,7 @@ private const val TAG: String = "MbtiBadgeData"
 
 data class MbtiBadgeData(
     val mbti: MBTI,
+    val isFlag: Boolean,
     val mbtiSize0: MbtiSize,
     val mbtiSize1: MbtiSize,
     val mbtiSize2: MbtiSize,
@@ -13,6 +14,7 @@ data class MbtiBadgeData(
     override fun toString(): String {
         return "$TAG{" +
                 "mbti=${mbti.name}, " +
+                "isFlag=$isFlag, " +
                 "mbtiSize0=${mbtiSize0}, " +
                 "mbtiSize1=${mbtiSize1}, " +
                 "mbtiSize2=${mbtiSize2}, " +

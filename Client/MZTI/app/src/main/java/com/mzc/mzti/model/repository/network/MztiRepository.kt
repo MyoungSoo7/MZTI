@@ -9,6 +9,7 @@ import com.mzc.mzti.model.data.friends.FriendsOtherProfileData
 import com.mzc.mzti.model.data.network.NetworkResult
 import com.mzc.mzti.model.data.sign.SignUpData
 import com.mzc.mzti.model.data.user.UserInfoData
+import com.mzc.mzti.model.data.user.UserProfileData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONException
@@ -126,7 +127,7 @@ class MztiRepository(
             val hsParams = hashMapOf<String, Any>().apply {
                 put("loginId", pSignUpData.signUpId)
                 put("password", pSignUpData.signUpPw)
-                put("nickname", pSignUpData.signUpNickname)
+                put("username", pSignUpData.signUpNickname)
                 put("mbti", pSignUpData.signUpMbti.name)
             }
 
@@ -238,6 +239,37 @@ class MztiRepository(
                 try {
                     val jsonRoot = JSONObject(message)
                     jsonParserUtil.getRemoveFriendResponse(jsonRoot)
+                } catch (e: JSONException) {
+                    DLog.e(TAG, e.stackTraceToString())
+                    NetworkResult.Error(e)
+                }
+            } else {
+                NetworkResult.Fail(
+                    context.getString(R.string.api_connection_fail_msg)
+                )
+            }
+        }
+    }
+
+    suspend fun makeUserProfileRequest(
+        pUserToken: String,
+        pGenerateType: String
+    ): NetworkResult<UserProfileData> {
+        return withContext(Dispatchers.IO) {
+            val hsParams = hashMapOf<String, Any>()
+
+            val userProfileUrl = "${BASE_URL}api/members/getProfile"
+            val message = sendRequestToMztiServer(
+                userProfileUrl,
+                hsParams,
+                GET,
+                authorization = "$pGenerateType $pUserToken"
+            )
+
+            if (message.isNotEmpty()) {
+                try {
+                    val jsonRoot = JSONObject(message)
+                    jsonParserUtil.getUserProfileResponse(jsonRoot)
                 } catch (e: JSONException) {
                     DLog.e(TAG, e.stackTraceToString())
                     NetworkResult.Error(e)

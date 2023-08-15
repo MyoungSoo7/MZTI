@@ -11,6 +11,7 @@ import com.mzc.mzti.databinding.ItemUserProfileLogoutBinding
 import com.mzc.mzti.databinding.ItemUserProfileMbtiBadgeBinding
 import com.mzc.mzti.databinding.ItemUserProfileMbtiCardBinding
 import com.mzc.mzti.databinding.ItemUserProfileMbtiTestBinding
+import com.mzc.mzti.model.data.user.UserProfileData
 import com.mzc.mzti.profile.viewholder.UserProfileAppVersionViewHolder
 import com.mzc.mzti.profile.viewholder.UserProfileEditViewHolder
 import com.mzc.mzti.profile.viewholder.UserProfileLogoutViewHolder
@@ -32,6 +33,8 @@ class UserProfileAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var userProfileListener: UserProfileListener? = null
+
+    private var userProfileData: UserProfileData? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -127,7 +130,9 @@ class UserProfileAdapter(
         when (holder.itemViewType) {
             // MBTI증
             R.layout.item_user_profile_mbti_card -> {
-
+                if (holder is UserProfileMbtiCardViewHolder) {
+                    holder.bindData()
+                }
             }
 
             // 프로필 수정하기
@@ -142,7 +147,9 @@ class UserProfileAdapter(
 
             // MBTI 뱃지
             R.layout.item_user_profile_mbti_badge -> {
-
+                if (holder is UserProfileMbtiBadgeViewHolder) {
+                    holder.bindData(userProfileData?.mbtiBadgeList ?: listOf())
+                }
             }
 
             // 앱 버전
@@ -170,6 +177,11 @@ class UserProfileAdapter(
         UserProfileLayoutType.APP_VERSION -> R.layout.item_user_profile_app_version
         UserProfileLayoutType.LOGOUT -> R.layout.item_user_profile_logout
         else -> R.layout.item_user_profile_app_version
+    }
+
+    fun update(pUserProfileData: UserProfileData) {
+        userProfileData = pUserProfileData
+        notifyItemRangeChanged(0, itemCount)
     }
 
     enum class UserProfileLayoutType {

@@ -1,22 +1,25 @@
 package com.mzc.mzti.profile.view
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mzc.mzti.R
 import com.mzc.mzti.base.BaseFragment
 import com.mzc.mzti.common.custom.WrapContentLinearLayoutManager
 import com.mzc.mzti.common.dialog.MessageDialog
-import com.mzc.mzti.databinding.DialogMztiMessageBinding
 import com.mzc.mzti.databinding.FragmentUserProfileBinding
 import com.mzc.mzti.main.viewmodel.MainViewModel
 import com.mzc.mzti.model.data.router.MztiTabRouter
 import com.mzc.mzti.profile.adapter.UserProfileAdapter
+import java.lang.Exception
 
 private const val TAG: String = "UserProfileFragment"
 
@@ -44,6 +47,7 @@ class UserProfileFragment : BaseFragment() {
     ): View {
         _binding = FragmentUserProfileBinding.inflate(inflater, container, false)
 
+        setObserver()
         init()
 
         return binding.root
@@ -54,6 +58,15 @@ class UserProfileFragment : BaseFragment() {
         _binding = null
     }
     // endregion Fragment LifeCycle
+
+    private fun setObserver() {
+        model.userProfileData.observe(viewLifecycleOwner, Observer { userProfileData ->
+            if (userProfileData != null) {
+                model.setProgressFlag(false)
+                mAdapter.update(userProfileData)
+            }
+        })
+    }
 
     private fun init() {
         mAdapter = UserProfileAdapter().apply {
@@ -75,7 +88,13 @@ class UserProfileFragment : BaseFragment() {
                 }
 
                 override fun connectMbtiTestSite() {
-
+                    try {
+                        val intent = Intent(Intent.ACTION_VIEW)
+                        intent.data = Uri.parse("https://www.16personalities.com/ko")
+                        requireContext().startActivity(intent)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                 }
 
                 override fun letsGoMztiTest() {
@@ -96,6 +115,8 @@ class UserProfileFragment : BaseFragment() {
                 itemAnimator = null
             }
         }
+
+        model.requestUserProfile()
     }
 
     private fun showLogoutDialog() {

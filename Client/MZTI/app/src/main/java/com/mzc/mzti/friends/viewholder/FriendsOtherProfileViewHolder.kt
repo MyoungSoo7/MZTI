@@ -6,6 +6,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.mzc.mzti.R
 import com.mzc.mzti.databinding.ItemFriendsOtherProfileBinding
 import com.mzc.mzti.model.data.friends.FriendsOtherProfileData
+import com.mzc.mzti.model.data.mbti.getProfileImgResId
 
 class FriendsOtherProfileViewHolder(
     private val binding: ItemFriendsOtherProfileBinding,
@@ -32,13 +33,14 @@ class FriendsOtherProfileViewHolder(
         val pos = bindingAdapterPosition
 
         binding.apply {
+            val defaultProfileImgRes = getProfileImgResId(pData.mbti)
             // 프로필 사진
             Glide.with(ivOtherProfileItemImg.context)
                 .load(pData.profileImg)
                 .transform(CircleCrop())
-                .placeholder(R.color.border)
-                .fallback(R.color.border)
-                .error(R.color.border)
+                .placeholder(defaultProfileImgRes)
+                .fallback(defaultProfileImgRes)
+                .error(defaultProfileImgRes)
                 .into(ivOtherProfileItemImg)
             // 닉네임
             tvOtherProfileItemNickname.text = pData.nickname
