@@ -31,9 +31,6 @@
         android:theme="@style/Theme.MZTI"
         tools:targetApi="31">
         <activity
-            android:name=".sign.view.SignActivity"
-            android:exported="false" />
-        <activity
             android:name=".intro.view.IntroActivity"
             android:exported="true">
             <intent-filter>
@@ -43,8 +40,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".main.view.MainActivity"
+            android:name=".sign.view.SignActivity"
             android:exported="false" />
+        <activity
+            android:name=".main.view.MainActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".friends.view.AddFriendActivity"
+            android:exported="false"
+            android:theme="@style/MztiBottomSheetDialogTheme"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".profileedit.view.UserProfileEditActivity"
             android:exported="false" />

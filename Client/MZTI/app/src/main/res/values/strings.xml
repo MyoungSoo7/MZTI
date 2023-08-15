@@ -12,6 +12,7 @@
     <string name="toast_msg_sign_up_success">회원가입 되었습니다.</string>
 
     <string name="api_connection_fail_msg">서버로부터 응답이 없습니다. 잠시 후에 다시 시도해 주세요.</string>
+    <string name="login_fail_msg">계정 정보가 올바르지 않습니다. 다시 한번 확인해 주세요.</string>
 
     <string name="confirm_btn">완료</string>
     <string name="next_btn">다음</string>
@@ -35,6 +36,13 @@
 
     <string name="friends_title">친구</string>
     <string name="friends_count">친구 %1$d명</string>
+    <string name="addFriends_title">ID로 친구 추가</string>
+    <string name="addFriends_myIdTitle">내 아이디</string>
+    <string name="addFriends_friendIdHint">친구 ID</string>
+    <string name="addFriends_confirm">친구추가</string>
+    <string name="addFriends_add_success">새로운 친구 %1$s님을 환영해 주세요!</string>
+    <string name="removeFriend_confirm">더 이상 보고 싶지 않아요 :(</string>
+    <string name="removeFriend_cancel">취소하기</string>
 
     <string name="userProfile_title">프로필</string>
     <string name="mbtiCard_title">#MBTI증</string>

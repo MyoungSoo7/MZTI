@@ -45,4 +45,44 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="MztiBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/MztiBottomSheetStyle</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="MztiBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">42dp</item>
+        <item name="cornerSizeTopRight">42dp</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+    <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/customBottomSheetStyle</item>
+    </style>
+
+    <style name="customBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">26dp</item>
+        <item name="cornerSizeTopLeft">26dp</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+    <style name="BottomSheetDialogFragmentAnimation">
+        <item name="android:windowEnterAnimation">@anim/enter_from_bottom_200</item>
+        <item name="android:windowExitAnimation">@anim/exit_to_bottom_200</item>
+    </style>
+
+    <style name="TransparentBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <!--<item name="android:windowCloseOnTouchOutside">false</item>-->
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:colorBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.3</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
 </resources>

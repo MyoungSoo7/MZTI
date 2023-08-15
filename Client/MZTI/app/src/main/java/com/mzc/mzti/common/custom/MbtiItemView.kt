@@ -54,38 +54,38 @@ class MbtiItemView : ViewGroup {
 
             tvMbti.text = value.name
             _mbtiImgResId = when (value) {
-                MBTI.ENFJ -> R.drawable.icon_mbti_profile_dummy
-                MBTI.ENFP -> R.drawable.icon_mbti_profile_dummy
-                MBTI.ENTJ -> R.drawable.icon_mbti_profile_dummy
-                MBTI.ENTP -> R.drawable.icon_mbti_profile_dummy
-                MBTI.ESFJ -> R.drawable.icon_mbti_profile_dummy
-                MBTI.ESFP -> R.drawable.icon_mbti_profile_dummy
-                MBTI.ESTJ -> R.drawable.icon_mbti_profile_dummy
-                MBTI.ESTP -> R.drawable.icon_mbti_profile_dummy
-                MBTI.INFJ -> R.drawable.icon_mbti_profile_dummy
-                MBTI.INFP -> R.drawable.icon_mbti_profile_dummy
-                MBTI.INTJ -> R.drawable.icon_mbti_profile_dummy
-                MBTI.INTP -> R.drawable.icon_mbti_profile_dummy
-                MBTI.ISFJ -> R.drawable.icon_mbti_profile_dummy
-                MBTI.ISFP -> R.drawable.icon_mbti_profile_dummy
-                MBTI.ISTJ -> R.drawable.icon_mbti_profile_dummy
-                MBTI.ISTP -> R.drawable.icon_mbti_profile_dummy
-                MBTI.MZTI -> R.drawable.icon_mbti_profile_dummy
+                MBTI.ENFJ -> R.drawable.icon_mbti_profile_test
+                MBTI.ENFP -> R.drawable.icon_mbti_profile_test
+                MBTI.ENTJ -> R.drawable.icon_mbti_profile_test
+                MBTI.ENTP -> R.drawable.icon_mbti_profile_test
+                MBTI.ESFJ -> R.drawable.icon_mbti_profile_test
+                MBTI.ESFP -> R.drawable.icon_mbti_profile_test
+                MBTI.ESTJ -> R.drawable.icon_mbti_profile_test
+                MBTI.ESTP -> R.drawable.icon_mbti_profile_test
+                MBTI.INFJ -> R.drawable.icon_mbti_profile_test
+                MBTI.INFP -> R.drawable.icon_mbti_profile_test
+                MBTI.INTJ -> R.drawable.icon_mbti_profile_test
+                MBTI.INTP -> R.drawable.icon_mbti_profile_test
+                MBTI.ISFJ -> R.drawable.icon_mbti_profile_test
+                MBTI.ISFP -> R.drawable.icon_mbti_profile_test
+                MBTI.ISTJ -> R.drawable.icon_mbti_profile_test
+                MBTI.ISTP -> R.drawable.icon_mbti_profile_test
+                MBTI.MZTI -> R.drawable.icon_mbti_profile_test
             }
         }
     private val mbti: MBTI get() = _mbti
 
     @DrawableRes
-    private var _mbtiImgResId: Int = R.drawable.icon_mbti_profile_dummy
+    private var _mbtiImgResId: Int = R.drawable.icon_mbti_profile_test
         set(value) {
             field = value
 
             Glide.with(ivProfileImg.context)
                 .load(value)
                 .transform(CircleCrop())
-                .fallback(R.drawable.icon_mbti_profile_dummy)
-                .placeholder(R.drawable.icon_mbti_profile_dummy)
-                .error(R.drawable.icon_mbti_profile_dummy)
+                .fallback(R.drawable.icon_mbti_profile_test)
+                .placeholder(R.drawable.icon_mbti_profile_test)
+                .error(R.drawable.icon_mbti_profile_test)
                 .into(ivProfileImg)
         }
     private val mbtiImgResId: Int get() = _mbtiImgResId

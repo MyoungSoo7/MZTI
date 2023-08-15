@@ -4,6 +4,8 @@ import android.content.Context
 import com.mzc.mzti.R
 import com.mzc.mzti.base.BaseNetworkRepository
 import com.mzc.mzti.common.util.DLog
+import com.mzc.mzti.model.data.friends.FriendsDataWrapper
+import com.mzc.mzti.model.data.friends.FriendsOtherProfileData
 import com.mzc.mzti.model.data.network.NetworkResult
 import com.mzc.mzti.model.data.sign.SignUpData
 import com.mzc.mzti.model.data.user.UserInfoData
@@ -48,7 +50,7 @@ class MztiRepository(
                 }
             } else {
                 NetworkResult.Fail(
-                    context.getString(R.string.api_connection_fail_msg)
+                    context.getString(R.string.login_fail_msg)
                 )
             }
         }
@@ -135,6 +137,107 @@ class MztiRepository(
                 try {
                     val jsonRoot = JSONObject(message)
                     jsonParserUtil.getSignUpResponse(jsonRoot)
+                } catch (e: JSONException) {
+                    DLog.e(TAG, e.stackTraceToString())
+                    NetworkResult.Error(e)
+                }
+            } else {
+                NetworkResult.Fail(
+                    context.getString(R.string.api_connection_fail_msg)
+                )
+            }
+        }
+    }
+
+    suspend fun makeFriendListRequest(
+        pUserToken: String,
+        pGenerateType: String
+    ): NetworkResult<List<FriendsDataWrapper>> {
+        return withContext(Dispatchers.IO) {
+            val hsParams = hashMapOf<String, Any>()
+
+            val friendListUrl = "${BASE_URL}api/members/friendList"
+            val message = sendRequestToMztiServer(
+                friendListUrl,
+                hsParams,
+                GET,
+                authorization = "$pGenerateType $pUserToken"
+            )
+            DLog.d("${TAG}_makeFriendListRequest", "message=$message")
+
+            if (message.isNotEmpty()) {
+                try {
+                    val jsonRoot = JSONObject(message)
+                    val data = jsonParserUtil.getFriendListResponse(jsonRoot)
+                    NetworkResult.Success(data)
+                } catch (e: JSONException) {
+                    DLog.e(TAG, e.stackTraceToString())
+                    NetworkResult.Error(e)
+                }
+            } else {
+                NetworkResult.Fail(
+                    context.getString(R.string.api_connection_fail_msg)
+                )
+            }
+        }
+    }
+
+    suspend fun makeAddFriendRequest(
+        pFriendId: String,
+        pUserToken: String,
+        pGenerateType: String
+    ): NetworkResult<FriendsOtherProfileData> {
+        return withContext(Dispatchers.IO) {
+            val hsParams = hashMapOf<String, Any>().apply {
+                put("loginId", pFriendId)
+            }
+
+            val addFriendUrl = "${BASE_URL}api/members/addFriend"
+            val message = sendRequestToMztiServer(
+                addFriendUrl,
+                hsParams,
+                POST,
+                authorization = "$pGenerateType $pUserToken"
+            )
+
+            if (message.isNotEmpty()) {
+                try {
+                    val jsonRoot = JSONObject(message)
+                    jsonParserUtil.getAddFriendResponse(jsonRoot)
+                } catch (e: JSONException) {
+                    DLog.e(TAG, e.stackTraceToString())
+                    NetworkResult.Error(e)
+                }
+            } else {
+                NetworkResult.Fail(
+                    context.getString(R.string.api_connection_fail_msg)
+                )
+            }
+        }
+    }
+
+    suspend fun makeRemoveFriendRequest(
+        pFriendId: String,
+        pUserToken: String,
+        pGenerateType: String
+    ): NetworkResult<String> {
+        return withContext(Dispatchers.IO) {
+            val hsParams = hashMapOf<String, Any>().apply {
+                put("loginId", pFriendId)
+            }
+
+            val removeFriendUrl = "${BASE_URL}api/members/deleteFriend"
+            val message = sendRequestToMztiServer(
+                removeFriendUrl,
+                hsParams,
+                POST,
+                authorization = "$pGenerateType $pUserToken"
+            )
+
+            if (message.isNotEmpty()) {
+                try {
+                    val jsonRoot = JSONObject(message)
+                    jsonParserUtil.getRemoveFriendResponse(jsonRoot)
                 } catch (e: JSONException) {
                     DLog.e(TAG, e.stackTraceToString())
                     NetworkResult.Error(e)

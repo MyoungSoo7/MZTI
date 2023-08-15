@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.mzc.mzti.friends.viewmodel.AddFriendViewModel
 import com.mzc.mzti.intro.viewmodel.IntroViewModel
 import com.mzc.mzti.main.viewmodel.MainViewModel
 import com.mzc.mzti.model.repository.download.DownloadRepository
@@ -37,6 +38,12 @@ open class BaseViewModel : ViewModel() {
     private val _apiFailMsg: MutableLiveData<String> = MutableLiveData()
     val apiFailMsg: LiveData<String> get() = _apiFailMsg
 
+    /**
+     * Toast Message
+     */
+    private val _toastMsg: MutableLiveData<String> = MutableLiveData()
+    val toastMsg: LiveData<String> get() = _toastMsg
+
     fun setProgressFlag(pProgressFlag: Boolean) {
         if (progressFlag.value != pProgressFlag)
             _progressFlag.value = pProgressFlag
@@ -50,6 +57,10 @@ open class BaseViewModel : ViewModel() {
         _apiFailMsg.value = pMsg
     }
 
+    fun setToastMsg(pMsg: String) {
+        _toastMsg.value = pMsg
+    }
+
     class Factory(private val application: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             // Intro ViewModel
@@ -61,7 +72,8 @@ open class BaseViewModel : ViewModel() {
             // Main ViewModel
             else if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
                 return MainViewModel(
-                    DownloadRepository(application)
+                    DownloadRepository(application),
+                    MztiRepository(application)
                 ) as T
             }
             // UserProfileEdit ViewModel
@@ -71,6 +83,12 @@ open class BaseViewModel : ViewModel() {
             // Sign ViewModel
             else if (modelClass.isAssignableFrom(SignViewModel::class.java)) {
                 return SignViewModel(
+                    MztiRepository(application)
+                ) as T
+            }
+            // AddFriend ViewModel
+            else if (modelClass.isAssignableFrom(AddFriendViewModel::class.java)) {
+                return AddFriendViewModel(
                     MztiRepository(application)
                 ) as T
             }

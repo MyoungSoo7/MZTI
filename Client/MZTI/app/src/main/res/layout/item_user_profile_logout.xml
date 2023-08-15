@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
     android:id="@+id/cl_logout"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white">
 
@@ -15,12 +15,24 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/iv_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:src="@drawable/icon_sign_out"
+        app:layout_constraintBottom_toBottomOf="@id/tv_logout_title"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/tv_logout_title"
+        app:layout_constraintTop_toTopOf="@id/tv_logout_title" />
+
     <TextView
         android:id="@+id/tv_logout_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="12dp"
         android:layout_marginTop="19dp"
+        android:layout_marginRight="20dp"
         android:layout_marginBottom="18dp"
         android:fontFamily="@font/noto_sans_kr_regular"
         android:includeFontPadding="false"
@@ -29,7 +41,9 @@
         android:textColor="@color/text_black"
         android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/iv_logout"
+        app:layout_constraintRight_toRightOf="parent"
+
         app:layout_constraintTop_toBottomOf="@id/view_logout_topBorder" />
 
 

@@ -1,5 +1,10 @@
 package com.mzc.mzti.common.util
 
+import com.mzc.mzti.common.session.MztiSession
+import com.mzc.mzti.model.data.friends.FriendsDataWrapper
+import com.mzc.mzti.model.data.friends.FriendsLayoutType
+import com.mzc.mzti.model.data.friends.FriendsMyProfileData
+import com.mzc.mzti.model.data.friends.FriendsOtherProfileData
 import com.mzc.mzti.model.data.mbti.MBTI
 import com.mzc.mzti.model.data.mbti.getMBTI
 import com.mzc.mzti.model.data.network.NetworkResult
@@ -21,6 +26,8 @@ private const val KEY_ACCESS_TOKEN: String = "accessToken"
 private const val KEY_USER_NAME: String = "username"
 private const val KEY_MBTI: String = "mbti"
 private const val KEY_PROFILE_IMG: String = "profileImage"
+
+private const val KEY_FRIEND_LIST: String = "friendlist"
 
 class JsonParserUtil {
 
@@ -200,6 +207,110 @@ class JsonParserUtil {
             NetworkResult.Fail(failMsg)
         } else {
             NetworkResult.Success(true)
+        }
+    }
+
+    fun getFriendListResponse(jsonRoot: JSONObject): List<FriendsDataWrapper> {
+        val ret = arrayListOf(
+            FriendsDataWrapper(
+                FriendsLayoutType.MY_PROFILE,
+                FriendsMyProfileData(
+                    nickname = MztiSession.userNickname,
+                    mbti = MztiSession.userMbti,
+                    profileImg = MztiSession.userProfileImg
+                )
+            )
+        )
+
+        val resultCode = getInt(jsonRoot, KEY_RESULT_CODE)
+        if (resultCode != 200) {
+            return ret
+        }
+
+        val otherProfileList = arrayListOf<FriendsOtherProfileData>()
+
+        val resultData = getJsonObject(jsonRoot, KEY_RESULT_DATA)
+        if (resultData != null) {
+            val friendListArray = getJSONArray(resultData, KEY_FRIEND_LIST)
+
+            if (friendListArray != null) {
+                for (idx in 0 until friendListArray.length()) {
+                    if (!friendListArray.isNull(idx)) {
+                        val obj = friendListArray.getJSONObject(idx)
+
+                        if (obj != null) {
+                            val loginId = getString(obj, KEY_LOGIN_ID)
+                            val userName = getString(obj, KEY_USER_NAME)
+                            val profileImg = getString(obj, KEY_PROFILE_IMG)
+                            val strMbti = getString(obj, KEY_MBTI)
+
+                            otherProfileList.add(
+                                FriendsOtherProfileData(
+                                    id = loginId,
+                                    nickname = userName,
+                                    mbti = getMBTI(strMbti),
+                                    profileImg = profileImg
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+        }
+        otherProfileList.sort()
+
+        ret.add(
+            FriendsDataWrapper(
+                FriendsLayoutType.FRIEND_COUNT,
+                otherProfileList.size
+            )
+        )
+
+        for (otherProfile in otherProfileList) {
+            ret.add(
+                FriendsDataWrapper(
+                    FriendsLayoutType.OTHER_PROFILE,
+                    otherProfile
+                )
+            )
+        }
+
+        return ret
+    }
+
+    fun getAddFriendResponse(jsonRoot: JSONObject): NetworkResult<FriendsOtherProfileData> {
+        val resultCode = getInt(jsonRoot, KEY_RESULT_CODE)
+        if (resultCode != 200) {
+            return NetworkResult.Fail("API Request Fail, resultCode=$resultCode")
+        }
+
+        val resultData = getJsonObject(jsonRoot, KEY_RESULT_DATA)
+        return if (resultData != null) {
+            val loginId = getString(resultData, KEY_LOGIN_ID)
+            val userName = getString(resultData, KEY_USER_NAME)
+            val profileImg = getString(resultData, KEY_PROFILE_IMG)
+            val strMBTI = getString(resultData, KEY_MBTI)
+
+            NetworkResult.Success(
+                FriendsOtherProfileData(
+                    id = loginId,
+                    nickname = userName,
+                    mbti = getMBTI(strMBTI),
+                    profileImg = profileImg
+                )
+            )
+        } else {
+            return NetworkResult.Fail("ResultData=$resultData")
+        }
+    }
+
+    fun getRemoveFriendResponse(jsonRoot: JSONObject): NetworkResult<String> {
+        val resultCode = getInt(jsonRoot, KEY_RESULT_CODE)
+        val resultData = getString(jsonRoot, KEY_RESULT_DATA)
+        return if (resultCode == 200) {
+            NetworkResult.Success(resultData)
+        } else {
+            NetworkResult.Fail(resultData)
         }
     }
 

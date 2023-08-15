@@ -122,6 +122,12 @@ class FriendsAdapter(
         FriendsLayoutType.OTHER_PROFILE -> R.layout.item_friends_other_profile
     }
 
+    fun update(pItems: List<FriendsDataWrapper>) {
+        items.clear()
+        items.addAll(pItems)
+        notifyDataSetChanged()
+    }
+
     interface FriendsListener {
         fun showMbtiInfo(mbti: MBTI)
 

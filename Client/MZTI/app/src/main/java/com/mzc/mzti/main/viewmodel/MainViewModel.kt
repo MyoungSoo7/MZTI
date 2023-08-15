@@ -1,20 +1,28 @@
 package com.mzc.mzti.main.viewmodel
 
 import android.graphics.Bitmap
+import android.net.NetworkRequest
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mzc.mzti.base.BaseViewModel
+import com.mzc.mzti.common.session.MztiSession
 import com.mzc.mzti.model.data.download.DownloadResult
+import com.mzc.mzti.model.data.friends.FriendsDataWrapper
+import com.mzc.mzti.model.data.friends.FriendsLayoutType
+import com.mzc.mzti.model.data.friends.FriendsOtherProfileData
+import com.mzc.mzti.model.data.network.NetworkResult
 import com.mzc.mzti.model.data.router.MztiTabRouter
 import com.mzc.mzti.model.repository.download.DownloadRepository
+import com.mzc.mzti.model.repository.network.MztiRepository
 import kotlinx.coroutines.launch
 
 private const val TAG: String = "MainViewModel"
 
 class MainViewModel(
-    private val downloadRepository: DownloadRepository
+    private val downloadRepository: DownloadRepository,
+    private val mztiRepository: MztiRepository
 ) : BaseViewModel() {
 
     /**
@@ -36,6 +44,15 @@ class MainViewModel(
     private val _saveBmpResult: MutableLiveData<DownloadResult<Uri>?> = MutableLiveData(null)
     val saveBmpResult: LiveData<DownloadResult<Uri>?> get() = _saveBmpResult
 
+    private val _friendsList: MutableLiveData<List<FriendsDataWrapper>> = MutableLiveData()
+    val friendsList: LiveData<List<FriendsDataWrapper>> get() = _friendsList
+
+    /**
+     * 삭제할 친구 ID
+     */
+    private var _removeFriendId: String = ""
+    private val removeFriendId: String get() = _removeFriendId
+
     fun setTabRouter(pTabRouter: MztiTabRouter) {
         if (tabRouter.value != pTabRouter) {
             _tabRouter.value = pTabRouter
@@ -47,6 +64,132 @@ class MainViewModel(
             _logoutFlag.value = pFlag
         }
     }
+
+    // region Friends Tab
+    fun requestFriendsList() {
+        setProgressFlag(true)
+        viewModelScope.launch {
+            val result = mztiRepository.makeFriendListRequest(
+                MztiSession.userToken,
+                MztiSession.generateType
+            )
+
+            when (result) {
+                is NetworkResult.Success<List<FriendsDataWrapper>> -> {
+                    val data = result.data
+                    _friendsList.value = data
+                }
+
+                is NetworkResult.Fail -> {
+                    setApiFailMsg(result.msg)
+                }
+
+                is NetworkResult.Error -> {
+                    setExceptionData(result.exception)
+                }
+            }
+        }
+    }
+
+    fun requestAddFriend(pOtherProfileData: FriendsOtherProfileData) {
+        setProgressFlag(true)
+        viewModelScope.launch {
+            val prevList = friendsList.value ?: arrayListOf()
+            val newList = arrayListOf<FriendsDataWrapper>()
+
+            val otherProfileList = arrayListOf(pOtherProfileData)
+            for (data in prevList) {
+                if (data.data is FriendsOtherProfileData) {
+                    otherProfileList.add(data.data)
+                } else if (data.type == FriendsLayoutType.FRIEND_COUNT) {
+                    newList.add(
+                        FriendsDataWrapper(
+                            FriendsLayoutType.FRIEND_COUNT,
+                            (data.data as Int) + 1
+                        )
+                    )
+                } else {
+                    newList.add(data)
+                }
+            }
+            otherProfileList.sort()
+
+            for (otherProfile in otherProfileList) {
+                newList.add(
+                    FriendsDataWrapper(
+                        FriendsLayoutType.OTHER_PROFILE,
+                        otherProfile
+                    )
+                )
+            }
+
+            _friendsList.value = newList
+        }
+    }
+
+    fun setRemoveFriendId(pFriendId: String) {
+        _removeFriendId = pFriendId
+    }
+
+    fun requestRemoveFriend() {
+        val id = removeFriendId
+        if (id.isNotEmpty()) {
+            setProgressFlag(true)
+            viewModelScope.launch {
+                val result = mztiRepository.makeRemoveFriendRequest(
+                    id,
+                    MztiSession.userToken,
+                    MztiSession.generateType
+                )
+
+                when (result) {
+                    is NetworkResult.Success<String> -> {
+                        val prevList = friendsList.value ?: arrayListOf()
+                        val newList = arrayListOf<FriendsDataWrapper>()
+
+                        val otherProfileList = arrayListOf<FriendsOtherProfileData>()
+                        for (data in prevList) {
+                            if (data.data is FriendsOtherProfileData) {
+                                otherProfileList.add(data.data)
+                            } else if (data.type == FriendsLayoutType.FRIEND_COUNT) {
+                                newList.add(
+                                    FriendsDataWrapper(
+                                        FriendsLayoutType.FRIEND_COUNT,
+                                        (data.data as Int) + 1
+                                    )
+                                )
+                            } else {
+                                newList.add(data)
+                            }
+                        }
+
+                        for (otherProfile in otherProfileList) {
+                            if (otherProfile.id != id) {
+                                newList.add(
+                                    FriendsDataWrapper(
+                                        FriendsLayoutType.OTHER_PROFILE,
+                                        otherProfile
+                                    )
+                                )
+                            }
+                        }
+
+                        _friendsList.value = newList
+                        setToastMsg(result.data)
+                    }
+
+                    is NetworkResult.Fail -> {
+                        setApiFailMsg(result.msg)
+                    }
+
+                    is NetworkResult.Error -> {
+                        setExceptionData(result.exception)
+                    }
+                }
+            }
+        }
+    }
+    // endregion Friends Tab
 
     // region UserProfile Tab
     fun requestSaveBitmap(pBitmap: Bitmap) {

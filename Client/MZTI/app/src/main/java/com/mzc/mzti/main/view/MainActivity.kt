@@ -54,6 +54,22 @@ class MainActivity : BaseActivity() {
             }
         })
 
+        model.exceptionData.observe(this, Observer { exception ->
+            exception.message?.let { msg ->
+                model.setProgressFlag(false)
+                showErrorMsg()
+            }
+        })
+
+        model.apiFailMsg.observe(this, Observer { msg ->
+            model.setProgressFlag(false)
+            showToastMsg(msg)
+        })
+
+        model.toastMsg.observe(this, Observer { msg ->
+            showToastMsg(msg)
+        })
+
         model.tabRouter.observe(this, Observer { tabRouter ->
             when (tabRouter) {
                 MztiTabRouter.TAB_FRIENDS -> {
