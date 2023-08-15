@@ -62,6 +62,7 @@
     <string name="userProfileEdit_changeProfileImg">프로필 사진 변경하기</string>
     <string name="userProfileEdit_id">ID</string>
     <string name="userProfileEdit_nickname">닉네임</string>
+    <string name="userProfileEdit_nicknameWarning">닉네임은 1~8자 이내이어야 합니다.</string>
     <string name="userProfileEdit_mbti">MBTI</string>
 
     <!-- TODO: Remove or change this placeholder text -->

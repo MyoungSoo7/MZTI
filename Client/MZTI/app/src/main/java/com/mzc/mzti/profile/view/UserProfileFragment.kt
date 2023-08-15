@@ -8,6 +8,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +22,7 @@ import com.mzc.mzti.databinding.FragmentUserProfileBinding
 import com.mzc.mzti.main.viewmodel.MainViewModel
 import com.mzc.mzti.model.data.router.MztiTabRouter
 import com.mzc.mzti.profile.adapter.UserProfileAdapter
+import com.mzc.mzti.profileedit.view.UserProfileEditActivity
 import java.lang.Exception
 
 private const val TAG: String = "UserProfileFragment"
@@ -33,12 +37,22 @@ class UserProfileFragment : BaseFragment() {
     private val binding: FragmentUserProfileBinding get() = _binding!!
 
     private lateinit var mAdapter: UserProfileAdapter
+    private lateinit var userProfileEditIntentForResult: ActivityResultLauncher<Intent>
 
     // region Fragment LifeCycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
         }
+
+        userProfileEditIntentForResult =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                when (result.resultCode) {
+                    AppCompatActivity.RESULT_OK -> {
+
+                    }
+                }
+            }
     }
 
     override fun onCreateView(
@@ -84,7 +98,9 @@ class UserProfileFragment : BaseFragment() {
                 }
 
                 override fun editUserProfile() {
-
+                    val profileEditIntent =
+                        Intent(requireContext(), UserProfileEditActivity::class.java)
+                    userProfileEditIntentForResult.launch(profileEditIntent)
                 }
 
                 override fun connectMbtiTestSite() {

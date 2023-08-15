@@ -9,6 +9,7 @@ import com.mzc.mzti.friends.viewmodel.AddFriendViewModel
 import com.mzc.mzti.intro.viewmodel.IntroViewModel
 import com.mzc.mzti.main.viewmodel.MainViewModel
 import com.mzc.mzti.model.repository.download.DownloadRepository
+import com.mzc.mzti.model.repository.image.ImageRepository
 import com.mzc.mzti.model.repository.network.MztiRepository
 import com.mzc.mzti.profileedit.viewmodel.UserProfileEditViewModel
 import com.mzc.mzti.sign.viewmodel.SignViewModel
@@ -78,7 +79,10 @@ open class BaseViewModel : ViewModel() {
             }
             // UserProfileEdit ViewModel
             else if (modelClass.isAssignableFrom(UserProfileEditViewModel::class.java)) {
-                return UserProfileEditViewModel() as T
+                return UserProfileEditViewModel(
+                    MztiRepository(application),
+                    ImageRepository(application)
+                ) as T
             }
             // Sign ViewModel
             else if (modelClass.isAssignableFrom(SignViewModel::class.java)) {
