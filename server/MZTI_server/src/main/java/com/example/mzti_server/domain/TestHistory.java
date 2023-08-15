@@ -2,11 +2,13 @@ package com.example.mzti_server.domain;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Map;
 
+@EqualsAndHashCode(callSuper=false)
 @Entity
 @RequiredArgsConstructor
 @Data

@@ -5,7 +5,6 @@ import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Data
 public class ProfileResponseDTO {
@@ -21,7 +20,7 @@ public class ProfileResponseDTO {
     private LinkedHashMap<MBTIS, String> testResult;
 
     @Builder
-    public ProfileResponseDTO(String loginId, String username, String profileImage, String mbti, LinkedHashMap testResult) {
+    public ProfileResponseDTO(String loginId, String username, String profileImage, String mbti, LinkedHashMap<MBTIS, String> testResult) {
         this.loginId = loginId;
         this.username = username;
         this.profileImage = profileImage;

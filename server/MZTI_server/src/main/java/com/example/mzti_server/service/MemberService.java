@@ -143,6 +143,12 @@ public class MemberService {
         Member memberByToken = memberByToken(accessToken); // 본인
         Optional<Member> friend = memberRepository.findByLoginId(friendId); // 친구
         if (friend.isPresent()) {
+            Optional<List<FriendRelationship>> byMemberId = friendRelationshipRepository.findByMemberId(memberByToken.getId());
+            for(int i=0;i<byMemberId.get().size();i++){
+                if(byMemberId.get().get(i).getUsername().equals(friend.get().getUsername())){
+                    throw new RuntimeException("이미 추가된 친구입니다.");
+                }
+            }
             FriendRelationship friendRelationship = FriendRelationship.builder()
                     .member(memberByToken)
                     .loginId(friend.get().getLoginId())

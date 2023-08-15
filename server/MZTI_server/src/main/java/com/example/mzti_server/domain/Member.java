@@ -4,6 +4,7 @@ package com.example.mzti_server.domain;
 import com.example.mzti_server.dto.Member.EditMemberDTO;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
+@EqualsAndHashCode(callSuper=false)
 @Data
 @Entity
 @RequiredArgsConstructor
