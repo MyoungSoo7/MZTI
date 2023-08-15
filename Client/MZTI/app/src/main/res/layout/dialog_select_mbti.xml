@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dim60">
+
+    <HorizontalScrollView
+        android:id="@+id/sv_selectMbtiDialog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.mzc.mzti.common.custom.MbtiItemView
+                android:id="@+id/cv_selectMbtiDialog_intj"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="15dp"
+                app:layout_constraintBottom_toTopOf="@id/cv_selectMbtiDialog_entj"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/cv_selectMbtiDialog_intp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:mbti="INTJ" />
+
+            <com.mzc.mzti.common.custom.MbtiItemView
+                android:id="@+id/cv_selectMbtiDialog_intp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="15dp"
+                app:layout_constraintBottom_toTopOf="@id/cv_selectMbtiDialog_entp"
+                app:layout_constraintLeft_toRightOf="@id/cv_selectMbtiDialog_intj"
+                app:layout_constraintRight_toLeftOf="@id/cv_selectMbtiDialog_infj"
+                app:layout_constraintTop_toTopOf="parent"
+                app:mbti="INTP" />
+
+            <com.mzc.mzti.common.custom.MbtiItemView
+                android:id="@+id/cv_selectMbtiDialog_entj"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/cv_selectMbtiDialog_entp"
+                app:layout_constraintTop_toBottomOf="@id/cv_selectMbtiDialog_intj"
+                app:mbti="ENTJ" />
+
+            <com.mzc.mzti.common.custom.MbtiItemView
+                android:id="@+id/cv_selectMbtiDialog_entp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/cv_selectMbtiDialog_entj"
+                app:layout_constraintRight_toLeftOf="@id/cv_selectMbtiDialog_enfj"
+                app:layout_constraintTop_toBottomOf="@id/cv_selectMbtiDialog_intp"
+                app:mbti="ENTP" />
+
+            <com.mzc.mzti.common.custom.MbtiItemView
+                android:id="@+id/cv_selectMbtiDialog_infj"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="15dp"
+                app:layout_constraintBottom_toTopOf="@id/cv_selectMbtiDialog_enfj"
+                app:layout_constraintLeft_toRightOf="@id/cv_selectMbtiDialog_intp"
+                app:layout_constraintRight_toLeftOf="@id/cv_selectMbtiDialog_infp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:mbti="INFJ" />
+
+            <com.mzc.mzti.common.custom.MbtiItemView
+                android:id="@+id/cv_selectMbtiDialog_infp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="15dp"
+                app:layout_constraintBottom_toTopOf="@id/cv_selectMbtiDialog_enfp"
+                app:layout_constraintLeft_toRightOf="@id/cv_selectMbtiDialog_infj"
+                app:layout_constraintRight_toLeftOf="@id/cv_selectMbtiDialog_istj"
+                app:layout_constraintTop_toTopOf="parent"
+                app:mbti="INFP" />
+
+            <com.mzc.mzti.common.custom.MbtiItemView
+                android:id="@+id/cv_selectMbtiDialog_enfj"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/cv_selectMbtiDialog_entp"
+                app:layout_constraintRight_toLeftOf="@id/cv_selectMbtiDialog_enfp"
+                app:layout_constraintTop_toBottomOf="@id/cv_selectMbtiDialog_infj"
+                app:mbti="ENFJ" />
+
+            <com.mzc.mzti.common.custom.MbtiItemView
+                android:id="@+id/cv_selectMbtiDialog_enfp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/cv_selectMbtiDialog_enfj"
+                app:layout_constraintRight_toLeftOf="@id/cv_selectMbtiDialog_estj"
+                app:layout_constraintTop_toBottomOf="@id/cv_selectMbtiDialog_infp"
+                app:mbti="ENFP" />
+
+            <com.mzc.mzti.common.custom.MbtiItemView
+                android:id="@+id/cv_selectMbtiDialog_istj"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="15dp"
+                app:layout_constraintBottom_toTopOf="@id/cv_selectMbtiDialog_estj"
+                app:layout_constraintLeft_toRightOf="@id/cv_selectMbtiDialog_infp"
+                app:layout_constraintRight_toLeftOf="@id/cv_selectMbtiDialog_isfj"
+                app:layout_constraintTop_toTopOf="parent"
+                app:mbti="ISTJ" />
+
+            <com.mzc.mzti.common.custom.MbtiItemView
+                android:id="@+id/cv_selectMbtiDialog_isfj"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="15dp"
+                app:layout_constraintBottom_toTopOf="@id/cv_selectMbtiDialog_esfj"
+                app:layout_constraintLeft_toRightOf="@id/cv_selectMbtiDialog_istj"
+                app:layout_constraintRight_toLeftOf="@id/cv_selectMbtiDialog_istp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:mbti="ISFJ" />
+
+            <com.mzc.mzti.common.custom.MbtiItemView
+                android:id="@+id/cv_selectMbtiDialog_estj"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/cv_selectMbtiDialog_enfp"
+                app:layout_constraintRight_toLeftOf="@id/cv_selectMbtiDialog_esfj"
+                app:layout_constraintTop_toBottomOf="@id/cv_selectMbtiDialog_istj"
+                app:mbti="ESTJ" />
+
+            <com.mzc.mzti.common.custom.MbtiItemView
+                android:id="@+id/cv_selectMbtiDialog_esfj"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/cv_selectMbtiDialog_estj"
+                app:layout_constraintRight_toLeftOf="@id/cv_selectMbtiDialog_estp"
+                app:layout_constraintTop_toBottomOf="@id/cv_selectMbtiDialog_isfj"
+                app:mbti="ESFJ" />
+
+            <com.mzc.mzti.common.custom.MbtiItemView
+                android:id="@+id/cv_selectMbtiDialog_istp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="15dp"
+                app:layout_constraintBottom_toTopOf="@id/cv_selectMbtiDialog_estp"
+                app:layout_constraintLeft_toRightOf="@id/cv_selectMbtiDialog_isfj"
+                app:layout_constraintRight_toLeftOf="@id/cv_selectMbtiDialog_isfp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:mbti="ISTP" />
+
+            <com.mzc.mzti.common.custom.MbtiItemView
+                android:id="@+id/cv_selectMbtiDialog_isfp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="15dp"
+                app:layout_constraintBottom_toTopOf="@id/cv_selectMbtiDialog_esfp"
+                app:layout_constraintLeft_toRightOf="@id/cv_selectMbtiDialog_istp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:mbti="ISFP" />
+
+            <com.mzc.mzti.common.custom.MbtiItemView
+                android:id="@+id/cv_selectMbtiDialog_estp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/cv_selectMbtiDialog_esfj"
+                app:layout_constraintRight_toLeftOf="@id/cv_selectMbtiDialog_esfp"
+                app:layout_constraintTop_toBottomOf="@id/cv_selectMbtiDialog_istp"
+                app:mbti="ESTP" />
+
+            <com.mzc.mzti.common.custom.MbtiItemView
+                android:id="@+id/cv_selectMbtiDialog_esfp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/cv_selectMbtiDialog_estp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cv_selectMbtiDialog_isfp"
+                app:mbti="ESFP" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </HorizontalScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
