@@ -11,11 +11,11 @@ values (2, 1, 'rladhrwl', '김옥지', null, 'ININ');
 insert into Question(id, questionContent, questionType)
 values (1, "연애할 때 어떻게 함?", "1");
 insert into Question(id, questionContent, questionType)
-values (2, "키스할 때 어떻게 함?", "0");
+values (2, "데이트할 때 어떻게 함?", "0");
 
 
 insert into Answer(id, mbti, answerContent, questionId)
-values (1, "ESFJ", "섹스부터 해야지", 1);
+values (1, "ESFJ", "흐악부터 해야지", 1);
 
 insert into Answer(id, mbti, answerContent, questionId)
 values (2, "INFJ", "뽀뽀부터 해야지", 1);
@@ -37,27 +37,27 @@ insert into Answer(id, mbti, answerContent, questionId)
 values (9, "ESFJ", "ESFJ 답변 8", 1);
 
 insert into Answer(id, mbti, answerContent, questionId)
-values (10, "INFJ", "뽀뽀부터 해야지", 1);
+values (10, "INFJ", "데이트부터 해야지", 1);
 insert into Answer(id, mbti, answerContent, questionId)
-values (11, "SEXY", "뽀뽀부터 해야지", 1);
+values (11, "SEXY", "데이트부터 해야지", 1);
 insert into Answer(id, mbti, answerContent, questionId)
-values (12, "AUDI", "뽀뽀부터 해야지", 1);
+values (12, "AUDI", "데이트부터 해야지", 1);
 insert into Answer(id, mbti, answerContent, questionId)
-values (13, "SONNY", "뽀뽀부터 해야지", 1);
+values (13, "SONNY", "데이트부터 해야지", 1);
 insert into Answer(id, mbti, answerContent, questionId)
-values (14, "KANE", "뽀뽀부터 해야지", 1);
+values (14, "KANE", "데이트부터 해야지", 1);
 insert into Answer(id, mbti, answerContent, questionId)
-values (15, "SALAH", "뽀뽀부터 해야지", 1);
+values (15, "SALAH", "데이트부터 해야지", 1);
 insert into Answer(id, mbti, answerContent, questionId)
-values (16, "HIHI", "뽀뽀부터 해야지", 1);
+values (16, "HIHI", "데이트부터 해야지", 1);
 insert into Answer(id, mbti, answerContent, questionId)
-values (17, "SEXSERX", "뽀뽀부터 해야지", 1);
+values (17, "SEXSERX", "데이트부터 해야지", 1);
 
 
 #######
 
 insert into Answer(id, mbti, answerContent, questionId)
-values (18, "ESFJ", "2번섹스부터 해야지", 2);
+values (18, "ESFJ", "2번부터 해야지", 2);
 insert into Answer(id, mbti, answerContent, questionId)
 values (19, "INFJ", "2번혀부터 넣어야지", 2);
 insert into Answer(id, mbti, answerContent, questionId)

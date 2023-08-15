@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MbtiInfoRepository extends JpaRepository<MbtiInfo, Long> {
+    MbtiInfo findByCategory(String category);
 }

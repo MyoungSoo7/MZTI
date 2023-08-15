@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.LinkedHashMap;
 
-@Tag(name = "MBTI", description = "MBTI 정보 API")
+@Tag(name = "MBTI 정보", description = "MBTI 정보 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/info")
@@ -21,7 +21,7 @@ public class InfoController {
     private final InfoService infoService;
 
     @Operation(summary = "MBTI 정보", description = "mbti에 대한 정보를 제공합니다.")
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<LinkedHashMap<String, Object>> getMBTIInfo(@RequestParam String mbti){
         return infoService.getMBTIInfo(mbti);
     }
