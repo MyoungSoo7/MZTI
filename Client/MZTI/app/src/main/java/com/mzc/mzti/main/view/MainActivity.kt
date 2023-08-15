@@ -1,5 +1,6 @@
 package com.mzc.mzti.main.view
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
@@ -8,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.mzc.mzti.R
 import com.mzc.mzti.base.BaseActivity
 import com.mzc.mzti.base.BaseViewModel
+import com.mzc.mzti.common.session.MztiSession
 import com.mzc.mzti.common.util.DLog
 import com.mzc.mzti.databinding.ActivityMainBinding
 import com.mzc.mzti.friends.view.FriendsFragment
@@ -16,6 +18,7 @@ import com.mzc.mzti.main.viewmodel.MainViewModel
 import com.mzc.mzti.model.data.download.DownloadResult
 import com.mzc.mzti.model.data.router.MztiTabRouter
 import com.mzc.mzti.profile.view.UserProfileFragment
+import com.mzc.mzti.sign.view.SignActivity
 
 private const val TAG: String = "MainActivity"
 
@@ -72,6 +75,18 @@ class MainActivity : BaseActivity() {
                 else -> {
                     DLog.e(TAG, "Unknown TabRouter!, $tabRouter")
                 }
+            }
+        })
+
+        model.logoutFlag.observe(this, Observer { flag ->
+            if (flag) {
+                MztiSession.logout()
+
+                val signIntent = Intent(this, SignActivity::class.java)
+                startActivity(signIntent)
+                finish()
+
+                model.setLogoutFlag(false)
             }
         })
 

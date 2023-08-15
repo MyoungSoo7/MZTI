@@ -8,8 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mzc.mzti.R
 import com.mzc.mzti.base.BaseFragment
 import com.mzc.mzti.common.custom.WrapContentLinearLayoutManager
+import com.mzc.mzti.common.dialog.MessageDialog
+import com.mzc.mzti.databinding.DialogMztiMessageBinding
 import com.mzc.mzti.databinding.FragmentUserProfileBinding
 import com.mzc.mzti.main.viewmodel.MainViewModel
 import com.mzc.mzti.model.data.router.MztiTabRouter
@@ -80,7 +83,7 @@ class UserProfileFragment : BaseFragment() {
                 }
 
                 override fun logout() {
-
+                    showLogoutDialog()
                 }
             }
         }
@@ -93,6 +96,25 @@ class UserProfileFragment : BaseFragment() {
                 itemAnimator = null
             }
         }
+    }
+
+    private fun showLogoutDialog() {
+        for (fragment in childFragmentManager.fragments) {
+            if (fragment is MessageDialog) {
+                return
+            }
+        }
+
+        MessageDialog(
+            pMsg = getString(R.string.logout_dialog),
+            pLeftBtnText = getString(R.string.logout_title),
+            pLeftBtnClickListener = {
+                model.setLogoutFlag(true)
+            },
+            pRightBtnText = getString(R.string.cancel_btn),
+            pRightBtnClickListener = {
+            }
+        ).show(childFragmentManager, null)
     }
 
 }

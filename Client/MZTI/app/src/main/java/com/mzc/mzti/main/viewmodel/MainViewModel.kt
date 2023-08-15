@@ -25,6 +25,12 @@ class MainViewModel(
     val tabRouter: LiveData<MztiTabRouter> get() = _tabRouter
 
     /**
+     * true -> 사용자가 로그아웃 버튼 클릭시, true로 변경됨
+     */
+    private val _logoutFlag: MutableLiveData<Boolean> = MutableLiveData(false)
+    val logoutFlag: LiveData<Boolean> get() = _logoutFlag
+
+    /**
      * 비트맵 저장 결과
      */
     private val _saveBmpResult: MutableLiveData<DownloadResult<Uri>?> = MutableLiveData(null)
@@ -33,6 +39,12 @@ class MainViewModel(
     fun setTabRouter(pTabRouter: MztiTabRouter) {
         if (tabRouter.value != pTabRouter) {
             _tabRouter.value = pTabRouter
+        }
+    }
+
+    fun setLogoutFlag(pFlag: Boolean) {
+        if (logoutFlag.value != pFlag) {
+            _logoutFlag.value = pFlag
         }
     }
 

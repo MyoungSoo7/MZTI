@@ -26,7 +26,8 @@ class UserProfileAdapter(
         UserProfileLayoutType.EDIT_PROFILE,
         UserProfileLayoutType.MBTI_TEST,
         UserProfileLayoutType.MBTI_BADGE,
-        UserProfileLayoutType.APP_VERSION
+        UserProfileLayoutType.APP_VERSION,
+        UserProfileLayoutType.LOGOUT
     )
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
