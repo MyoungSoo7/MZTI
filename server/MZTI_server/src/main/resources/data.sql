@@ -94,3 +94,23 @@ values (34, "SEXSERX", "쿠르투번부터 해야지",2);
 
 insert into TestHistory(id, memberId, mbti, score, mbtiResult)
 values (1, 1, "ESFJ", 80, "2202");
+
+insert into MbtiInfo(id, category, goodJob, loveStyle, goodPeople, goodMBTI, badMBTI, talkingHabit, keyword, virtualPeople)
+values (1, 'ESFJ', '의사 결정 과정에 주체적으로 참여할 수 있는 일. 사람들과 공통의 목표를 향해 조화롭게 나아갈 수 있도록 돕는 일', '관계가 틀어짐에서 오는 스트레스를 많이 받고, 헌신적이며 책임감. 연애 스타일은 "소유욕"','공통점이 많은 사람 직접적으로 표현하는 사람 취미를 공유할 수 있는 사람','ISFP, ESTP, ESFP, ISTJ','INTP, ENTP, INTJ, ISTP','됐어','사랑꾼, 완벽주의자, 현실적, 예의 바르고 친절함, 과몰입러, 기억력 좋음, 철벽, 낙천적, 인싸, 배려, 정직','스폰지밥, 이두나'),
+       (2, 'ESTJ', '','','','','','','','')
+;
+
+insert into MbtiDescription(id, MbtiInfoId,content)
+values (1, 1, '친목 끝판왕 그리고 타고난 협력자'),
+       (2, 1, '타인에게 인정받고 싶은 사람일 확률 높음'),
+       (3, 1, '스트레스를 받으면 누구든 만나야 함'),
+       (4, 1, '어색한 거 참지 못하고 말을 먼저 검'),
+       (5, 1, '인간관계에서 상처받아도 상대방을 배려해서 말을 못함'),
+       (6, 1, '자책을 잘하고, 자기검열을 통해 개선하려고함');
+insert into MbtiDescription(id, MbtiInfoId,content)
+values (7, 2, ''),
+       (8, 2, ''),
+       (9, 2, ''),
+       (10, 2, ''),
+       (11, 2, ''),
+       (12, 2, '');
