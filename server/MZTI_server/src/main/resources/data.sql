@@ -9,7 +9,7 @@ values (2, 1, '김옥지', null, 'ININ');
 insert into Question(id, questionContent, questionType)
 values (1, "연애할 때 어떻게 함?", "SN");
 insert into Question(id, questionContent, questionType)
-values (2, "키스할 때 어떻게 함?", "SN");
+values (2, "키스할 때 어떻게 함?", "TF");
 
 
 insert into Answer(id, mbti, answerContent, questionId)

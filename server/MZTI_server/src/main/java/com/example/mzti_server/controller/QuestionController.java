@@ -23,14 +23,14 @@ public class QuestionController {
 
     @Operation(summary = "문제 검색", description = "문제ID를 통해 문제를 검색합니다.")
     @GetMapping("/search")
-    public ResponseEntity<LinkedHashMap<String, Object>> getQuestion(@RequestBody QuestionIdDTO questionIdDTO){
-        return questionService.getQuestion(questionIdDTO.getQ_id());
+    public ResponseEntity<LinkedHashMap<String, Object>> getQuestion(@RequestParam Long questionId){
+        return questionService.getQuestion(questionId);
     }
 
     @Operation(summary = "문제 모두 가져오기", description = "mbti와 문제 개수를 받으면 모든 문제들의 보기와 정답을 제공합니다.")
     @GetMapping()
-    public ResponseEntity<LinkedHashMap<String, Object>> getQuestionAnswers(@RequestBody QuestionCountMbtiDTO dto){
-        return questionService.getQuestionAnswers(dto.getQuestionCount(), dto.getMbti());
+    public ResponseEntity<LinkedHashMap<String, Object>> getQuestionAnswers(@RequestParam int qustionCount, @RequestParam String mbti){
+        return questionService.getQuestionAnswers(qustionCount, mbti);
     }
 
     // @Operation(summary = "문제 모두 가져오기", description = "mbti와 문제 개수를 받으면 모든 문제들의 보기와 정답을 제공합니다.")

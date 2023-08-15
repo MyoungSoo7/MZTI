@@ -17,7 +17,7 @@ public class Question {
 
     @Column(length = 5000) private String questionContent;
 
-    private String questionType;
+    private String questionType; // "EI", "NS", "TF", "PJ"
 
     @Builder
     public Question(String questionContent,String questionType) {

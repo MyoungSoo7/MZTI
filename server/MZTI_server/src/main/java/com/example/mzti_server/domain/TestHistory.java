@@ -12,10 +12,6 @@ public class TestHistory {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "questionId")
-    private Question question;
-
     @OneToOne
     private Member member;
 

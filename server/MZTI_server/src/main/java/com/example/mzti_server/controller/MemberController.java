@@ -37,8 +37,7 @@ public class MemberController {
             @ApiResponse(responseCode = "400", description = "오류")
     })
     @GetMapping("/info")
-    public ResponseEntity<LinkedHashMap<String, Object>> userInfo(@RequestBody LoginIdDTO loginIdDTO) {
-        String loginId = loginIdDTO.getLoginId();
+    public ResponseEntity<LinkedHashMap<String, Object>> userInfo(@RequestParam String loginId) {
         return memberService.findMemberByLoginId(loginId);
     }
 
@@ -62,8 +61,8 @@ public class MemberController {
 
     @Operation(summary = "아이디 중복 체크", description = "아이디 중복 여부를 체크합니다.")
     @GetMapping("/isDuplicate")
-    public ResponseEntity<LinkedHashMap<String, Object>> checkId(@RequestBody LoginIdDTO loginIdDTO){
-        return memberService.checkId(loginIdDTO.getLoginId());
+    public ResponseEntity<LinkedHashMap<String, Object>> checkId(@RequestParam String loginId){
+        return memberService.checkId(loginId);
     }
 
     @Operation(summary = "친구 관계 확인", description = "친구 관계 목록을 확인합니다.")
