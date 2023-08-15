@@ -65,7 +65,7 @@ public class MemberController {
         return memberService.checkId(loginId);
     }
 
-    @Operation(summary = "친구 관계 확인", description = "친구 관계 목록을 확인합니다.")
+    @Operation(summary = "친구 관계 모두 확인", description = "친구 관계 목록을 확인합니다.")
     @GetMapping("/friendList")
     public ResponseEntity<LinkedHashMap<String, Object>> friendlist(HttpServletRequest request) {
         return memberService.findFriendListByLoginId(request.getHeader("Authorization"));

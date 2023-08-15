@@ -88,6 +88,7 @@ public class MemberService {
                 List<MemberDTO> memberDTOS = new ArrayList<>();
                 friendRelationshipList.stream().forEach(friendRelationship -> {
                     MemberDTO memberDTO = MemberDTO.builder()
+                            .loginId(friendRelationship.getLoginId())
                             .username(friendRelationship.getUsername())
                             .profileImage(friendRelationship.getProfileImage())
                             .mbti(friendRelationship.getMbti())
@@ -122,6 +123,7 @@ public class MemberService {
         if (friend.isPresent()) {
             FriendRelationship friendRelationship = FriendRelationship.builder()
                     .member(memberByToken)
+                    .loginId(friend.get().getLoginId())
                     .username(friend.get().getUsername())
                     .profileImage(friend.get().getProfileImage())
                     .mbti(friend.get().getMbti())
@@ -139,6 +141,7 @@ public class MemberService {
         if (friend.isPresent()) {
             FriendRelationship friendRelationship = FriendRelationship.builder()
                     .member(memberByToken)
+                    .loginId(friend.get().getLoginId())
                     .username(friend.get().getUsername())
                     .profileImage(friend.get().getProfileImage())
                     .mbti(friend.get().getMbti())
