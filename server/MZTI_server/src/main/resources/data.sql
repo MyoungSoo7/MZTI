@@ -7,9 +7,9 @@ insert into FriendRelationship(id, memberId, username, profileImage, mbti)
 values (2, 1, '김옥지', null, 'ININ');
 
 insert into Question(id, questionContent, questionType)
-values (1, "연애할 때 어떻게 함?", "SN");
+values (1, "연애할 때 어떻게 함?", "1");
 insert into Question(id, questionContent, questionType)
-values (2, "키스할 때 어떻게 함?", "TF");
+values (2, "키스할 때 어떻게 함?", "0");
 
 
 insert into Answer(id, mbti, answerContent, questionId)
