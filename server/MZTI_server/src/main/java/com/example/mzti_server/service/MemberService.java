@@ -49,8 +49,7 @@ public class MemberService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         Optional<Member> member = memberRepository.findByLoginId(loginId);
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(member.get());
-        LoginResponseDTO loginResponseDTO = new LoginResponseDTO(loginId, tokenInfo.getGrantType(), tokenInfo.getAccessToken());
-
+        LoginResponseDTO loginResponseDTO = new LoginResponseDTO(loginId, tokenInfo.getGrantType(), tokenInfo.getAccessToken(), member.get().getUsername(), member.get().getMbti(), member.get().getProfileImage());
         return getResponse(loginResponseDTO);
     }
 
@@ -173,14 +172,8 @@ public class MemberService {
         Member memberByToken = memberByToken(accessToken); // 본인
         Optional<Member> friend = memberRepository.findByLoginId(friendId); // 친구
         if (friend.isPresent()) {
-            FriendRelationship friendRelationship = FriendRelationship.builder()
-                    .member(memberByToken)
-                    .loginId(friend.get().getLoginId())
-                    .username(friend.get().getUsername())
-                    .profileImage(friend.get().getProfileImage())
-                    .mbti(friend.get().getMbti())
-                    .build();
-            friendRelationshipRepository.delete(friendRelationship);
+            FriendRelationship byMemberIdAndLoginId = friendRelationshipRepository.findByMemberIdAndLoginId(memberByToken.getId(), friend.get().getLoginId());
+            friendRelationshipRepository.delete(byMemberIdAndLoginId);
             return getResponse(memberByToken.getUsername() + "님이  " + friend.get().getUsername() + "님을 삭제하였습니다.");
         } else {
             throw new RuntimeException("아이디에 해당하는 친구가 없습니다.");
