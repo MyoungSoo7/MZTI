@@ -83,6 +83,13 @@ public class MemberController {
         return memberService.deleteFriend(request.getHeader("Authorization"), loginIdDTO.getLoginId());
     }
 
+    @Operation(summary = "멤버 프로필 화면 정보", description = "멤버의 프로필 화면에 들어갈 정보를 제공합니다.")
+    @GetMapping("/getProfile")
+    public ResponseEntity<LinkedHashMap<String, Object>> getProfile(HttpServletRequest request) {
+        return memberService.getProfile(request.getHeader("Authorization"));
+    }
+
+
 //    @PostMapping("/signup")
 //    public String signup(String id, String password, String nickname, String mbti, MultipartFile profileImage){
 //        return memberService.signup(id, password, nickname, mbti, profileImage);

@@ -1,6 +1,7 @@
 package com.example.mzti_server.domain;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
@@ -8,7 +9,8 @@ import java.util.Map;
 
 @Entity
 @RequiredArgsConstructor
-public class TestHistory {
+@Data
+public class TestHistory extends BaseTime {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

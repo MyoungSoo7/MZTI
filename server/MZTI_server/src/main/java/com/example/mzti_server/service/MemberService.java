@@ -3,13 +3,18 @@ package com.example.mzti_server.service;
 import com.example.mzti_server.config.JwtTokenProvider;
 import com.example.mzti_server.domain.FriendRelationship;
 import com.example.mzti_server.domain.Member;
+import com.example.mzti_server.domain.TestHistory;
 import com.example.mzti_server.dto.FriendListDTO;
+import com.example.mzti_server.dto.MBTIS;
 import com.example.mzti_server.dto.Member.LoginResponseDTO;
 import com.example.mzti_server.dto.Member.MemberDTO;
+import com.example.mzti_server.dto.Member.ProfileResponseDTO;
 import com.example.mzti_server.dto.token.LoginTokenInfo;
 import com.example.mzti_server.dto.token.TokenInfo;
 import com.example.mzti_server.repository.FriendRelationshipRepository;
 import com.example.mzti_server.repository.MemberRepository;
+import com.example.mzti_server.repository.TestHistoryRepository;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 @Service
@@ -30,6 +36,7 @@ import java.util.*;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final TestHistoryRepository testHistoryRepository;
     private final FriendRelationshipRepository friendRelationshipRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -109,15 +116,6 @@ public class MemberService {
         }
     }
 
-    public Member memberByToken(String accessToken) {
-        Optional<Member> member = memberRepository.findById(jwtTokenProvider.getMemberId(accessToken));
-        if (member.isPresent()) {
-            return member.get();
-        } else {
-            throw new RuntimeException("토큰에 해당하는 멤버가 없습니다.");
-        }
-    }
-
     public ResponseEntity<LinkedHashMap<String, Object>> addFriend(String accessToken, String friendId) {
         Member memberByToken = memberByToken(accessToken); // 본인
         Optional<Member> friend = memberRepository.findByLoginId(friendId); // 친구
@@ -154,10 +152,43 @@ public class MemberService {
 
     public ResponseEntity<LinkedHashMap<String, Object>> checkId(String loginId) {
         Optional<Member> byLoginId = memberRepository.findByLoginId(loginId);
-        if(byLoginId.isPresent()){
+        if (byLoginId.isPresent()) {
             return getResponse("중복");
-        }else{
+        } else {
             return getResponse("중복아님");
+        }
+    }
+
+    public ResponseEntity<LinkedHashMap<String, Object>> getProfile(String accessToken) {
+        Member findByToken = memberByToken(accessToken);
+        // List<TestHistory> testHistories = testHistoryRepository.findByMemberId(findByToken.getId());
+        LinkedHashMap<MBTIS, String> testResults = new LinkedHashMap<>();
+        for (MBTIS mbti : MBTIS.values()) {
+            System.out.println("mbti = " + mbti);
+            Optional<TestHistory> testHistoryOptional = testHistoryRepository.findTopByMbtiAndMemberIdOrderByCreatedDateDesc(mbti.toString(), findByToken.getId());
+            if (testHistoryOptional.isPresent()) {
+                testResults.put(mbti, testHistoryOptional.get().getMbtiResult());
+            } else {
+                testResults.put(mbti, "");
+            }
+        }
+        ProfileResponseDTO responseDTO = ProfileResponseDTO.builder()
+                .loginId(findByToken.getLoginId())
+                .username(findByToken.getUsername())
+                .profileImage(findByToken.getProfileImage())
+                .mbti(findByToken.getMbti())
+                .testResult(testResults)
+                .build();
+
+        return getResponse(responseDTO);
+    }
+
+    public Member memberByToken(String accessToken) {
+        Optional<Member> member = memberRepository.findById(jwtTokenProvider.getMemberId(accessToken));
+        if (member.isPresent()) {
+            return member.get();
+        } else {
+            throw new RuntimeException("토큰에 해당하는 멤버가 없습니다.");
         }
     }
 

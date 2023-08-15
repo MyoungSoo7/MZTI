@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class QuestionService {
 
+    public final int QUESTION_COUNT = 12; // 문제 개수
+
     private final MemberRepository memberRepository;
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
@@ -70,8 +72,6 @@ public class QuestionService {
         QuestionAnswerResponseDTO questionAnswerResponseDTO = new QuestionAnswerResponseDTO(mbti, qa);
         return getResponse(questionAnswerResponseDTO);
     }
-
-    public final int QUESTION_COUNT = 12;
 
     public Member memberByToken(String accessToken) {
         Optional<Member> member = memberRepository.findById(jwtTokenProvider.getMemberId(accessToken));

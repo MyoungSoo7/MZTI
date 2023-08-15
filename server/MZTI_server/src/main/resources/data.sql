@@ -1,5 +1,7 @@
 insert into Member (id, loginId, password, username, mbti, profileImage)
 values (1, 'tae77777', '{bcrypt}$2a$10$5oqr1GqOVJl8PrbbwfcAd.kUV4biF8A5JEdCb60/pvEpmqtcsBtoS', '김태헌', 'ESFJ', null);
+insert into Member (id, loginId, password, username, mbti, profileImage)
+values (2, 'kimbsu00', '{bcrypt}$2a$10$vDRuMI6X07XSbgQcCTjOwOY6C.ORdvKZwQOK17j64D3A7JxfG37MK', '김병수', 'INTP', null);
 
 insert into FriendRelationship(id, memberId, username, profileImage, mbti)
 values (1, 1, '빵빵이', null, 'SEXY');
@@ -90,3 +92,5 @@ values (33, "HIHI", "쿠쿠부터 해야지",2);
 insert into Answer(id, mbti, answerContent, questionId)
 values (34, "SEXSERX", "쿠르투번부터 해야지",2);
 
+insert into TestHistory(id, memberId, mbti, score, mbtiResult)
+values (1, 1, "ESFJ", 80, "2202");

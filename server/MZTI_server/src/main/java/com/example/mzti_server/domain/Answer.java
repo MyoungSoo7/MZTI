@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @Data
 @RequiredArgsConstructor
-public class Answer {
+public class Answer extends BaseTime {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
