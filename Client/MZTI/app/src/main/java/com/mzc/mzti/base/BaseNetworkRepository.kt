@@ -125,6 +125,7 @@ open class BaseNetworkRepository(
                 setRequestProperty("Content-Type", "application/json")
 
                 if (authorization.isNotEmpty()) {
+                    DLog.d(TAG, "Authorization=$authorization")
                     setRequestProperty("Authorization", authorization)
                 }
             }
@@ -210,7 +211,7 @@ open class BaseNetworkRepository(
     }
 
     companion object {
-        const val BASE_URL: String = "http://3.35.231.108/"
+        const val BASE_URL: String = "http://3.36.109.90/"
 
         const val POST: String = "POST"
         const val GET: String = "GET"
