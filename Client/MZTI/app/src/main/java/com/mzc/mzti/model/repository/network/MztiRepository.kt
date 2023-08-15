@@ -11,7 +11,7 @@ import kotlinx.coroutines.withContext
 import org.json.JSONException
 import org.json.JSONObject
 
-private const val TAG: String = "MztiNetworkRepository"
+private const val TAG: String = "MztiRepository"
 
 class MztiRepository(
     private val context: Context
@@ -27,7 +27,7 @@ class MztiRepository(
                 put("password", pLoginPw)
             }
 
-            val loginUrl = "${BASE_URL}members/login"
+            val loginUrl = "${BASE_URL}api/members/login"
             val message = sendRequestToMztiServer(loginUrl, hsParams, POST)
             DLog.d(TAG, "message=$message")
 
@@ -56,11 +56,11 @@ class MztiRepository(
     suspend fun makeCheckIdRequest(pSignUpId: String): NetworkResult<Boolean> {
         return withContext(Dispatchers.IO) {
             val hsParams = hashMapOf<String, Any>().apply {
-                put("id", pSignUpId)
+                put("loginId", pSignUpId)
             }
 
-            val checkIdUrl = "${BASE_URL}"
-            val message = sendRequestToMztiServer(checkIdUrl, hsParams, POST)
+            val checkIdUrl = "${BASE_URL}api/members/isDuplicate"
+            val message = sendRequestToMztiServer(checkIdUrl, hsParams, GET)
             DLog.d(TAG, "message=$message")
 
             if (message.isNotEmpty()) {
@@ -80,6 +80,43 @@ class MztiRepository(
             NetworkResult.Fail(
                 context.getString(R.string.api_connection_fail_msg)
             )
+        }
+    }
+
+    suspend fun makeUserInfoRequest(
+        pUserToken: String,
+        pGenerateType: String
+    ): NetworkResult<UserInfoData> {
+        return withContext(Dispatchers.IO) {
+            val hsParams = hashMapOf<String, Any>()
+
+            val userInfoUrl = "${BASE_URL}api/members"
+            val message = sendRequestToMztiServer(
+                userInfoUrl,
+                hsParams,
+                GET,
+                authorization = "$pGenerateType $pUserToken"
+            )
+
+            if (message.isNotEmpty()) {
+                try {
+                    val jsonRoot = JSONObject(message)
+                    val data = jsonParserUtil.getUserInfoData(jsonRoot)
+
+                    if (data != null) {
+                        NetworkResult.Success(data)
+                    } else {
+                        NetworkResult.Fail("resultCode 확인 필요")
+                    }
+                } catch (e: JSONException) {
+                    DLog.e(TAG, e.stackTraceToString())
+                    NetworkResult.Error(e)
+                }
+            } else {
+                NetworkResult.Fail(
+                    context.getString(R.string.api_connection_fail_msg)
+                )
+            }
         }
     }
 

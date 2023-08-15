@@ -10,6 +10,7 @@ import com.mzc.mzti.base.BaseActivity
 import com.mzc.mzti.base.BaseViewModel
 import com.mzc.mzti.common.util.DLog
 import com.mzc.mzti.databinding.ActivityMainBinding
+import com.mzc.mzti.friends.view.FriendsFragment
 import com.mzc.mzti.intro.viewmodel.IntroViewModel
 import com.mzc.mzti.main.viewmodel.MainViewModel
 import com.mzc.mzti.model.data.download.DownloadResult
@@ -30,6 +31,7 @@ class MainActivity : BaseActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
+    private val friendsFragment: FriendsFragment = FriendsFragment()
     private val userProfileFragment: UserProfileFragment = UserProfileFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +54,7 @@ class MainActivity : BaseActivity() {
         model.tabRouter.observe(this, Observer { tabRouter ->
             when (tabRouter) {
                 MztiTabRouter.TAB_FRIENDS -> {
-
+                    setFragment(R.id.fl_main, friendsFragment)
                 }
 
                 MztiTabRouter.TAB_COMPARE -> {

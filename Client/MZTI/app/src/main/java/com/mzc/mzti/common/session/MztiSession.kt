@@ -53,6 +53,10 @@ object MztiSession {
         pUserMBTI: MBTI,
         pUserProfileImg: String
     ) {
+        DLog.d(
+            "${TAG}_login",
+            "{pUserId=$pUserId, pGenerateType=$pGenerateType, pUserToken=$pUserToken, pUserNickname=$pUserNickname, pUserMBTI=$pUserMBTI}"
+        )
         editor.putBoolean(IS_LOGIN, true)
         editor.putString(USER_ID, pUserId)
         editor.putString(GENERATE_TYPE, pGenerateType)

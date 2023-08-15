@@ -15,6 +15,9 @@ class IntroViewModel(
     private val mztiRepository: MztiRepository
 ) : BaseViewModel() {
 
+    private var _animationCycle: Int = 0
+    val animationCycle: Int get() = _animationCycle
+
     /**
      * 저장공간 권한이 허용되었는지 여부
      */
@@ -35,6 +38,11 @@ class IntroViewModel(
 
     private val _userInfoData: MutableLiveData<NetworkResult<UserInfoData>> = MutableLiveData()
     val userInfoData: LiveData<NetworkResult<UserInfoData>> get() = _userInfoData
+
+    fun plusAnimationCycle() {
+        _animationCycle += 1
+        checkAllRequiredPermissionGranted()
+    }
 
     /**
      * 저장공간 권한 허용 여부를 변경하는 함수
@@ -57,13 +65,13 @@ class IntroViewModel(
      */
     private fun checkAllRequiredPermissionGranted() {
         _isAllRequiredPermissionGranted.value =
-            isStoragePermissionGranted && isCameraPermissionGranted
+            isStoragePermissionGranted && isCameraPermissionGranted && (animationCycle > 0)
         DLog.d(TAG, "granted=${isAllRequiredPermissionGranted.value}")
     }
 
     fun requestUserInfo(pUserToken: String, pGenerateType: String) {
         viewModelScope.launch {
-            _userInfoData.value = NetworkResult.Fail("Dummy Fail")
+            _userInfoData.value = mztiRepository.makeUserInfoRequest(pUserToken, pGenerateType)
         }
     }
 

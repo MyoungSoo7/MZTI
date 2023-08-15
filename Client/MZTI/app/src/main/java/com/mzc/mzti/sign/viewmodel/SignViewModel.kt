@@ -179,26 +179,24 @@ class SignViewModel(
     private fun requestCheckId() {
         setProgressFlag(true)
         viewModelScope.launch {
-            setProgressFlag(false)
-            moveToNextSignUpState()
-//            when (val result = mztiRepository.makeCheckIdRequest(signUpData.signUpId)) {
-//                is NetworkResult.Success<Boolean> -> {
-//                    if (result.data) {
-//                        setProgressFlag(false)
-//                        moveToNextSignUpState()
-//                    } else {
-//                        setApiFailMsg("이미 사용중인 ID 입니다.")
-//                    }
-//                }
-//
-//                is NetworkResult.Fail -> {
-//                    setApiFailMsg(result.msg)
-//                }
-//
-//                is NetworkResult.Error -> {
-//                    setExceptionData(result.exception)
-//                }
-//            }
+            when (val result = mztiRepository.makeCheckIdRequest(signUpData.signUpId)) {
+                is NetworkResult.Success<Boolean> -> {
+                    if (result.data) {
+                        setProgressFlag(false)
+                        moveToNextSignUpState()
+                    } else {
+                        setApiFailMsg("이미 사용중인 ID 입니다.")
+                    }
+                }
+
+                is NetworkResult.Fail -> {
+                    setApiFailMsg(result.msg)
+                }
+
+                is NetworkResult.Error -> {
+                    setExceptionData(result.exception)
+                }
+            }
         }
     }
 

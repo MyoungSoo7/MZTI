@@ -119,6 +119,7 @@ class IntroActivity : BaseActivity() {
                 IntroAnim.M_DOWN -> {
                     binding.ivIntroM.post {
                         binding.ivIntroM.animateDown {
+                            model.plusAnimationCycle()
                             val sendMsg = Message.obtain().apply {
                                 obj = IntroAnim.I_DOWN
                             }
@@ -166,7 +167,6 @@ class IntroActivity : BaseActivity() {
         })
 
         model.isAllRequiredPermissionGranted.observe(this, Observer { isGranted ->
-            DLog.d(TAG, "isGranted=$isGranted")
             if (isGranted) {
                 if (MztiSession.isLogin) {
                     val mainIntent = Intent(this@IntroActivity, MainActivity::class.java)
@@ -184,9 +184,11 @@ class IntroActivity : BaseActivity() {
     private fun init() {
         startAnimation()
 
+        DLog.d(TAG, "isLogin=${MztiSession.isLogin}")
         if (MztiSession.isLogin) {
             val token = MztiSession.userToken
             val generateType = MztiSession.generateType
+            DLog.d(TAG, "token=$token, generateType=$generateType")
             model.requestUserInfo(token, generateType)
         } else {
             requestRequiredPermission()

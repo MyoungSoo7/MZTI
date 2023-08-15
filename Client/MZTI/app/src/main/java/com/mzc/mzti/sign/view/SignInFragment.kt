@@ -15,8 +15,11 @@ import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.mzc.mzti.R
+import com.mzc.mzti.applyFontStyle
+import com.mzc.mzti.applyTextColor
 import com.mzc.mzti.base.BaseFragment
 import com.mzc.mzti.clearFocus
+import com.mzc.mzti.common.util.FontStyle
 import com.mzc.mzti.databinding.FragmentSignInBinding
 import com.mzc.mzti.model.data.router.SignRouter
 import com.mzc.mzti.sign.viewmodel.SignViewModel
@@ -65,8 +68,15 @@ class SignInFragment : BaseFragment() {
 
     private fun init() {
         binding.apply {
+            tvSignInLetsGoSignUp.text = getString(R.string.signIn_letsGoSignUp)
+                .applyFontStyle(FontStyle.MEDIUM, 11, 14, requireContext())
+                .applyTextColor(R.color.text_black, 11, 14, requireContext())
+
             tvSignInLetsGoSignUp.setOnClickListener {
                 model.setSignRouter(SignRouter.SIGN_UP)
+            }
+            btnSignIn.setOnClickListener {
+                model.requestLogin()
             }
 
             etSignInId.addTextChangedListener(object : TextWatcher {

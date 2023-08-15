@@ -194,8 +194,8 @@ class SignUpFragment : BaseFragment() {
             SignUpState.PW -> {
                 binding.apply {
                     tvSignUpTitle.text = getString(R.string.signUp_title_pw)
-                    clSignUpId.slideOut()
-                    clSignUpPw.slideIn()
+                    clSignUpId.slideOutToLeft()
+                    clSignUpPw.slideInFromRight()
                     clSignUpNickname.gone()
                     clSignUpMbti.gone()
                 }
@@ -205,8 +205,8 @@ class SignUpFragment : BaseFragment() {
                 binding.apply {
                     tvSignUpTitle.text = getString(R.string.signUp_title_nickname)
                     clSignUpId.gone()
-                    clSignUpPw.slideOut()
-                    clSignUpNickname.slideIn()
+                    clSignUpPw.slideOutToLeft()
+                    clSignUpNickname.slideInFromRight()
                     clSignUpMbti.gone()
                 }
             }
@@ -216,8 +216,8 @@ class SignUpFragment : BaseFragment() {
                     tvSignUpTitle.text = getString(R.string.signUp_title_mbti)
                     clSignUpId.gone()
                     clSignUpPw.gone()
-                    clSignUpNickname.slideOut()
-                    clSignUpMbti.slideIn()
+                    clSignUpNickname.slideOutToLeft()
+                    clSignUpMbti.slideInFromRight()
                 }
             }
         }
@@ -231,12 +231,13 @@ class SignUpFragment : BaseFragment() {
         this.visibility = View.VISIBLE
     }
 
-    private fun View.slideOut() {
+    private fun View.slideOutToLeft() {
         val width = measuredWidth.toFloat()
         animate().setDuration(250)
             .translationX(-width)
             .withStartAction {
                 translationX = 0f
+                visibility = View.VISIBLE
             }
             .withEndAction {
                 visibility = View.GONE
@@ -244,7 +245,32 @@ class SignUpFragment : BaseFragment() {
             .start()
     }
 
-    private fun View.slideIn() {
+    private fun View.slideOutToRight() {
+        val width = measuredWidth.toFloat()
+        animate().setDuration(250)
+            .translationX(width)
+            .withStartAction {
+                translationX = 0f
+                visibility = View.VISIBLE
+            }
+            .withEndAction {
+                visibility = View.GONE
+            }
+            .start()
+    }
+
+    private fun View.slideInFromLeft() {
+        val width = measuredWidth.toFloat()
+        animate().setDuration(250)
+            .translationX(0f)
+            .withStartAction {
+                visibility = View.VISIBLE
+                translationX = -width
+            }
+            .start()
+    }
+
+    private fun View.slideInFromRight() {
         val width = measuredWidth.toFloat()
         animate().setDuration(250)
             .translationX(0f)

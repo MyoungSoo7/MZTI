@@ -1,6 +1,7 @@
 package com.mzc.mzti.common.util
 
 import com.mzc.mzti.model.data.mbti.MBTI
+import com.mzc.mzti.model.data.mbti.getMBTI
 import com.mzc.mzti.model.data.user.UserInfoData
 import org.json.JSONArray
 import org.json.JSONException
@@ -13,8 +14,12 @@ private const val KEY_RESULT_CODE: String = "result_code"
 private const val KEY_RESULT_DATA: String = "result_data"
 
 private const val KEY_LOGIN_ID: String = "loginId"
-private const val KEY_GENERATE_TYPE: String = "generate_type"
-private const val KEY_ACCESS_TOKEN: String = "access_token"
+private const val KEY_GENERATE_TYPE: String = "generateType"
+private const val KEY_ACCESS_TOKEN: String = "accessToken"
+
+private const val KEY_USER_NAME: String = "username"
+private const val KEY_MBTI: String = "mbti"
+private const val KEY_PROFILE_IMG: String = "profileImage"
 
 class JsonParserUtil {
 
@@ -127,18 +132,51 @@ class JsonParserUtil {
             return null
         }
 
-        val loginId: String = getString(jsonRoot, KEY_LOGIN_ID)
-        val generateType: String = getString(jsonRoot, KEY_GENERATE_TYPE)
-        val accessToken: String = getString(jsonRoot, KEY_ACCESS_TOKEN)
+        val resultDataObj = getJsonObject(jsonRoot, KEY_RESULT_DATA)
+        return if (resultDataObj != null) {
+            val loginId: String = getString(resultDataObj, KEY_LOGIN_ID)
+            val generateType: String = getString(resultDataObj, KEY_GENERATE_TYPE)
+            val accessToken: String = getString(resultDataObj, KEY_ACCESS_TOKEN)
 
-        return UserInfoData(
-            id = loginId,
-            generateType = generateType,
-            token = accessToken,
-            nickname = "",
-            mbti = MBTI.MZTI,
-            profileImg = ""
-        )
+            UserInfoData(
+                id = loginId,
+                generateType = generateType,
+                token = accessToken,
+                nickname = "",
+                mbti = MBTI.MZTI,
+                profileImg = ""
+            )
+        } else {
+            null
+        }
+    }
+
+    fun getUserInfoData(jsonRoot: JSONObject): UserInfoData? {
+        val resultCode = getInt(jsonRoot, KEY_RESULT_CODE)
+        if (resultCode != 200) {
+            return null
+        }
+
+        val resultDataObj = getJsonObject(jsonRoot, KEY_RESULT_DATA)
+        return if (resultDataObj != null) {
+            val loginId = getString(resultDataObj, KEY_LOGIN_ID)
+            val generateType = getString(resultDataObj, KEY_GENERATE_TYPE)
+            val accessToken = getString(resultDataObj, KEY_ACCESS_TOKEN)
+            val nickname = getString(resultDataObj, KEY_USER_NAME)
+            val mbti = getString(resultDataObj, KEY_MBTI)
+            val profileImg = getString(resultDataObj, KEY_PROFILE_IMG)
+
+            UserInfoData(
+                id = loginId,
+                generateType = generateType,
+                token = accessToken,
+                nickname = nickname,
+                mbti = getMBTI(mbti),
+                profileImg = profileImg
+            )
+        } else {
+            null
+        }
     }
 
 }

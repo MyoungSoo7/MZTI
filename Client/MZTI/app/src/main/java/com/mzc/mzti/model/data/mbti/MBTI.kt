@@ -20,3 +20,15 @@ enum class MBTI {
 
     MZTI
 }
+
+fun getMBTI(strMBTI: String): MBTI {
+    val mbtiList = MBTI.values()
+
+    for (mbti in mbtiList) {
+        if (mbti.name == strMBTI.uppercase()) {
+            return mbti
+        }
+    }
+
+    return MBTI.MZTI
+}
