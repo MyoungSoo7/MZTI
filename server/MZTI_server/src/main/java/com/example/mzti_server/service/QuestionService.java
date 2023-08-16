@@ -44,7 +44,7 @@ public class QuestionService {
         Question question = questionRepository.findById(qId).get();
         List<Answer> answers = answerRepository.findAllByQuestionId(qId);
         List<String> answersList = answers.stream()
-                .map(answer -> answer.getAnswerContent() + " (" + answer.getMbti() + ")")
+                .map(answer -> answer.getAnswerContent())
                 .collect(Collectors.toList());
         return getResponse(QuestionDTO.builder()
                 .questionContent(question.getQuestionContent())
@@ -60,7 +60,7 @@ public class QuestionService {
             List<Answer> wrongAnswers = answerRepository.findRandomWrongAnswers(randomQuestions.get(i).getId(), mbti);
             List<String> wrongAnswerDTO = new ArrayList<>();
             for (int j = 0; j < 2; j++) {
-                wrongAnswerDTO.add(wrongAnswers.get(j).getAnswerContent() + "(" + wrongAnswers.get(j).getMbti() + ")");
+                wrongAnswerDTO.add(wrongAnswers.get(j).getAnswerContent());
             }
             qa.add(QuestionAnswer.builder()
                     .question(randomQuestions.get(i).getQuestionContent())
