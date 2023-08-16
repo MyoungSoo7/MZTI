@@ -24,8 +24,8 @@ class UserProfileEditViewModel(
     private var _userMBTI: MutableLiveData<MBTI> = MutableLiveData(MBTI.MZTI)
     val userMBTI: LiveData<MBTI> get() = _userMBTI
 
-    private var _userProfileImg: MutableLiveData<Uri> = MutableLiveData()
-    val userProfileImg: LiveData<Uri> get() = _userProfileImg
+    private var _userProfileImg: MutableLiveData<String?> = MutableLiveData()
+    val userProfileImg: LiveData<String?> get() = _userProfileImg
 
     fun init(
         pUserNickname: String,
@@ -44,8 +44,8 @@ class UserProfileEditViewModel(
     }
 
     fun setUserProfileImg(pUserProfileImg: Uri) {
-
-        _userProfileImg.value = pUserProfileImg
+        val imgPath = imageRepository.copyImageToCacheDir(pUserProfileImg)
+        _userProfileImg.value = imgPath
     }
 
     fun checkProfileEdited(): Boolean {

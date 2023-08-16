@@ -1,6 +1,7 @@
 package com.mzc.mzti.profileedit.view
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,11 +11,9 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.mzc.mzti.R
 import com.mzc.mzti.base.BaseActivity
 import com.mzc.mzti.base.BaseViewModel
@@ -24,6 +23,7 @@ import com.mzc.mzti.common.util.DLog
 import com.mzc.mzti.databinding.ActivityUserProfileEditBinding
 import com.mzc.mzti.model.data.mbti.getProfileImgResId
 import com.mzc.mzti.profileedit.viewmodel.UserProfileEditViewModel
+import java.io.File
 
 private const val TAG: String = "UserProfileEditActivity"
 const val KEY_USER_INFO_DATA: String = "user_info_data"
@@ -98,7 +98,12 @@ class UserProfileEditActivity : BaseActivity() {
         })
 
         model.userProfileImg.observe(this, Observer { userProfileImg ->
-
+            DLog.d(TAG, "userProfileImg=$userProfileImg")
+            if (userProfileImg != null) {
+                Glide.with(binding.ivUserProfileEditUserProfile)
+                    .load(File(userProfileImg))
+                    .into(binding.ivUserProfileEditUserProfile)
+            }
         })
     }
 

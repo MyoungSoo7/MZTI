@@ -11,9 +11,13 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
+import androidx.core.net.toUri
+import java.io.EOFException
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
+import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -22,6 +26,8 @@ private const val TAG: String = "FileUtil"
 class FileUtil(
     private val context: Context
 ) {
+
+    private val strCachePath: String = context.cacheDir.absolutePath
 
     @SuppressLint("SimpleDateFormat")
     private fun getStrDate(): String =
@@ -140,6 +146,59 @@ class FileUtil(
         }
 
         return uri
+    }
+
+    /**
+     * File을 임시폴더로 Copy 한다.
+     */
+    @Throws(IOException::class)
+    fun copyFileToCacheFolder(strOriginPath: String?): String? {
+        val strOriginFileName = strOriginPath!!.substring(strOriginPath.lastIndexOf("/") + 1)
+        val strFilePath: String = strCachePath + "/" + getFileName()
+        val fileOrigin = File(strOriginPath)
+        val fileCopy = File(strFilePath)
+        val inOrigin = FileInputStream(fileOrigin)
+        val buf = ByteArray(inOrigin.available())
+        var idx = 0
+        while (idx < buf.size) {
+            val read = inOrigin.read(buf, idx, buf.size - idx)
+            if (read < 0) throw EOFException("File COPY ERROR!!")
+            idx += read
+        }
+        inOrigin.close()
+        val outCopy = FileOutputStream(fileCopy)
+        outCopy.write(buf)
+        outCopy.close()
+        return fileCopy.absolutePath
+    }
+
+    /**
+     * 이미지 파일을 캐시로 복사하는 함수
+     *
+     * @param uri      캐시로 복사할 이미지의 Content Uri
+     *
+     * @return 캐시로 복사한 이미지 파일의 절대 경로를 반환함
+     */
+    @Throws(IOException::class)
+    fun copyFileToCacheFolder(uri: Uri): String? {
+        if (uri.scheme != "content") return copyFileToCacheFolder(uri.path)
+        val strFilePath: String = strCachePath + "/" + getFileName()
+        val fileCopy = File(strFilePath)
+        val inOrigin: InputStream? = context.contentResolver.openInputStream(uri)
+        if (inOrigin != null) {
+            val buf = ByteArray(inOrigin.available())
+            var idx = 0
+            while (idx < buf.size) {
+                val read = inOrigin.read(buf, idx, buf.size - idx)
+                if (read < 0) throw EOFException("File COPY ERROR!!")
+                idx += read
+            }
+            inOrigin.close()
+            val outCopy = FileOutputStream(fileCopy)
+            outCopy.write(buf)
+            outCopy.close()
+        }
+        return fileCopy.absolutePath
     }
 
 }
