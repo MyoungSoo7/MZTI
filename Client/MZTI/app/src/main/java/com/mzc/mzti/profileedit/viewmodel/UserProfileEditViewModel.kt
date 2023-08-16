@@ -44,8 +44,11 @@ class UserProfileEditViewModel(
     }
 
     fun setUserProfileImg(pUserProfileImg: Uri) {
-        val imgPath = imageRepository.copyImageToCacheDir(pUserProfileImg)
-        _userProfileImg.value = imgPath
+        setProgressFlag(true)
+        viewModelScope.launch {
+            val imgPath = imageRepository.copyImageToCacheDir(pUserProfileImg)
+            _userProfileImg.value = imgPath
+        }
     }
 
     fun checkProfileEdited(): Boolean {

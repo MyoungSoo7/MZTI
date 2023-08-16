@@ -34,6 +34,7 @@ class UserProfileMbtiCardViewHolder(
             // 프로필 사진
             Glide.with(ivMbtiCardUserProfile.context)
                 .load(profileImg)
+                .transform(CircleCrop())
                 .placeholder(defaultProfileImgRes)
                 .fallback(defaultProfileImgRes)
                 .error(defaultProfileImgRes)

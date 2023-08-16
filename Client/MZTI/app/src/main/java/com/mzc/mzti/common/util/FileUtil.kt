@@ -6,18 +6,21 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
-import androidx.core.net.toUri
+import androidx.exifinterface.media.ExifInterface
 import java.io.EOFException
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
+import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -154,7 +157,7 @@ class FileUtil(
     @Throws(IOException::class)
     fun copyFileToCacheFolder(strOriginPath: String?): String? {
         val strOriginFileName = strOriginPath!!.substring(strOriginPath.lastIndexOf("/") + 1)
-        val strFilePath: String = strCachePath + "/" + getFileName()
+        val strFilePath: String = strCachePath + "/" + getFileName() + ".png"
         val fileOrigin = File(strOriginPath)
         val fileCopy = File(strFilePath)
         val inOrigin = FileInputStream(fileOrigin)
@@ -182,7 +185,7 @@ class FileUtil(
     @Throws(IOException::class)
     fun copyFileToCacheFolder(uri: Uri): String? {
         if (uri.scheme != "content") return copyFileToCacheFolder(uri.path)
-        val strFilePath: String = strCachePath + "/" + getFileName()
+        val strFilePath: String = strCachePath + "/" + getFileName() + ".png"
         val fileCopy = File(strFilePath)
         val inOrigin: InputStream? = context.contentResolver.openInputStream(uri)
         if (inOrigin != null) {
@@ -199,6 +202,154 @@ class FileUtil(
             outCopy.close()
         }
         return fileCopy.absolutePath
+    }
+
+    /**
+     * 이미지 파일의 크기가 maxPixel * maxPixel 보다 큰 경우, 비트맵을 리사이징해서 photoPath에 저장함
+     *
+     * @param photoPath     리사이징한 비트맵을 저장할 경로
+     * @param maxPixel      픽셀 최대값
+     * @param originImgSize 원본 이미지의 크기를 저장하는 버퍼, {(0, width), (1, height)}
+     * @return 리사이징이 필요하다면 리사이징된 비트맵, 그렇지 않다면 원본 이미지의 비트맵
+     */
+    fun createResizeBitmap(photoPath: String, maxPixel: Int, originImgSize: IntArray): String? {
+        if (maxPixel > 0) {
+            // Get the dimensions of the bitmap
+            val options = BitmapFactory.Options()
+            options.inJustDecodeBounds = true
+            BitmapFactory.decodeFile(
+                photoPath,
+                options
+            ) // inJustDecodeBounds 설정을 해주지 않으면 이부분에서 큰 이미지가 들어올 경우 outofmemory Exception이 발생한다.
+            var resizedBitmap: Bitmap? = null
+            var photoW = options.outWidth.toFloat()
+            var photoH = options.outHeight.toFloat()
+            originImgSize[0] = photoW.toInt()
+            originImgSize[1] = photoH.toInt()
+            val photoPixel = if (photoW > photoH) photoW else photoH
+            options.inJustDecodeBounds = false
+            if (photoPixel > maxPixel) {
+                val bitmap = BitmapFactory.decodeFile(photoPath, options)
+                val ratio = photoPixel.toFloat() / maxPixel
+                photoW /= ratio
+                photoH /= ratio
+                DLog.d(TAG, "resized Bitmap!, ratio=$ratio")
+                resizedBitmap =
+                    Bitmap.createScaledBitmap(bitmap, photoW.toInt(), photoH.toInt(), true)
+            } else {
+                resizedBitmap = BitmapFactory.decodeFile(photoPath, options)
+            }
+            DLog.d(
+                TAG,
+                "after resizing, bmpWidth=${resizedBitmap.width}, bmpHeight=${resizedBitmap.height}"
+            )
+            return try {
+                var rotateBitmap: Bitmap? = null
+                val strFileName = photoPath.substring(photoPath.lastIndexOf("/") + 1)
+                var exifDegree = 0f
+                try {
+                    val exif = ExifInterface(photoPath)
+                    val exifOrientation = exif.getAttributeInt(
+                        ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_UNDEFINED
+                    )
+                    exifDegree = exifOrientationToDegrees(exifOrientation)
+                    if (exifDegree != 0f && resizedBitmap != null) {
+                        val m = Matrix()
+                        m.setRotate(
+                            exifDegree,
+                            resizedBitmap.width.toFloat() / 2,
+                            resizedBitmap.height.toFloat() / 2
+                        )
+                        var intRotateWidth = 0
+                        var intRotateHeight = 0
+                        if (exifDegree == 90f ||
+                            exifDegree == 270f
+                        ) {
+                            intRotateWidth = resizedBitmap.height
+                            intRotateHeight = resizedBitmap.width
+                        } else {
+                            intRotateWidth = resizedBitmap.width
+                            intRotateHeight = resizedBitmap.height
+                        }
+                        try {
+                            var converted = Bitmap.createBitmap(
+                                resizedBitmap,
+                                0,
+                                0,
+                                resizedBitmap.width,
+                                resizedBitmap.height,
+                                m,
+                                true
+                            )
+                            converted = Bitmap.createScaledBitmap(
+                                converted!!,
+                                intRotateWidth,
+                                intRotateHeight,
+                                true
+                            )
+                            rotateBitmap = converted
+                        } catch (ex: OutOfMemoryError) {
+                            DLog.e(TAG, ex.stackTraceToString())
+                            // 메모리가 부족하여 회전을 시키지 못할 경우 그냥 원본을 반환합니다.
+                        }
+                    } else rotateBitmap = resizedBitmap
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+                if (rotateBitmap != null) {
+                    val newCacheFilePath = "$strCachePath/${getFileName()}.png"
+                    saveBitmapToCacheFolder(rotateBitmap, newCacheFilePath)
+                    newCacheFilePath
+                } else null
+            } catch (e: Exception) {
+                DLog.e(TAG, e.stackTraceToString())
+                null
+            }
+        }
+        return null
+    }
+
+    private fun exifOrientationToDegrees(exifOrientation: Int): Float {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            return 90f
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+            return 180f
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+            return 270f
+        }
+        return 0f
+    }
+
+    /**
+     * 비트맵 이미지를 캐시 메모리에 저장하는 함수
+     *
+     * @param bitmap      이미지 파일로 저장할 비트맵 객체
+     * @param strFilePath 이미지 절대경로
+     */
+    private fun saveBitmapToCacheFolder(bitmap: Bitmap, strFilePath: String) {
+        DLog.d(
+            TAG,
+            "strFilePath=$strFilePath, bmpWidth=${bitmap.width}, bmpHeight=${bitmap.height}"
+        )
+        val fileCacheItem = File(strFilePath)
+        if (fileCacheItem.exists()) deleteFile(strFilePath)
+        try {
+            fileCacheItem.createNewFile()
+            val out: OutputStream = FileOutputStream(fileCacheItem)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+            out.close()
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    /**
+     * 파일 삭제
+     */
+    fun deleteFile(path: String) {
+        val file = File("$strCachePath/$path")
+        if (file.exists()) file.delete()
     }
 
 }

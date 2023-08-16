@@ -14,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.mzc.mzti.R
 import com.mzc.mzti.base.BaseActivity
 import com.mzc.mzti.base.BaseViewModel
@@ -100,8 +101,10 @@ class UserProfileEditActivity : BaseActivity() {
         model.userProfileImg.observe(this, Observer { userProfileImg ->
             DLog.d(TAG, "userProfileImg=$userProfileImg")
             if (userProfileImg != null) {
+                model.setProgressFlag(false)
                 Glide.with(binding.ivUserProfileEditUserProfile)
                     .load(File(userProfileImg))
+                    .transform(CircleCrop())
                     .into(binding.ivUserProfileEditUserProfile)
             }
         })
@@ -124,6 +127,7 @@ class UserProfileEditActivity : BaseActivity() {
             // 프로필 사진
             Glide.with(this@UserProfileEditActivity)
                 .load(MztiSession.userProfileImg)
+                .transform(CircleCrop())
                 .placeholder(defaultProfileImgRes)
                 .fallback(defaultProfileImgRes)
                 .error(defaultProfileImgRes)
