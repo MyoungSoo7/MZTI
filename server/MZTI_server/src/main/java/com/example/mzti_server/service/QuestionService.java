@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class QuestionService {
 
-    public final int QUESTION_COUNT = 12; // 문제 개수
+    public final int QUESTION_COUNT = 16; // 문제 개수
 
     private final MemberRepository memberRepository;
     private final QuestionRepository questionRepository;
@@ -87,7 +87,7 @@ public class QuestionService {
         System.out.println("testedMember = " + testedMember);
         String testedMbti = resultRequestDTO.getMbti();
         List<ResultRequestDTO.AnswerDTO> answerList = resultRequestDTO.getAnswerList();
-        int[] resultTemp = {0, 0, 0, 0};
+        int[] resultTemp = {-1, -1, -1, -1};
         int correctCount = 0;
         for (int i = 0; i < answerList.size(); i++) {
             int typeNumber = answerList.get(i).getType();
@@ -111,6 +111,11 @@ public class QuestionService {
                     resultTemp[3] += 1;
                     correctCount += 1;
                 }
+            }
+        }
+        for (int k = 0; k < 4; k++) {
+            if (resultTemp[k] == -1) {
+                resultTemp[k] = 0;
             }
         }
         int score = Math.round((100 * correctCount) / QUESTION_COUNT);
