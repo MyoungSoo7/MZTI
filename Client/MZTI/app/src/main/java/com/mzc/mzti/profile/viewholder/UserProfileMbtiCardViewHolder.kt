@@ -7,6 +7,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.mzc.mzti.R
 import com.mzc.mzti.common.session.MztiSession
 import com.mzc.mzti.databinding.ItemUserProfileMbtiCardBinding
+import com.mzc.mzti.model.data.mbti.getBackgroundProfileDrawableResId
 import com.mzc.mzti.model.data.mbti.getProfileImgResId
 
 class UserProfileMbtiCardViewHolder(
@@ -46,6 +47,9 @@ class UserProfileMbtiCardViewHolder(
             // ID
             tvMbtiCardUserId.text =
                 tvMbtiCardUserId.context.getString(R.string.mbtiCard_id, id)
+
+            clMbtiCard.setBackgroundResource(getBackgroundProfileDrawableResId(mbti))
+            cvMbtiCardProfileBorder.updateColor(mbti)
         }
     }
 

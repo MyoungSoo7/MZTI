@@ -11,6 +11,7 @@ import android.view.View
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import com.mzc.mzti.R
+import com.mzc.mzti.model.data.mbti.MBTI
 
 private const val TAG: String = "MztiCircleView"
 
@@ -44,6 +45,29 @@ class MztiCircleView : View {
 
     private val mPaint: Paint = getDefaultPaint()
     private val mRect: RectF = RectF()
+
+    fun updateColor(pMbti: MBTI) {
+        val colorResId = when (pMbti) {
+            MBTI.ENFJ -> R.color.enfj
+            MBTI.ENFP -> R.color.enfp
+            MBTI.ENTJ -> R.color.entj
+            MBTI.ENTP -> R.color.entp
+            MBTI.ESFJ -> R.color.esfj
+            MBTI.ESFP -> R.color.esfp
+            MBTI.ESTJ -> R.color.estj
+            MBTI.ESTP -> R.color.estp
+            MBTI.INFJ -> R.color.infj
+            MBTI.INFP -> R.color.infp
+            MBTI.INTJ -> R.color.intj
+            MBTI.INTP -> R.color.intp
+            MBTI.ISFJ -> R.color.isfj
+            MBTI.ISFP -> R.color.isfp
+            MBTI.ISTJ -> R.color.istj
+            MBTI.ISTP -> R.color.istp
+            MBTI.MZTI -> R.color.istj
+        }
+        _mztiColor = ContextCompat.getColor(context, colorResId)
+    }
 
     private fun setupAttributes(context: Context, attrs: AttributeSet?, defStyleAttr: Int) {
         val typedArray =
@@ -113,10 +137,6 @@ class MztiCircleView : View {
         super.onDraw(canvas)
 
         canvas?.drawOval(getRect(), mPaint)
-    }
-
-    fun setDiningColor(@ColorInt pColorInt: Int) {
-        this._mztiColor = pColorInt
     }
 
     companion object {

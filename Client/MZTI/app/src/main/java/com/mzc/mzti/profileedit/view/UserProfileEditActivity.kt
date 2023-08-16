@@ -22,6 +22,7 @@ import com.mzc.mzti.common.session.MztiSession
 import com.mzc.mzti.common.util.DLog
 import com.mzc.mzti.databinding.ActivityUserProfileEditBinding
 import com.mzc.mzti.model.data.mbti.MBTI
+import com.mzc.mzti.model.data.mbti.getBackgroundProfileDrawableResId
 import com.mzc.mzti.model.data.mbti.getProfileImgResId
 import com.mzc.mzti.profileedit.viewmodel.UserProfileEditViewModel
 import java.io.File
@@ -94,7 +95,13 @@ class UserProfileEditActivity : BaseActivity() {
         })
 
         model.userMBTI.observe(this, Observer { userMBTI ->
-            binding.tvUserProfileEditMbti.text = userMBTI.name
+            binding.apply {
+                tvUserProfileEditMbti.text = userMBTI.name
+                clUserProfileEditMbtiCard.setBackgroundResource(
+                    getBackgroundProfileDrawableResId(userMBTI)
+                )
+                cvUserProfileEditProfileBorder.updateColor(userMBTI)
+            }
         })
 
         model.userProfileImg.observe(this, Observer { userProfileImg ->

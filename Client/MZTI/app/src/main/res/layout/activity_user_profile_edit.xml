@@ -69,7 +69,7 @@
         android:layout_width="320dp"
         android:layout_height="210dp"
         android:layout_marginTop="15dp"
-        android:background="@drawable/background_profile_enfj_test"
+        android:background="@drawable/background_profile_enfj"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_userProfileEdit_title">
