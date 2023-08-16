@@ -255,6 +255,10 @@ class MainViewModel(
             }
         }
     }
+
+    fun clearFriendsList() {
+        _friendsList.value = listOf()
+    }
     // endregion UserProfile Tab
 
 }

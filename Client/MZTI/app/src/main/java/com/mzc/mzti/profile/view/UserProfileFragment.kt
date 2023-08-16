@@ -49,6 +49,7 @@ class UserProfileFragment : BaseFragment() {
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 when (result.resultCode) {
                     AppCompatActivity.RESULT_OK -> {
+                        model.clearFriendsList()
                         model.clearUserProfileData()
                         model.requestUserProfile()
                     }
