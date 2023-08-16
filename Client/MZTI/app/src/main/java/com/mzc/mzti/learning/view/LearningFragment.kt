@@ -44,7 +44,7 @@ class LearningFragment : BaseFragment() {
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 when (result.resultCode) {
                     AppCompatActivity.RESULT_OK -> {
-
+                        model.clearUserProfileData()
                     }
                 }
             }

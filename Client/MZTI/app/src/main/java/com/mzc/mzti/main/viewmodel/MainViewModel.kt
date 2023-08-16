@@ -212,6 +212,10 @@ class MainViewModel(
             else -> false
         }
     }
+
+    fun clearUserProfileData() {
+        _userProfileData.value = null
+    }
     // endregion Learning Tab
 
     // region UserProfile Tab
