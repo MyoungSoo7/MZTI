@@ -6,6 +6,7 @@ import com.mzc.mzti.base.BaseNetworkRepository
 import com.mzc.mzti.common.util.DLog
 import com.mzc.mzti.common.util.FileUtil
 import com.mzc.mzti.model.data.compare.CompareMbtiData
+import com.mzc.mzti.model.data.compare.CompareMbtiDataWrapper
 import com.mzc.mzti.model.data.friends.FriendsDataWrapper
 import com.mzc.mzti.model.data.friends.FriendsOtherProfileData
 import com.mzc.mzti.model.data.mbti.MBTI
@@ -485,6 +486,42 @@ class MztiRepository(
                 try {
                     val jsonRoot = JSONObject(message)
                     jsonParserUtil.getMbtiInfoResponse(jsonRoot)
+                } catch (e: JSONException) {
+                    DLog.e(TAG, e.stackTraceToString())
+                    NetworkResult.Error(e)
+                }
+            } else {
+                NetworkResult.Fail(
+                    context.getString(R.string.api_connection_fail_msg)
+                )
+            }
+        }
+    }
+
+    suspend fun makeMbtiCompareRequest(
+        pLeftMbti: MBTI,
+        pRightMbti: MBTI,
+        pUserToken: String,
+        pGenerateType: String,
+    ): NetworkResult<CompareMbtiDataWrapper> {
+        return withContext(Dispatchers.IO) {
+            val hsParams = hashMapOf<String, Any>().apply {
+                put("leftMBTI", pLeftMbti.name)
+                put("rightMBTI", pRightMbti.name)
+            }
+
+            val mbtiCompareUrl = "${BASE_URL}api/info/compare"
+            val message = sendRequestToMztiServer(
+                mbtiCompareUrl,
+                hsParams,
+                GET,
+                authorization = "$pGenerateType $pUserToken"
+            )
+
+            if (message.isNotEmpty()) {
+                try {
+                    val jsonRoot = JSONObject(message)
+                    jsonParserUtil.getMbtiCompareResponse(jsonRoot)
                 } catch (e: JSONException) {
                     DLog.e(TAG, e.stackTraceToString())
                     NetworkResult.Error(e)

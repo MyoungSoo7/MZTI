@@ -38,7 +38,7 @@ class TestViewModel(
         setProgressFlag(true)
         viewModelScope.launch {
             val result = mztiRepository.makeQuestionRequest(
-                pQuestionCount = 12,
+                pQuestionCount = 16,
                 pMbti = mbti,
                 pUserToken = MztiSession.userToken,
                 pGenerateType = MztiSession.generateType

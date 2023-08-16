@@ -2,17 +2,17 @@ package com.mzc.mzti.common.custom
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import androidx.core.view.updateMargins
 import androidx.core.view.updatePadding
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.mzc.mzti.R
 import com.mzc.mzti.applyFontStyle
 import com.mzc.mzti.applyTextSize
 import com.mzc.mzti.common.util.FontStyle
 import com.mzc.mzti.databinding.InflateMztiCardViewBinding
+import com.mzc.mzti.databinding.InflateMztiVirtualPeopleBinding
 import com.mzc.mzti.dp2px
 import com.mzc.mzti.model.data.compare.CompareMbtiData
 import com.mzc.mzti.model.data.compare.CompareMbtiType
@@ -36,6 +36,8 @@ class MztiCardLayout : LinearLayout {
     }
 
     fun setCompareMbtiData(pCompareMbtiData: CompareMbtiData, pMbti: MBTI) {
+        removeAllViews()
+
         val backgroundResId = when (pMbti) {
             MBTI.INTJ,
             MBTI.INTP,
@@ -59,14 +61,17 @@ class MztiCardLayout : LinearLayout {
 
             else -> R.drawable.background_mzti_card_purple
         }
-        setBackgroundResource(backgroundResId)
+        if (pCompareMbtiData.type != CompareMbtiType.VIRTUAL_PEOPLE) {
+            setBackgroundResource(backgroundResId)
+        }
 
         for (idx in pCompareMbtiData.content.indices) {
             val content = pCompareMbtiData.content[idx]
             addContentView(
                 pCompareMbtiData.type,
                 content,
-                (idx == 0 && pCompareMbtiData.type == CompareMbtiType.DESCRIPTION)
+                (idx == 0 && pCompareMbtiData.type == CompareMbtiType.DESCRIPTION),
+                backgroundResId
             )
         }
     }
@@ -74,12 +79,13 @@ class MztiCardLayout : LinearLayout {
     private fun addContentView(
         pType: CompareMbtiType,
         pContent: String,
-        pIsHighlight: Boolean = true
+        pIsHighlight: Boolean = true,
+        pBackgroundResId: Int = 0
     ) {
         val inflater = LayoutInflater.from(context)
-        val view = inflater.inflate(R.layout.inflate_mzti_card_view, this, false)
         when (pType) {
             CompareMbtiType.DESCRIPTION -> {
+                val view = inflater.inflate(R.layout.inflate_mzti_card_view, this, false)
                 InflateMztiCardViewBinding.bind(view).apply {
                     ivMztiCardView.setImageResource(R.drawable.icon_pin)
 
@@ -94,30 +100,48 @@ class MztiCardLayout : LinearLayout {
                         tvMztiCardView.text = pContent
                     }
                 }
+                addView(view)
             }
 
             CompareMbtiType.GOOD_MBTI -> {
+                val view = inflater.inflate(R.layout.inflate_mzti_card_view, this, false)
                 InflateMztiCardViewBinding.bind(view).apply {
                     ivMztiCardView.setImageResource(R.drawable.icon_good)
                     tvMztiCardView.text = pContent
                 }
+                addView(view)
             }
 
             CompareMbtiType.WORST_MBTI -> {
+                val view = inflater.inflate(R.layout.inflate_mzti_card_view, this, false)
                 InflateMztiCardViewBinding.bind(view).apply {
                     ivMztiCardView.setImageResource(R.drawable.icon_bad)
                     tvMztiCardView.text = pContent
                 }
+                addView(view)
+            }
+
+            CompareMbtiType.VIRTUAL_PEOPLE -> {
+                val view = inflater.inflate(R.layout.inflate_mzti_virtual_people, this, false)
+                val data = pContent.split('-')
+                InflateMztiVirtualPeopleBinding.bind(view).apply {
+                    clVirtualPeople.setBackgroundResource(pBackgroundResId)
+                    tvVirtualPeopleName.text = data.getOrNull(1)?.trim() ?: ""
+                    tvVirtualPeopleProduct.text = data.getOrNull(0)?.trim() ?: ""
+                }
+                (view.layoutParams as MarginLayoutParams).updateMargins(top = 10.dp2px(context))
+                addView(view)
             }
 
             else -> {
+                val view = inflater.inflate(R.layout.inflate_mzti_card_view, this, false)
                 InflateMztiCardViewBinding.bind(view).apply {
                     ivMztiCardView.setImageResource(R.drawable.icon_pin)
                     tvMztiCardView.text = pContent
                 }
+                addView(view)
             }
         }
-        addView(view)
     }
 
 }

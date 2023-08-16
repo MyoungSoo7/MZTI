@@ -2,6 +2,7 @@ package com.mzc.mzti.common.util
 
 import com.mzc.mzti.common.session.MztiSession
 import com.mzc.mzti.model.data.compare.CompareMbtiData
+import com.mzc.mzti.model.data.compare.CompareMbtiDataWrapper
 import com.mzc.mzti.model.data.compare.getCompareMbtiType
 import com.mzc.mzti.model.data.friends.FriendsDataWrapper
 import com.mzc.mzti.model.data.friends.FriendsLayoutType
@@ -439,12 +440,14 @@ class JsonParserUtil {
                             val wrongAnswerArray = getJSONArray(obj, KEY_WRONG_ANSWER)
                             if (wrongAnswerArray != null) {
                                 for (idx2 in 0 until wrongAnswerArray.length()) {
-                                    if (!wrongAnswerArray.isNull(idx)) {
+                                    if (!wrongAnswerArray.isNull(idx2)) {
                                         val wrongAnswer = wrongAnswerArray.getString(idx2)
+                                        DLog.d(TAG,"wrongAnswer=$wrongAnswer")
                                         answerList.add(wrongAnswer)
                                     }
                                 }
                             }
+                            DLog.d(TAG,"wrongAnswerArray=$wrongAnswerArray, wrongAnswerArray.length()=${wrongAnswerArray?.length()}, answerList=$answerList")
 
                             val answerIdx = IntRange(0, 2).random()
                             when (answerIdx) {
@@ -610,7 +613,7 @@ class JsonParserUtil {
         }
     }
 
-    fun getMbtiCompareResponse(jsonRoot: JSONObject): NetworkResult<List<CompareMbtiData>> {
+    fun getMbtiCompareResponse(jsonRoot: JSONObject): NetworkResult<CompareMbtiDataWrapper> {
         val resultCode = getInt(jsonRoot, KEY_RESULT_CODE)
         if (resultCode != 200) {
             return NetworkResult.Fail("API Request Fail, resultCode=$resultCode")
@@ -618,7 +621,8 @@ class JsonParserUtil {
 
         val resultData = getJSONArray(jsonRoot, KEY_RESULT_DATA)
         return if (resultData != null) {
-            val mbtiInfoList = arrayListOf<CompareMbtiData>()
+            val leftMbtiInfo: ArrayList<CompareMbtiData> = arrayListOf()
+            val rightMbtiInfo: ArrayList<CompareMbtiData> = arrayListOf()
 
             for (idx in 0 until resultData.length()) {
                 if (!resultData.isNull(idx)) {
@@ -627,6 +631,7 @@ class JsonParserUtil {
                     if (obj != null) {
                         val dataArray = getJSONArray(obj, KEY_DATA)
 
+                        val mbtiInfoList = arrayListOf<CompareMbtiData>()
                         if (dataArray != null) {
                             for (idx2 in 0 until dataArray.length()) {
                                 if (!dataArray.isNull(idx2)) {
@@ -656,10 +661,15 @@ class JsonParserUtil {
                                 }
                             }
                         }
+                        when (idx) {
+                            0 -> leftMbtiInfo.addAll(mbtiInfoList)
+                            1 -> rightMbtiInfo.addAll(mbtiInfoList)
+                            else -> break
+                        }
                     }
                 }
             }
-            NetworkResult.Success(mbtiInfoList)
+            NetworkResult.Success(CompareMbtiDataWrapper(leftMbtiInfo, rightMbtiInfo))
         } else {
             NetworkResult.Fail("ResultData=$resultData")
         }

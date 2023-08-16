@@ -8,16 +8,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mzc.mzti.base.BaseViewModel
 import com.mzc.mzti.common.session.MztiSession
+import com.mzc.mzti.model.data.compare.CompareMbtiDataWrapper
 import com.mzc.mzti.model.data.download.DownloadResult
 import com.mzc.mzti.model.data.friends.FriendsDataWrapper
 import com.mzc.mzti.model.data.friends.FriendsLayoutType
 import com.mzc.mzti.model.data.friends.FriendsOtherProfileData
+import com.mzc.mzti.model.data.mbti.MBTI
 import com.mzc.mzti.model.data.network.NetworkResult
 import com.mzc.mzti.model.data.router.MztiTabRouter
 import com.mzc.mzti.model.data.user.UserProfileData
 import com.mzc.mzti.model.repository.download.DownloadRepository
 import com.mzc.mzti.model.repository.network.MztiRepository
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 private const val TAG: String = "MainViewModel"
 
@@ -53,6 +56,15 @@ class MainViewModel(
      */
     private var _removeFriendId: String = ""
     private val removeFriendId: String get() = _removeFriendId
+
+    private val _leftMbti: MutableLiveData<MBTI> = MutableLiveData()
+    val leftMbti: LiveData<MBTI> get() = _leftMbti
+
+    private val _rightMbti: MutableLiveData<MBTI> = MutableLiveData()
+    val rightMbti: LiveData<MBTI> get() = _rightMbti
+
+    private val _mbtiCompareResult: MutableLiveData<CompareMbtiDataWrapper?> = MutableLiveData()
+    val mbtiCompareResult: LiveData<CompareMbtiDataWrapper?> get() = _mbtiCompareResult
 
     private val _learningAgree: MutableLiveData<Boolean> = MutableLiveData(false)
     val learningAgree: LiveData<Boolean> get() = _learningAgree
@@ -199,6 +211,71 @@ class MainViewModel(
         }
     }
     // endregion Friends Tab
+
+    // region Compare Tab
+
+    fun setLeftMbti(pLeftMbti: MBTI) {
+        if (leftMbti.value != pLeftMbti) {
+            _leftMbti.value = pLeftMbti
+            _mbtiCompareResult.value = null
+            requestMbtiCompare()
+        }
+    }
+
+    fun setRightMbti(pRightMbti: MBTI) {
+        if (rightMbti.value != pRightMbti) {
+            _rightMbti.value = pRightMbti
+            _mbtiCompareResult.value = null
+            requestMbtiCompare()
+        }
+    }
+
+    fun requestMbtiCompare() {
+        if (mbtiCompareResult.value == null) {
+            setProgressFlag(true)
+            val tmpLeftMbti = leftMbti.value
+            val tmpRightMbti = rightMbti.value
+
+            viewModelScope.launch {
+                val result = if (tmpLeftMbti != null && tmpRightMbti != null) {
+                    mztiRepository.makeMbtiCompareRequest(
+                        tmpLeftMbti,
+                        tmpRightMbti,
+                        MztiSession.userToken,
+                        MztiSession.generateType
+                    )
+                } else {
+                    val left = MztiSession.userMbti
+                    val right = MBTI.values()[IntRange(0, 15).random()]
+                    _leftMbti.value = left
+                    _rightMbti.value = right
+
+                    mztiRepository.makeMbtiCompareRequest(
+                        left,
+                        right,
+                        MztiSession.userToken,
+                        MztiSession.generateType
+                    )
+                }
+
+                when (result) {
+                    is NetworkResult.Success<CompareMbtiDataWrapper> -> {
+                        val data = result.data
+                        _mbtiCompareResult.value = data
+                    }
+
+                    is NetworkResult.Fail -> {
+                        setApiFailMsg(result.msg)
+                    }
+
+                    is NetworkResult.Error -> {
+                        setExceptionData(result.exception)
+                    }
+                }
+            }
+        }
+    }
+    // endregion Compare Tab
 
     // region Learning Tab
     fun setLearningAgree(pLearningAgree: Boolean) {
