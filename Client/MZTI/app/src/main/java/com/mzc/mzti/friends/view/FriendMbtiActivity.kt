@@ -16,6 +16,7 @@ import com.mzc.mzti.model.data.compare.CompareMbtiData
 import com.mzc.mzti.model.data.compare.CompareMbtiType
 import com.mzc.mzti.model.data.friends.FriendsOtherProfileData
 import com.mzc.mzti.model.data.mbti.MBTI
+import com.mzc.mzti.model.data.mbti.getBackgroundProfileDrawableResId
 import com.mzc.mzti.model.data.mbti.getProfileImgResId
 import com.mzc.mzti.model.data.user.UserInfoData
 
@@ -134,6 +135,9 @@ class FriendMbtiActivity : BaseActivity() {
             tvFriendMbtiTitle.text = getString(R.string.friendMbti_title, model.friendInfo.nickname)
             tvFriendMbtiUserName.text = model.friendInfo.nickname
             tvFriendMbtiUserMbti.text = model.friendInfo.mbti.name
+
+            clFriendMbtiContent.setBackgroundResource(getBackgroundProfileDrawableResId(mbti))
+            cvFriendMbtiProfileBorder.updateColor(mbti)
         }
 
         model.requestMbtiInfo()
