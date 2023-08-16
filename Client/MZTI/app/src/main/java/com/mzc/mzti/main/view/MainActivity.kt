@@ -177,7 +177,7 @@ class MainActivity : BaseActivity() {
             super.onBackPressed()
         } else {
             backPressedTime = tempTime
-            val msg: String = "테스트를 종료하시려면 뒤로 버튼을 한 번 더 누루세요."
+            val msg: String = "앱을 종료하시려면 뒤로 버튼을 한 번 더 누루세요."
             Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
         }
     }
