@@ -1,5 +1,6 @@
 package com.example.mzti_server.service;
 
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.example.mzti_server.config.JwtTokenProvider;
 import com.example.mzti_server.domain.FriendRelationship;
 import com.example.mzti_server.domain.Member;
@@ -18,6 +19,7 @@ import com.example.mzti_server.repository.MemberRepository;
 import com.example.mzti_server.repository.TestHistoryRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,11 +33,15 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
     private final MemberRepository memberRepository;
     private final TestHistoryRepository testHistoryRepository;
@@ -43,7 +49,7 @@ public class MemberService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
-    private final FileService fileService;
+    private final AmazonS3Client amazonS3Client;
 
     public ResponseEntity<LinkedHashMap<String, Object>> login(String loginId, String password) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginId, password);
@@ -80,18 +86,24 @@ public class MemberService {
         }
     }
 
-    public ResponseEntity<LinkedHashMap<String, Object>> editMember(String accessToken, EditMemberDTO editMemberDTO) {
+    public ResponseEntity<LinkedHashMap<String, Object>> editMember(String accessToken, EditMemberDTO editMemberDTO, MultipartFile file) throws IOException {
         Member findByToken = memberByToken(accessToken);
         if (editMemberDTO.getUsername() == null) {
             editMemberDTO.setUsername(findByToken.getUsername());
         }
-        if (editMemberDTO.getProfileImage() == null) {
-            editMemberDTO.setProfileImage(findByToken.getProfileImage());
-        }
         if (editMemberDTO.getMbti() == null) {
             editMemberDTO.setMbti(findByToken.getMbti());
         }
+        if (file != null){
+            String fileName = file.getOriginalFilename();
+            amazonS3Client.putObject(bucket, fileName, file.getInputStream(), null);
+            String imageUrl = amazonS3Client.getUrl(bucket, fileName).toString();
+            editMemberDTO.setProfileImage(imageUrl);
+        } else{
+            editMemberDTO.setProfileImage(findByToken.getProfileImage());
+        }
         findByToken.update(editMemberDTO);
+        memberRepository.save(findByToken);
         MemberDTO changedMember = MemberDTO.builder()
                 .loginId(findByToken.getLoginId())
                 .username(findByToken.getUsername())
@@ -230,6 +242,17 @@ public class MemberService {
         return getResponse(responseDTO);
     }
 
+    public ResponseEntity<LinkedHashMap<String, Object>> updateProfileImage(String accessToken, MultipartFile file) {
+        try {
+            String fileName = file.getOriginalFilename();
+            amazonS3Client.putObject(bucket, fileName, file.getInputStream(), null);
+            String imageUrl = amazonS3Client.getUrl(bucket, fileName).toString();
+            return getResponse(imageUrl);
+        } catch (Exception e) {
+            throw new RuntimeException("이미지 업로드 실패");
+        }
+    }
+
     public Member memberByToken(String accessToken) {
         Optional<Member> member = memberRepository.findById(jwtTokenProvider.getMemberId(accessToken));
         if (member.isPresent()) {
@@ -246,44 +269,5 @@ public class MemberService {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
 }
-
-//    public String signup(String id, String password, String nickname, String mbti, MultipartFile profileImage) {
-//        Member member = Member.builder()
-//                .password(passwordEncoder.encode(password))
-//                .build();
-//        System.out.println("member = " + member);
-//        Member savedMember = memberRepository.save(member);
-//
-//        return savedMember;
-//    }
-
-//    @Transactional(readOnly = false)
-//    private MemberImage saveMemberImage(MultipartFile file) {
-//        if(file.getContentType().startsWith("image") == false) {
-//            log.warn("이미지 파일이 아닙니다.");
-//            return null;
-//        }
-//
-//        String originalName = file.getOriginalFilename();
-//        Path root = Paths.get(uploadPath, "member");
-//
-//        try {
-//            ImageDTO imageDTO =  fileService.createImageDTO(originalName, root);
-//            MemberImage memberImage = MemberImage.builder()
-//                    .uuid(imageDTO.getUuid())
-//                    .fileName(imageDTO.getFileName())
-//                    .fileUrl(imageDTO.getFileUrl())
-//                    .build();
-//
-//            file.transferTo(Paths.get(imageDTO.getFileUrl()));
-//
-//            return imageRepository.save(memberImage);
-//        } catch (IOException e) {
-//            log.warn("업로드 폴더 생성 실패: " + e.getMessage());
-//        }
-//
-//        return null;
-//    }
 

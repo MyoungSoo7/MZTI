@@ -14,8 +14,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -52,8 +54,10 @@ public class MemberController {
 
     @Operation(summary = "멤버 수정", description = "멤버 정보를 수정합니다.")
     @PostMapping("/edit")
-    public ResponseEntity<LinkedHashMap<String, Object>> editMember(HttpServletRequest request, @RequestBody EditMemberDTO editMemberDTO) {
-        return memberService.editMember(request.getHeader("Authorization"), editMemberDTO);
+    public ResponseEntity<LinkedHashMap<String, Object>> editMember(HttpServletRequest request,
+                                                                    @RequestPart(value = "userInfo") EditMemberDTO editMemberDTO,
+                                                                    @RequestPart(value = "profileImage", required = false) MultipartFile multipartFile) throws IOException {
+        return memberService.editMember(request.getHeader("Authorization"), editMemberDTO, multipartFile);
     }
 
     @Operation(summary = "회원가입", description = "아이디, 비밀번호, 이름, mbti를 이용하여 회원가입합니다.")
@@ -92,11 +96,12 @@ public class MemberController {
         return memberService.getProfile(request.getHeader("Authorization"));
     }
 
+    @Operation(summary = "멤버 프로필 화면 정보", description = "멤버의 프로필 화면에 들어갈 정보를 제공합니다.")
+    @PostMapping("/update/profileImage")
+    public ResponseEntity<LinkedHashMap<String, Object>> updateProfileImage(HttpServletRequest request, @RequestPart("file") MultipartFile multipartFile) throws IOException {
+        return memberService.updateProfileImage(request.getHeader("Authorization"), multipartFile);
+    }
 
-//    @PostMapping("/signup")
-//    public String signup(String id, String password, String nickname, String mbti, MultipartFile profileImage){
-//        return memberService.signup(id, password, nickname, mbti, profileImage);
-//    }
 
 
 }

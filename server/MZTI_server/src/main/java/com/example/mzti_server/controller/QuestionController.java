@@ -28,7 +28,8 @@ public class QuestionController {
     @Operation(summary = "문제 모두 가져오기", description = "mbti와 문제 개수를 받으면 모든 문제들의 보기와 정답을 제공합니다.")
     @GetMapping()
     public ResponseEntity<LinkedHashMap<String, Object>> getQuestionAnswers(@RequestParam int questionCount, @RequestParam String mbti){
-        return questionService.getQuestionAnswers(questionCount, mbti);
+        // return questionService.getQuestionAnswers(questionCount, mbti);
+        return questionService.getQuestionAnswers(2, "ESFJ");
     }
 
     @Operation(summary = "문제 결과 받기", description = "mbti와 문제 개수를 받으면 모든 문제들의 보기와 정답을 제공합니다.")
