@@ -19,6 +19,7 @@ import com.example.mzti_server.repository.MemberRepository;
 import com.example.mzti_server.repository.TestHistoryRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberService {
 
     @Value("${cloud.aws.s3.bucket}")
@@ -88,29 +90,51 @@ public class MemberService {
 
     public ResponseEntity<LinkedHashMap<String, Object>> editMember(String accessToken, EditMemberDTO editMemberDTO, MultipartFile file) throws IOException {
         Member findByToken = memberByToken(accessToken);
-        if (editMemberDTO.getUsername() == null) {
-            editMemberDTO.setUsername(findByToken.getUsername());
+        if (editMemberDTO == null) {
+            if (file != null) {
+                String fileName = file.getOriginalFilename();
+                log.info("filesize",file.getSize());
+                System.out.println("fileName = " + fileName);
+                System.out.println();
+                amazonS3Client.putObject(bucket, fileName, file.getInputStream(), null);
+                String imageUrl = amazonS3Client.getUrl(bucket, fileName).toString();
+                EditMemberDTO pi = new EditMemberDTO(findByToken.getUsername(), findByToken.getMbti(), imageUrl);
+                findByToken.update(pi);
+                memberRepository.save(findByToken);
+                MemberDTO changedMember = MemberDTO.builder()
+                        .loginId(findByToken.getLoginId())
+                        .username(findByToken.getUsername())
+                        .profileImage(findByToken.getProfileImage())
+                        .mbti(findByToken.getMbti())
+                        .build();
+                return getResponse(changedMember);
+            }
+        } else {
+            if (editMemberDTO.getUsername() == null) {
+                editMemberDTO.setUsername(findByToken.getUsername());
+            }
+            if (editMemberDTO.getMbti() == null) {
+                editMemberDTO.setMbti(findByToken.getMbti());
+            }
+            if (file != null) {
+                String fileName = file.getOriginalFilename();
+                amazonS3Client.putObject(bucket, fileName, file.getInputStream(), null);
+                String imageUrl = amazonS3Client.getUrl(bucket, fileName).toString();
+                editMemberDTO.setProfileImage(imageUrl);
+            } else {
+                editMemberDTO.setProfileImage(findByToken.getProfileImage());
+            }
+            findByToken.update(editMemberDTO);
+            memberRepository.save(findByToken);
+            MemberDTO changedMember = MemberDTO.builder()
+                    .loginId(findByToken.getLoginId())
+                    .username(findByToken.getUsername())
+                    .profileImage(findByToken.getProfileImage())
+                    .mbti(findByToken.getMbti())
+                    .build();
+            return getResponse(changedMember);
         }
-        if (editMemberDTO.getMbti() == null) {
-            editMemberDTO.setMbti(findByToken.getMbti());
-        }
-        if (file != null){
-            String fileName = file.getOriginalFilename();
-            amazonS3Client.putObject(bucket, fileName, file.getInputStream(), null);
-            String imageUrl = amazonS3Client.getUrl(bucket, fileName).toString();
-            editMemberDTO.setProfileImage(imageUrl);
-        } else{
-            editMemberDTO.setProfileImage(findByToken.getProfileImage());
-        }
-        findByToken.update(editMemberDTO);
-        memberRepository.save(findByToken);
-        MemberDTO changedMember = MemberDTO.builder()
-                .loginId(findByToken.getLoginId())
-                .username(findByToken.getUsername())
-                .profileImage(findByToken.getProfileImage())
-                .mbti(findByToken.getMbti())
-                .build();
-        return getResponse(changedMember);
+        return null;
     }
 
     public ResponseEntity<LinkedHashMap<String, Object>> findFriendListByLoginId(String accessToken) {
@@ -159,8 +183,8 @@ public class MemberService {
                 throw new RuntimeException("본인과는 친구될 수 없습니다.");
             }
             Optional<List<FriendRelationship>> byMemberId = friendRelationshipRepository.findByMemberId(memberByToken.getId());
-            for(int i=0;i<byMemberId.get().size();i++){
-                if(byMemberId.get().get(i).getUsername().equals(friend.get().getUsername())){
+            for (int i = 0; i < byMemberId.get().size(); i++) {
+                if (byMemberId.get().get(i).getUsername().equals(friend.get().getUsername())) {
                     throw new RuntimeException("이미 추가된 친구입니다.");
                 }
             }

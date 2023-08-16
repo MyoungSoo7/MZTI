@@ -55,7 +55,7 @@ public class MemberController {
     @Operation(summary = "멤버 수정", description = "멤버 정보를 수정합니다.")
     @PostMapping("/edit")
     public ResponseEntity<LinkedHashMap<String, Object>> editMember(HttpServletRequest request,
-                                                                    @RequestPart(value = "userInfo") EditMemberDTO editMemberDTO,
+                                                                    @RequestPart(value = "userInfo", required = false) EditMemberDTO editMemberDTO,
                                                                     @RequestPart(value = "profileImage", required = false) MultipartFile multipartFile) throws IOException {
         return memberService.editMember(request.getHeader("Authorization"), editMemberDTO, multipartFile);
     }
