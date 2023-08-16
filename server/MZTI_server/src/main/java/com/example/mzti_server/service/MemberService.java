@@ -155,6 +155,9 @@ public class MemberService {
         Member memberByToken = memberByToken(accessToken); // 본인
         Optional<Member> friend = memberRepository.findByLoginId(friendId); // 친구
         if (friend.isPresent()) {
+            if (friend.get().getId().equals(memberByToken.getId())) {
+                throw new RuntimeException("본인과는 친구될 수 없습니다.");
+            }
             Optional<List<FriendRelationship>> byMemberId = friendRelationshipRepository.findByMemberId(memberByToken.getId());
             for(int i=0;i<byMemberId.get().size();i++){
                 if(byMemberId.get().get(i).getUsername().equals(friend.get().getUsername())){
