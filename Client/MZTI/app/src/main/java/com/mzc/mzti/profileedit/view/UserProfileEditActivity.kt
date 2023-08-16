@@ -156,6 +156,10 @@ class UserProfileEditActivity : BaseActivity() {
                     finish()
                 }
             }
+            ibUserProfileEditBack.setOnClickListener {
+                setResult(RESULT_CANCELED)
+                finish()
+            }
             clUserProfileEditMbtiCard.setOnClickListener {
                 val galleryIntent = Intent().apply {
                     type = "image/*"
