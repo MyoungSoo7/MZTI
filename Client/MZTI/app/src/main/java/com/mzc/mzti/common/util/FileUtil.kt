@@ -14,10 +14,12 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
 import androidx.exifinterface.media.ExifInterface
+import org.json.JSONObject
 import java.io.EOFException
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.io.FileWriter
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -245,7 +247,6 @@ class FileUtil(
             )
             return try {
                 var rotateBitmap: Bitmap? = null
-                val strFileName = photoPath.substring(photoPath.lastIndexOf("/") + 1)
                 var exifDegree = 0f
                 try {
                     val exif = ExifInterface(photoPath)
@@ -350,6 +351,22 @@ class FileUtil(
     fun deleteFile(path: String) {
         val file = File("$strCachePath/$path")
         if (file.exists()) file.delete()
+    }
+
+    @Throws(IOException::class)
+    fun jsonObject2JsonFile(pJsonObj: JSONObject): File {
+        val jsonFile = File("$strCachePath/user_info.json")
+
+        if (jsonFile.exists()) {
+            jsonFile.delete()
+        }
+
+        val fileWriter = FileWriter(jsonFile)
+        fileWriter.write(pJsonObj.toString())
+        fileWriter.flush()
+        fileWriter.close()
+
+        return jsonFile
     }
 
 }

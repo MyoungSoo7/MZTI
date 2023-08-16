@@ -1,7 +1,6 @@
 package com.mzc.mzti.profileedit.view
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -22,12 +21,12 @@ import com.mzc.mzti.clearFocus
 import com.mzc.mzti.common.session.MztiSession
 import com.mzc.mzti.common.util.DLog
 import com.mzc.mzti.databinding.ActivityUserProfileEditBinding
+import com.mzc.mzti.model.data.mbti.MBTI
 import com.mzc.mzti.model.data.mbti.getProfileImgResId
 import com.mzc.mzti.profileedit.viewmodel.UserProfileEditViewModel
 import java.io.File
 
 private const val TAG: String = "UserProfileEditActivity"
-const val KEY_USER_INFO_DATA: String = "user_info_data"
 
 class UserProfileEditActivity : BaseActivity() {
 
@@ -108,6 +107,16 @@ class UserProfileEditActivity : BaseActivity() {
                     .into(binding.ivUserProfileEditUserProfile)
             }
         })
+
+        model.editProfileResult.observe(this, Observer { UserInfoData ->
+            MztiSession.update(
+                pUserNickname = UserInfoData.nickname,
+                pUserMBTI = UserInfoData.mbti,
+                pUserProfileImg = UserInfoData.profileImg
+            )
+            setResult(RESULT_OK)
+            finish()
+        })
     }
 
     private fun init() {
@@ -135,7 +144,10 @@ class UserProfileEditActivity : BaseActivity() {
 
             // 완료 버튼
             tvUserProfileEditConfirm.setOnClickListener {
-
+                if (!model.checkProfileEdited()) {
+                    setResult(RESULT_CANCELED)
+                    finish()
+                }
             }
             clUserProfileEditMbtiCard.setOnClickListener {
                 val galleryIntent = Intent().apply {
@@ -143,6 +155,15 @@ class UserProfileEditActivity : BaseActivity() {
                     action = Intent.ACTION_GET_CONTENT
                 }
                 galleryIntentForResult.launch(Intent.createChooser(galleryIntent, "프로필 사진 선택"))
+            }
+            tvUserProfileEditMbti.setOnClickListener {
+                showSelectMbtiDialog(
+                    onMbtiSelected = { mbti: MBTI ->
+                        model.setUserMBTI(mbti)
+                    },
+                    onDismissListener = {
+                    }
+                )
             }
 
             etUserProfileEditNickname.addTextChangedListener(object : TextWatcher {

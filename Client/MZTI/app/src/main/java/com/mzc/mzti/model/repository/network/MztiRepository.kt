@@ -4,12 +4,12 @@ import android.content.Context
 import com.mzc.mzti.R
 import com.mzc.mzti.base.BaseNetworkRepository
 import com.mzc.mzti.common.util.DLog
+import com.mzc.mzti.common.util.FileUtil
 import com.mzc.mzti.model.data.friends.FriendsDataWrapper
 import com.mzc.mzti.model.data.friends.FriendsOtherProfileData
 import com.mzc.mzti.model.data.mbti.MBTI
 import com.mzc.mzti.model.data.network.NetworkResult
 import com.mzc.mzti.model.data.question.MbtiAnswerData
-import com.mzc.mzti.model.data.question.MbtiQuestionData
 import com.mzc.mzti.model.data.question.MbtiQuestionDataWrapper
 import com.mzc.mzti.model.data.question.MbtiTestResultData
 import com.mzc.mzti.model.data.sign.SignUpData
@@ -17,15 +17,30 @@ import com.mzc.mzti.model.data.user.UserInfoData
 import com.mzc.mzti.model.data.user.UserProfileData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.Response
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.File
+import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 private const val TAG: String = "MztiRepository"
+private const val MEDIA_TYPE: String = "application/octet-stream"
 
 class MztiRepository(
     private val context: Context
 ) : BaseNetworkRepository(context, TAG) {
+
+    private val fileUtil = FileUtil(context)
 
     suspend fun makeLoginRequest(
         pLoginId: String,
@@ -366,6 +381,83 @@ class MztiRepository(
                 NetworkResult.Fail(
                     context.getString(R.string.api_connection_fail_msg)
                 )
+            }
+        }
+    }
+
+    suspend fun makeEditProfileRequest(
+        pUserToken: String,
+        pGenerateType: String,
+        pUserNickname: String? = null,
+        pUserMBTI: MBTI? = null,
+        pUserProfileImgPath: String? = null
+    ): NetworkResult<UserInfoData> {
+        return withContext(Dispatchers.IO) {
+            DLog.d(
+                "${TAG}_editProfile",
+                "username=$pUserNickname, mbti=${pUserMBTI?.name}, profileImg=$pUserProfileImgPath"
+            )
+            val editProfileUrl = "${BASE_URL}api/members/edit"
+
+            val okHttpClient = OkHttpClient.Builder()
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .build()
+
+            val multipartBody = MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+
+            if (pUserNickname != null || pUserMBTI != null) {
+                val userInfoObj = JSONObject().apply {
+                    if (pUserNickname != null) {
+                        put("username", pUserNickname)
+                    }
+                    if (pUserMBTI != null) {
+                        put("mbti", pUserMBTI.name)
+                    }
+                }
+                val userInfoJsonFile = fileUtil.jsonObject2JsonFile(userInfoObj)
+
+                multipartBody.addFormDataPart(
+                    "userInfo",
+                    userInfoJsonFile.name,
+                    userInfoJsonFile.asRequestBody("application/json".toMediaType())
+                )
+            }
+            if (pUserProfileImgPath != null) {
+                val profileImgFile = File(pUserProfileImgPath)
+                DLog.d(TAG, "imgFileSize=${profileImgFile.length() / 1024}")
+
+                multipartBody.addFormDataPart(
+                    "profileImage",
+                    profileImgFile.name,
+                    profileImgFile.asRequestBody(MEDIA_TYPE.toMediaType())
+                )
+            }
+            val body = multipartBody.build()
+
+            val request = Request.Builder()
+                .addHeader("Authorization", "$pGenerateType $pUserToken")
+                .url(editProfileUrl)
+                .post(body)
+                .build()
+
+            val response = okHttpClient.newCall(request).execute()
+
+            DLog.d(TAG, "responseCode=${response.code}, message=${response.message}")
+            if (response.isSuccessful) {
+                val responseBody = response.body?.string()
+
+                if (responseBody != null) {
+                    DLog.d(TAG, "responseBody=$responseBody")
+                    val jsonRoot = JSONObject(responseBody)
+                    jsonParserUtil.getEditProfileResponse(jsonRoot, pUserToken, pGenerateType)
+                } else {
+                    NetworkResult.Fail("ResponseBody is Null!")
+                }
+            } else {
+                NetworkResult.Fail("ResultCode=${response.code}")
             }
         }
     }

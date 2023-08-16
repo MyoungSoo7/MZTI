@@ -7,6 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.mzc.mzti.base.BaseViewModel
 import com.mzc.mzti.common.session.MztiSession
 import com.mzc.mzti.model.data.mbti.MBTI
+import com.mzc.mzti.model.data.network.NetworkResult
+import com.mzc.mzti.model.data.user.UserInfoData
+import com.mzc.mzti.model.data.user.UserProfileData
 import com.mzc.mzti.model.repository.image.ImageRepository
 import com.mzc.mzti.model.repository.network.MztiRepository
 import kotlinx.coroutines.launch
@@ -24,8 +27,11 @@ class UserProfileEditViewModel(
     private var _userMBTI: MutableLiveData<MBTI> = MutableLiveData(MBTI.MZTI)
     val userMBTI: LiveData<MBTI> get() = _userMBTI
 
-    private var _userProfileImg: MutableLiveData<String?> = MutableLiveData()
+    private val _userProfileImg: MutableLiveData<String?> = MutableLiveData()
     val userProfileImg: LiveData<String?> get() = _userProfileImg
+
+    private val _editProfileResult: MutableLiveData<UserInfoData> = MutableLiveData()
+    val editProfileResult: LiveData<UserInfoData> get() = _editProfileResult
 
     fun init(
         pUserNickname: String,
@@ -66,7 +72,28 @@ class UserProfileEditViewModel(
     private fun requestEditProfile() {
         setProgressFlag(true)
         viewModelScope.launch {
+            val result = mztiRepository.makeEditProfileRequest(
+                pUserToken = MztiSession.userToken,
+                pGenerateType = MztiSession.generateType,
+                pUserNickname = userNickname.value,
+                pUserMBTI = userMBTI.value,
+                pUserProfileImgPath = userProfileImg.value
+            )
 
+            when (result) {
+                is NetworkResult.Success<UserInfoData> -> {
+                    val data = result.data
+                    _editProfileResult.value = data
+                }
+
+                is NetworkResult.Fail -> {
+                    setApiFailMsg(result.msg)
+                }
+
+                is NetworkResult.Error -> {
+                    setExceptionData(result.exception)
+                }
+            }
         }
     }
 

@@ -167,7 +167,7 @@ class JsonParserUtil {
             val accessToken: String = getString(resultData, KEY_ACCESS_TOKEN)
             val nickname: String = getString(resultData, KEY_USER_NAME)
             val strMbti: String = getString(resultData, KEY_MBTI)
-            val profileImg: String = getString(resultData, KEY_PROFILE_IMG)
+            val profileImg: String = getString(resultData, KEY_PROFILE_IMG).replace("https","http")
 
             UserInfoData(
                 id = loginId,
@@ -195,7 +195,7 @@ class JsonParserUtil {
             val accessToken = getString(resultData, KEY_ACCESS_TOKEN)
             val nickname = getString(resultData, KEY_USER_NAME)
             val mbti = getString(resultData, KEY_MBTI)
-            val profileImg = getString(resultData, KEY_PROFILE_IMG)
+            val profileImg = getString(resultData, KEY_PROFILE_IMG).replace("https","http")
 
             UserInfoData(
                 id = loginId,
@@ -264,7 +264,7 @@ class JsonParserUtil {
                         if (obj != null) {
                             val loginId = getString(obj, KEY_LOGIN_ID)
                             val userName = getString(obj, KEY_USER_NAME)
-                            val profileImg = getString(obj, KEY_PROFILE_IMG)
+                            val profileImg = getString(obj, KEY_PROFILE_IMG).replace("https","http")
                             val strMbti = getString(obj, KEY_MBTI)
 
                             otherProfileList.add(
@@ -311,7 +311,7 @@ class JsonParserUtil {
         return if (resultData != null) {
             val loginId = getString(resultData, KEY_LOGIN_ID)
             val userName = getString(resultData, KEY_USER_NAME)
-            val profileImg = getString(resultData, KEY_PROFILE_IMG)
+            val profileImg = getString(resultData, KEY_PROFILE_IMG).replace("https","http")
             val strMBTI = getString(resultData, KEY_MBTI)
 
             NetworkResult.Success(
@@ -347,7 +347,7 @@ class JsonParserUtil {
         return if (resultData != null) {
             val loginId = getString(resultData, KEY_LOGIN_ID)
             val userName = getString(resultData, KEY_USER_NAME)
-            val profileImg = getString(resultData, KEY_PROFILE_IMG)
+            val profileImg = getString(resultData, KEY_PROFILE_IMG).replace("https","http")
             val strMBTI = getString(resultData, KEY_MBTI)
 
             val mbtiBadgeList = arrayListOf<MbtiBadgeData>()
@@ -519,6 +519,38 @@ class JsonParserUtil {
 
             NetworkResult.Success(
                 MbtiTestResultData(mbtiBadgeData, score)
+            )
+        } else {
+            NetworkResult.Fail("ResultData=$resultData")
+        }
+    }
+
+    fun getEditProfileResponse(
+        jsonRoot: JSONObject,
+        token: String,
+        generateType: String
+    ): NetworkResult<UserInfoData> {
+        val resultCode = getInt(jsonRoot, KEY_RESULT_CODE)
+        if (resultCode != 200) {
+            return NetworkResult.Fail("API Request Fail, resultCode=$resultCode")
+        }
+
+        val resultData = getJsonObject(jsonRoot, KEY_RESULT_DATA)
+        return if (resultData != null) {
+            val loginId = getString(resultData, KEY_LOGIN_ID)
+            val nickname = getString(resultData, KEY_USER_NAME)
+            val profileImg = getString(resultData, KEY_PROFILE_IMG).replace("https", "http")
+            val strMBTI = getString(resultData, KEY_MBTI)
+
+            NetworkResult.Success(
+                UserInfoData(
+                    id = loginId,
+                    token = token,
+                    generateType = generateType,
+                    nickname = nickname,
+                    profileImg = profileImg,
+                    mbti = getMBTI(strMBTI)
+                )
             )
         } else {
             NetworkResult.Fail("ResultData=$resultData")

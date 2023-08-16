@@ -10,7 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.mzc.mzti.R
 import com.mzc.mzti.common.dialog.ProgressDialog
+import com.mzc.mzti.common.dialog.SelectMbtiDialog
 import com.mzc.mzti.common.util.VibrateManager
+import com.mzc.mzti.model.data.mbti.MBTI
 
 open class BaseActivity : AppCompatActivity() {
 
@@ -78,6 +80,23 @@ open class BaseActivity : AppCompatActivity() {
             }
         }
         return super.dispatchTouchEvent(ev)
+    }
+
+    protected fun showSelectMbtiDialog(
+        onMbtiSelected: (mbti: MBTI) -> Unit,
+        onDismissListener: () -> Unit,
+        pTitle: String = ""
+    ) {
+        for (fragment in supportFragmentManager.fragments) {
+            if (fragment is SelectMbtiDialog) {
+                return
+            }
+        }
+
+        SelectMbtiDialog(onMbtiSelected, pTitle, onDismissListener).show(
+            supportFragmentManager,
+            null
+        )
     }
 
 }
