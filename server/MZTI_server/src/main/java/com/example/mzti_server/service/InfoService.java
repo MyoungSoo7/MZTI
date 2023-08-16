@@ -23,6 +23,20 @@ public class InfoService {
 
     // MBTI 1개 조회
     public ResponseEntity<LinkedHashMap<String, Object>> getMBTIInfo(String mbti) {
+        MbtiInfoDTO mbtiInfoDTO = getMbtiInfoDTO(mbti);
+        return getResponse(mbtiInfoDTO);
+    }
+
+    // MBTI 2개 비교
+    public ResponseEntity<LinkedHashMap<String, Object>> getComparedMBTI(String leftMBTI, String rightMBTI) {
+        List<MbtiInfoDTO> responseDTOList = new ArrayList<>();
+        responseDTOList.add(getMbtiInfoDTO(leftMBTI));
+        responseDTOList.add(getMbtiInfoDTO(rightMBTI));
+        return getResponse(responseDTOList);
+    }
+
+
+    private MbtiInfoDTO getMbtiInfoDTO(String mbti) {
         MbtiInfo mbtiInfo = mbtiInfoRepository.findByCategory(mbti);
 
         List<MbtiDataDTO> temp = new ArrayList<>();
@@ -54,15 +68,7 @@ public class InfoService {
         }
 
         MbtiInfoDTO mbtiInfoDTO = new MbtiInfoDTO(temp);
-
-        return getResponse(mbtiInfoDTO);
-    }
-
-
-    // MBTI 2개 비교
-    public ResponseEntity<LinkedHashMap<String, Object>> getComparedMBTI(String leftMBTI, String rightMBTI) {
-        List<MbtiResponseDTO> responseDTOList = new ArrayList<>();
-        return getResponse(responseDTOList);
+        return mbtiInfoDTO;
     }
 
 
