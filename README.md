@@ -11,6 +11,8 @@
 
 ### 사용 기술 스택
 #### 안드로이드
+<a href="" target="_blank"><img src="https://img.shields.io/badge/ANDROID-3DDC84?style=for-the-badge&logo=Android&logoColor=FFFFFF"/></a>
+<a href="" target="_blank"><img src="https://img.shields.io/badge/KOTLIN-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=FFFFFF"/></a>
 
 #### 서버
 ![Spring](https://img.shields.io/badge/Spring-6DB33F.svg?&style=for-the-badge&logo=Spring&logoColor=white)
@@ -28,16 +30,16 @@
 
 ### 2. MBTI 학습
 - 16가지 MBTI 중 하나를 선택하여 해당 MBTI를 학습합니다
-- 상황과 상황에 따른 행동이 주어지며, 행동은 데이터베이스에서 랜덤으로 가져와 보여줍니다
-- MBTI 학습이 종료되면 4가지 유형(E/I, N/S, F/T, J/P)에 대한 점수에 따라 모양을 다르게 하여 보여줍니다
-- 해당 MBTI별 학습은 프로필 화면에서 확인할 수 있습니다
+- 상황과 상황에 대한 행동이 제시되며, 상황 및 행동은 서버로부터 가져와서 보여줍니다
+- MBTI 학습이 종료되면 4가지 유형(E/I, N/S, F/T, J/P)에 대한 점수를 바탕으로, 서로 다른 모양의 MBTI 뱃지를 보여줍니다
+- MBTI별 뱃지는 프로필 화면에서도 확인할 수 있습니다
 
 ![테스트화면](https://github.com/TEAMMZC/MZTI/assets/57055730/11edac11-2928-4fb3-9159-b605b59279ad)
 
 
 ### 3. 프로필
-- MBTI 학습 결과로 MBTI 별 뱃지를 얻을 수 있습니다
-- MBTI 뱃지는 유형별 점수에 따라 모양이 다릅니다
+- MBTI 학습 결과로 얻은 MBTI 뱃지를 확인할 수 있습니다
+- MBTI 뱃지는 유형별 점수에 따라 모양이 다르게 나타납니다
 <img width="417" alt="image" src="https://github.com/TEAMMZC/MZTI/assets/57055730/952673c0-65ec-44f6-944b-64de605379c9">
 
 ### 4. 회원 정보 수정
@@ -48,17 +50,18 @@
 
 
 ### 5. 친구 추가 및 조회
-- 친구 아이디를 통해 친구를 추가할 수 있습니다
+- 친구 아이디로 친구 추가를 할 수 있습니다
 - 추가한 친구들의 mbti 및 유저이름, 프로필 이미지를 확인할 수 있습니다
-- 추가한 친구들을 클릭하면 상세정보와 mbti 요약을 확인할 수 있습니다
-- 
+- 친구들을 클릭하면 친구의 MBTI 정보를 확인할 수 있습니다
+
 ![친구추가](https://github.com/TEAMMZC/MZTI/assets/57055730/45f2cabb-f986-4a5d-ac89-53096472d41e)
 
 
 ### 6. 회원가입
 - id, password, 회원 이름, mbti를 입력받아 회원가입합니다
-- 비밀번호는 암호화를 통해 DB에 저장합니다
-- 초기 회원은 아래와 같은 캐릭터의 mbti로 프로필 이미지가 지정됩니다.
+- 비밀번호는 암호화된 상태로 DB에 저장됩니다
+- 프로필 사진이 없는 회원은 아래의 mbti별 캐릭터로 프로필 이미지가 표시됩니다
+
 <img width="664" alt="image" src="https://github.com/TEAMMZC/MZTI/assets/57055730/2725be2b-7b0d-472e-b55a-53d868ef2b4b">
 
 ### 7. 로그인
