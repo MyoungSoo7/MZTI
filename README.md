@@ -35,7 +35,8 @@
 단순한 아이디어 자체가 아니라 새로운 아이디어를 만드는 **생성(Generating)**, **발전(Developing)**, 커뮤니케이션(Communicating) 과정을 말함
 <img src="https://user-images.githubusercontent.com/51811995/158553638-ee0b2c15-6771-4016-be56-91d9e4aa063f.png" width=500>
 
-  🔗 [위키피디아 설명](https://en.wikipedia.org/wiki/Ideation_(creative_process))
+![001-인트로 화면-둥근네모-1](https://github.com/TEAMMZC/MZTI/assets/57055730/689b7037-6c3b-4e3b-b914-83087b3a510a)
+
   
 ## 기술 스택
 
@@ -44,16 +45,20 @@
 ### 1. 로그인
 - 회원가입과 로그인을 통해 앱을 이용합니다.
 - 비밀번호 찾기, 계정 삭제를 통해 개인 정보를 수정/삭제 합니다.
+![007-MBTI 학습 화면-MBTI 문제-pressed](https://github.com/TEAMMZC/MZTI/assets/57055730/c452ed89-9d7f-4994-9149-24536b2cf22c)
 
 ### 2. 회원가입
+![007-MBTI 학습 화면-MBTI 테스트 결과 XL](https://github.com/TEAMMZC/MZTI/assets/57055730/2f956b84-140c-474f-ae81-6c017f4e1296)
 
 ### 3. MBTI 유형 비교
 
 ### 4. MBTI 학습
+![007-MBTI 학습 화면-MBTI 테스트 결과 Mixed](https://github.com/TEAMMZC/MZTI/assets/57055730/c791e553-e0f9-4f8a-844e-927d8cf25a2e)
 
 ### 5. 프로필 화면
 - MBTI증
 - MBTI뱃지
+![002-마이페이지](https://github.com/TEAMMZC/MZTI/assets/57055730/daad2649-88eb-401d-972a-f549328f5218)
 
 ## 설계
 ### navigation flow
