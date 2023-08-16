@@ -1,4 +1,4 @@
-# MZC - MZTI
+# MZC팀 - MZTI 애플리케이션
 
 # 소개
 
