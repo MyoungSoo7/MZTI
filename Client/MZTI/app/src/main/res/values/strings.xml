@@ -63,7 +63,11 @@
     <string name="test_mbtiBadgeInfo_02">획득한 뱃지는 프로필 화면에서 확인할 수 있어요.</string>
     <string name="test_totalScoreTitle">#종합 점수</string>
     <string name="test_totalScore">%1$d점</string>
-    <string name="test_81_to_100">너 MZC 동료가 돼라!</string>
+    <string name="test_totalScore_81_to_100">너 MZC 동료가 돼라!</string>
+    <string name="test_totalScore_61_to_80">이렇게 잘 맞출수가..!</string>
+    <string name="test_totalScore_41_to_60">다 찍으신건 아니죠..?</string>
+    <string name="test_totalScore_21_to_40">좀 더 노력하셔야겠어요 ~</string>
+    <string name="test_totalScore_0_to_20">아하, MBTI를 전혀 모르시군요..?</string>
 
     <string name="userProfile_title">프로필</string>
     <string name="mbtiCard_title">#MBTI증</string>

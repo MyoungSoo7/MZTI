@@ -144,6 +144,13 @@ class TestActivity : BaseActivity() {
 
             tvTestTotalScore.text = getString(R.string.test_totalScore, totalScore)
                 .applyTextSize(48, 0, totalScore.toString().length - 1, this@TestActivity)
+            tvTestTotalScoreInfo.text = when {
+                totalScore in 81..100 -> getString(R.string.test_totalScore_81_to_100)
+                totalScore in 61..80 -> getString(R.string.test_totalScore_61_to_80)
+                totalScore in 41..60 -> getString(R.string.test_totalScore_41_to_60)
+                totalScore in 21..40 -> getString(R.string.test_totalScore_21_to_40)
+                else -> getString(R.string.test_totalScore_0_to_20)
+            }
 
             val width = cvTestMztiTestLayout.measuredWidth
             val valueAnimator = ValueAnimator
