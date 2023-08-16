@@ -36,8 +36,8 @@
 
 
 ### 3. 프로필
-- MBTI 학습 결과로 MBTI 별 뱃지를 얻을 수 있다
-- MBTI 뱃지는 유형별 점수에 따라 모양이 다르다
+- MBTI 학습 결과로 MBTI 별 뱃지를 얻을 수 있습니다
+- MBTI 뱃지는 유형별 점수에 따라 모양이 다릅니다
 <img width="417" alt="image" src="https://github.com/TEAMMZC/MZTI/assets/57055730/952673c0-65ec-44f6-944b-64de605379c9">
 
 ### 4. 회원 정보 수정
