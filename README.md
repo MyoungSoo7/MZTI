@@ -8,6 +8,11 @@
 ![로고움직임](https://github.com/TEAMMZC/MZTI/assets/57055730/f170e070-96ea-4ecb-8109-516b429c9546)
 
 ## 프로젝트 설명
+MBTI에 과몰입하는 MZ세대를 위해, 나와 다른 MBTI를 이해할 수 있도록 도와주는 어플리케이션
+
+### 프로젝트 아키텍처
+
+![MZTI drawio](https://github.com/TEAMMZC/MZTI/assets/57055730/fd9a6e82-b805-4955-9cf3-59a64c36af89)
 
 ### 사용 기술 스택
 #### 안드로이드
