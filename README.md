@@ -87,10 +87,11 @@
 |기획, 디자인|정다은|
 
 ## 협업
-- Figma, Notion, Discord 를 이용하여 협업하였습니다.
+- Figma, Notion, Swagger, Discord 를 이용하여 협업하였습니다.
 - <img width="587" alt="image" src="https://github.com/TEAMMZC/MZTI/assets/57055730/73bc01f3-533f-4f58-a2ed-43f434a85d57">
 - <img width="1448" alt="KakaoTalk_Photo_2023-08-17-05-55-48" src="https://github.com/TEAMMZC/MZTI/assets/57055730/ba7c9fb0-c781-4639-9e04-fb5a1e9f23f9">
-- <img width="1435" alt="image" src="https://github.com/TEAMMZC/MZTI/assets/57055730/129ee06a-e614-479b-ad81-57a060a153c9">
+- <img width="1451" alt="image" src="https://github.com/TEAMMZC/MZTI/assets/57055730/efb129ae-71fc-4bae-b28c-6327b65af665">
+
 
 
 
