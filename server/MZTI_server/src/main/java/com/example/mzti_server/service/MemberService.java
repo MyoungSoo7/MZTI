@@ -188,18 +188,19 @@ public class MemberService {
                     throw new RuntimeException("이미 추가된 친구입니다.");
                 }
             }
+            Member friendMember = memberRepository.findByLoginId(friendId).get();
             FriendRelationship friendRelationship = FriendRelationship.builder()
                     .member(memberByToken)
                     .loginId(friend.get().getLoginId())
                     .username(friend.get().getUsername())
-                    .profileImage(friend.get().getProfileImage())
+                    .profileImage(friendMember.getProfileImage())
                     .mbti(friend.get().getMbti())
                     .build();
             friendRelationshipRepository.save(friendRelationship);
             MemberDTO responseFriend = MemberDTO.builder()
                     .loginId(friend.get().getLoginId())
                     .username(friend.get().getUsername())
-                    .profileImage(friend.get().getProfileImage())
+                    .profileImage(friendMember.getProfileImage())
                     .mbti(friend.get().getMbti())
                     .build();
             return getResponse(responseFriend);
