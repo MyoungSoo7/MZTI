@@ -5,6 +5,24 @@
     android:layout_height="match_parent"
     android:background="@color/dim60">
 
+    <TextView
+        android:id="@+id/tv_selectMbtiDialog_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="40dp"
+        android:fontFamily="@font/noto_sans_kr_bold"
+        android:includeFontPadding="false"
+        android:letterSpacing="-0.05"
+        android:text="타이틀"
+        android:textColor="@color/white"
+        android:textSize="24dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/sv_selectMbtiDialog"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
     <HorizontalScrollView
         android:id="@+id/sv_selectMbtiDialog"
         android:layout_width="0dp"

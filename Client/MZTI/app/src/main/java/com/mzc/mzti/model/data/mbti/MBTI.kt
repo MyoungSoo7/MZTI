@@ -43,7 +43,7 @@ fun getProfileImgResId(mbti: MBTI): Int = when (mbti) {
     MBTI.ESFJ -> R.drawable.mbti_profile_esfj
     MBTI.ESFP -> R.drawable.mbti_profile_esfp
     MBTI.ESTJ -> R.drawable.mbti_profile_estj
-    MBTI.ESTP -> R.drawable.mbti_profile_esfp
+    MBTI.ESTP -> R.drawable.mbti_profile_estp
     MBTI.INFJ -> R.drawable.mbti_profile_infj
     MBTI.INFP -> R.drawable.mbti_profile_infp
     MBTI.INTJ -> R.drawable.mbti_profile_intj

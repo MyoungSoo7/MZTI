@@ -9,6 +9,7 @@ import com.mzc.mzti.model.data.mbti.MBTI
 
 class SelectMbtiDialog(
     private val onMbtiSelected: (mbti: MBTI) -> Unit,
+    private val title: String = "",
     onDismissListener: () -> Unit = {}
 ) : BasePopupDialog(onDismissListener) {
 
@@ -34,6 +35,13 @@ class SelectMbtiDialog(
 
     private fun init() {
         binding.apply {
+            if (title.isNotEmpty()) {
+                tvSelectMbtiDialogTitle.text = title
+                tvSelectMbtiDialogTitle.visibility = View.VISIBLE
+            } else {
+                tvSelectMbtiDialogTitle.visibility = View.GONE
+            }
+
             // INTJ
             cvSelectMbtiDialogIntj.setOnClickListener {
                 onMbtiSelected(MBTI.INTJ)

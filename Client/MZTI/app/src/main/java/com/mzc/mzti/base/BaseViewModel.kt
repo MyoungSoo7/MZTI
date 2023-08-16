@@ -13,6 +13,7 @@ import com.mzc.mzti.model.repository.image.ImageRepository
 import com.mzc.mzti.model.repository.network.MztiRepository
 import com.mzc.mzti.profileedit.viewmodel.UserProfileEditViewModel
 import com.mzc.mzti.sign.viewmodel.SignViewModel
+import com.mzc.mzti.test.viewmodel.TestViewModel
 
 
 open class BaseViewModel : ViewModel() {
@@ -93,6 +94,12 @@ open class BaseViewModel : ViewModel() {
             // AddFriend ViewModel
             else if (modelClass.isAssignableFrom(AddFriendViewModel::class.java)) {
                 return AddFriendViewModel(
+                    MztiRepository(application)
+                ) as T
+            }
+            // Test ViewModel
+            else if (modelClass.isAssignableFrom(TestViewModel::class.java)) {
+                return TestViewModel(
                     MztiRepository(application)
                 ) as T
             }

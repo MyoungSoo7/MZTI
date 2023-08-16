@@ -6,12 +6,18 @@ import com.mzc.mzti.base.BaseNetworkRepository
 import com.mzc.mzti.common.util.DLog
 import com.mzc.mzti.model.data.friends.FriendsDataWrapper
 import com.mzc.mzti.model.data.friends.FriendsOtherProfileData
+import com.mzc.mzti.model.data.mbti.MBTI
 import com.mzc.mzti.model.data.network.NetworkResult
+import com.mzc.mzti.model.data.question.MbtiAnswerData
+import com.mzc.mzti.model.data.question.MbtiQuestionData
+import com.mzc.mzti.model.data.question.MbtiQuestionDataWrapper
+import com.mzc.mzti.model.data.question.MbtiTestResultData
 import com.mzc.mzti.model.data.sign.SignUpData
 import com.mzc.mzti.model.data.user.UserInfoData
 import com.mzc.mzti.model.data.user.UserProfileData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -270,6 +276,88 @@ class MztiRepository(
                 try {
                     val jsonRoot = JSONObject(message)
                     jsonParserUtil.getUserProfileResponse(jsonRoot)
+                } catch (e: JSONException) {
+                    DLog.e(TAG, e.stackTraceToString())
+                    NetworkResult.Error(e)
+                }
+            } else {
+                NetworkResult.Fail(
+                    context.getString(R.string.api_connection_fail_msg)
+                )
+            }
+        }
+    }
+
+    suspend fun makeQuestionRequest(
+        pQuestionCount: Int,
+        pMbti: MBTI,
+        pUserToken: String,
+        pGenerateType: String
+    ): NetworkResult<MbtiQuestionDataWrapper> {
+        return withContext(Dispatchers.IO) {
+            val hsParams = hashMapOf<String, Any>().apply {
+                put("questionCount", pQuestionCount)
+                put("mbti", pMbti.name)
+            }
+
+            val questionUrl = "${BASE_URL}api/question"
+            val message = sendRequestToMztiServer(
+                questionUrl,
+                hsParams,
+                GET,
+                authorization = "$pGenerateType $pUserToken"
+            )
+
+            if (message.isNotEmpty()) {
+                try {
+                    val jsonRoot = JSONObject(message)
+                    jsonParserUtil.getQuestionResponse(jsonRoot)
+                } catch (e: JSONException) {
+                    DLog.e(TAG, e.stackTraceToString())
+                    NetworkResult.Error(e)
+                }
+            } else {
+                NetworkResult.Fail(
+                    context.getString(R.string.api_connection_fail_msg)
+                )
+            }
+        }
+    }
+
+    suspend fun makeQuestionResult(
+        pMbti: MBTI,
+        pMBtiAnswerList: List<MbtiAnswerData>,
+        pUserToken: String,
+        pGenerateType: String
+    ): NetworkResult<MbtiTestResultData> {
+        return withContext(Dispatchers.IO) {
+            val answerArray = JSONArray().apply {
+                for (answerData in pMBtiAnswerList) {
+                    put(JSONObject().apply {
+                        put("type", answerData.questionType)
+                        put("correctFlag", answerData.answerFlag)
+                    })
+                }
+            }
+
+            val hsParams = hashMapOf<String, Any>().apply {
+                put("mbti", pMbti.name)
+                put("answerList", answerArray)
+            }
+
+            val questionResultUrl = "${BASE_URL}api/question/result"
+            val message = sendRequestToMztiServer(
+                questionResultUrl,
+                hsParams,
+                POST,
+                authorization = "$pGenerateType $pUserToken"
+            )
+            DLog.d(TAG, "questionResult=$message")
+
+            if (message.isNotEmpty()) {
+                try {
+                    val jsonRoot = JSONObject(message)
+                    jsonParserUtil.getQuestionResultResponse(jsonRoot, pMbti)
                 } catch (e: JSONException) {
                     DLog.e(TAG, e.stackTraceToString())
                     NetworkResult.Error(e)

@@ -27,7 +27,8 @@ open class BaseFragment : Fragment() {
 
     protected fun showSelectMbtiDialog(
         onMbtiSelected: (mbti: MBTI) -> Unit,
-        onDismissListener: () -> Unit
+        onDismissListener: () -> Unit,
+        pTitle: String = ""
     ) {
         for (fragment in childFragmentManager.fragments) {
             if (fragment is SelectMbtiDialog) {
@@ -35,7 +36,7 @@ open class BaseFragment : Fragment() {
             }
         }
 
-        SelectMbtiDialog(onMbtiSelected, onDismissListener).show(childFragmentManager, null)
+        SelectMbtiDialog(onMbtiSelected, pTitle, onDismissListener).show(childFragmentManager, null)
     }
 
 }

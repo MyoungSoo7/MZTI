@@ -44,7 +44,7 @@ fun String.applyFontStyle(
     return buildSpannedString {
         append(this@applyFontStyle)
 
-        if (pStart < pEnd && pStart in indices && pEnd in indices) {
+        if (pStart <= pEnd && pStart in indices && pEnd in indices) {
             val fontResId = when (pFontStyle) {
                 FontStyle.THIN -> R.font.noto_sans_kr_thin
                 FontStyle.LIGHT -> R.font.noto_sans_kr_light
@@ -82,7 +82,7 @@ fun SpannedString.applyFontStyle(
     return buildSpannedString {
         append(this@applyFontStyle)
 
-        if (pStart < pEnd && pStart in indices && pEnd in indices) {
+        if (pStart <= pEnd && pStart in indices && pEnd in indices) {
             val fontResId = when (pFontStyle) {
                 FontStyle.THIN -> R.font.noto_sans_kr_thin
                 FontStyle.LIGHT -> R.font.noto_sans_kr_light
@@ -118,7 +118,7 @@ fun String.applyTextColor(
     return buildSpannedString {
         append(this@applyTextColor)
 
-        if (pStart < pEnd && pStart in indices && pEnd in indices) {
+        if (pStart <= pEnd && pStart in indices && pEnd in indices) {
             setSpan(
                 ForegroundColorSpan(ContextCompat.getColor(pContext, pColorResId)),
                 pStart,
@@ -146,7 +146,7 @@ fun SpannedString.applyTextColor(
     return buildSpannedString {
         append(this@applyTextColor)
 
-        if (pStart < pEnd && pStart in indices && pEnd in indices) {
+        if (pStart <= pEnd && pStart in indices && pEnd in indices) {
             setSpan(
                 ForegroundColorSpan(ContextCompat.getColor(pContext, pColorResId)),
                 pStart,
@@ -236,7 +236,7 @@ fun String.applyTextSize(
     return buildSpannedString {
         append(this@applyTextSize)
 
-        if (pStart < pEnd && pStart in indices && pEnd in indices) {
+        if (pStart <= pEnd && pStart in indices && pEnd in indices) {
             setSpan(
                 AbsoluteSizeSpan(pTextSizeInDp.dp2px(pContext)),
                 pStart,
@@ -264,7 +264,7 @@ fun SpannedString.applyTextSize(
     return buildSpannedString {
         append(this@applyTextSize)
 
-        if (pStart < pEnd && pStart in indices && pEnd in indices) {
+        if (pStart <= pEnd && pStart in indices && pEnd in indices) {
             setSpan(
                 AbsoluteSizeSpan(pTextSizeInDp.dp2px(pContext)),
                 pStart,

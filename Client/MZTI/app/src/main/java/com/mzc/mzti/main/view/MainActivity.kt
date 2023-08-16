@@ -14,6 +14,7 @@ import com.mzc.mzti.common.util.DLog
 import com.mzc.mzti.databinding.ActivityMainBinding
 import com.mzc.mzti.friends.view.FriendsFragment
 import com.mzc.mzti.intro.viewmodel.IntroViewModel
+import com.mzc.mzti.learning.view.LearningFragment
 import com.mzc.mzti.main.viewmodel.MainViewModel
 import com.mzc.mzti.model.data.download.DownloadResult
 import com.mzc.mzti.model.data.router.MztiTabRouter
@@ -35,6 +36,7 @@ class MainActivity : BaseActivity() {
     }
 
     private val friendsFragment: FriendsFragment = FriendsFragment()
+    private val learningFragment: LearningFragment = LearningFragment()
     private val userProfileFragment: UserProfileFragment = UserProfileFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,7 +83,10 @@ class MainActivity : BaseActivity() {
                 }
 
                 MztiTabRouter.TAB_LEARNING -> {
-
+                    if (binding.navMain.selectedItemId != R.id.menu_learning) {
+                        binding.navMain.selectedItemId = R.id.menu_learning
+                    }
+                    setFragment(R.id.fl_main, learningFragment)
                 }
 
                 MztiTabRouter.TAB_PROFILE -> {

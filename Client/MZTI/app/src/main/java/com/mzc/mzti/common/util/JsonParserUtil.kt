@@ -10,6 +10,9 @@ import com.mzc.mzti.model.data.mbti.MbtiBadgeData
 import com.mzc.mzti.model.data.mbti.MbtiSize
 import com.mzc.mzti.model.data.mbti.getMBTI
 import com.mzc.mzti.model.data.network.NetworkResult
+import com.mzc.mzti.model.data.question.MbtiQuestionData
+import com.mzc.mzti.model.data.question.MbtiQuestionDataWrapper
+import com.mzc.mzti.model.data.question.MbtiTestResultData
 import com.mzc.mzti.model.data.user.UserInfoData
 import com.mzc.mzti.model.data.user.UserProfileData
 import org.json.JSONArray
@@ -36,6 +39,15 @@ private const val KEY_FRIEND_LIST: String = "friendlist"
 private const val KEY_TEST_RESULT: String = "testResult"
 private const val KEY_IS_FLAG: String = "isFlag"
 private const val KEY_SIZE: String = "size"
+
+private const val KEY_QA: String = "qa"
+private const val KEY_QUESTION: String = "question"
+private const val KEY_QUESTION_TYPE: String = "questionType"
+private const val KEY_ANSWER: String = "answer"
+private const val KEY_WRONG_ANSWER: String = "wronganswers"
+
+private const val KEY_MBTI_RESULT: String = "mbtiResult"
+private const val KEY_SCORE: String = "score"
 
 class JsonParserUtil {
 
@@ -389,6 +401,125 @@ class JsonParserUtil {
                 mbtiBadgeList = mbtiBadgeList
             )
             NetworkResult.Success(userProfileData)
+        } else {
+            NetworkResult.Fail("ResultData=$resultData")
+        }
+    }
+
+    fun getQuestionResponse(jsonRoot: JSONObject): NetworkResult<MbtiQuestionDataWrapper> {
+        val resultCode = getInt(jsonRoot, KEY_RESULT_CODE)
+        if (resultCode != 200) {
+            return NetworkResult.Fail("API Request Fail, resultCode=$resultCode")
+        }
+
+        val resultData = getJsonObject(jsonRoot, KEY_RESULT_DATA)
+        return if (resultData != null) {
+            val strMbti = getString(resultData, KEY_MBTI)
+
+            val mbtiQuestionList = arrayListOf<MbtiQuestionData>()
+            val qaArray = getJSONArray(resultData, KEY_QA)
+            if (qaArray != null) {
+                for (idx in 0 until qaArray.length()) {
+                    if (!qaArray.isNull(idx)) {
+                        val obj = qaArray.getJSONObject(idx)
+
+                        val answerList = arrayListOf<String>()
+                        if (obj != null) {
+                            val questionContent = getString(obj, KEY_QUESTION)
+                            val questionType = getInt(obj, KEY_QUESTION_TYPE)
+                            val answer = getString(obj, KEY_ANSWER)
+
+                            val wrongAnswerArray = getJSONArray(obj, KEY_WRONG_ANSWER)
+                            if (wrongAnswerArray != null) {
+                                for (idx2 in 0 until wrongAnswerArray.length()) {
+                                    if (!wrongAnswerArray.isNull(idx)) {
+                                        val wrongAnswer = wrongAnswerArray.getString(idx2)
+                                        answerList.add(wrongAnswer)
+                                    }
+                                }
+                            }
+
+                            val answerIdx = IntRange(0, 2).random()
+                            when (answerIdx) {
+                                0 -> {
+                                    answerList.add(0, answer)
+                                }
+
+                                1 -> {
+                                    answerList.add(1, answer)
+                                }
+
+                                2 -> {
+                                    answerList.add(answer)
+                                }
+                            }
+
+                            mbtiQuestionList.add(
+                                MbtiQuestionData(
+                                    questionContent = questionContent,
+                                    questionType = questionType,
+                                    answerIdx = answerIdx,
+                                    answerList = answerList
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+
+            NetworkResult.Success(
+                MbtiQuestionDataWrapper(
+                    mbti = getMBTI(strMbti),
+                    mbtiQuestionList = mbtiQuestionList
+                )
+            )
+        } else {
+            NetworkResult.Fail("ResultData=$resultData")
+        }
+    }
+
+    fun getQuestionResultResponse(
+        jsonRoot: JSONObject,
+        mbti: MBTI
+    ): NetworkResult<MbtiTestResultData> {
+        val resultCode = getInt(jsonRoot, KEY_RESULT_CODE)
+        if (resultCode != 200) {
+            return NetworkResult.Fail("API Request Fail, resultCode=$resultCode")
+        }
+
+        val resultData = getJsonObject(jsonRoot, KEY_RESULT_DATA)
+        return if (resultData != null) {
+            val mbtiResult = getString(resultData, KEY_MBTI_RESULT)
+            val score = getInt(resultData, KEY_SCORE)
+
+            var mbtiSize0: Int = 0
+            var mbtiSize1: Int = 0
+            var mbtiSize2: Int = 0
+            var mbtiSize3: Int = 0
+            try {
+                mbtiSize0 = mbtiResult[0] - '0'
+                mbtiSize1 = mbtiResult[1] - '0'
+                mbtiSize2 = mbtiResult[2] - '0'
+                mbtiSize3 = mbtiResult[3] - '0'
+            } catch (e: NumberFormatException) {
+            }
+            DLog.d(
+                TAG,
+                "mbtiSize0=$mbtiSize0, mbtiSize1=$mbtiSize1, mbtiSize2=$mbtiSize2, mbtiSize3=$mbtiSize3"
+            )
+
+            val mbtiBadgeData = MbtiBadgeData(
+                mbti = mbti,
+                isFlag = true,
+                mbtiSize0 = MbtiSize.values()[mbtiSize0],
+                mbtiSize1 = MbtiSize.values()[mbtiSize1],
+                mbtiSize2 = MbtiSize.values()[mbtiSize2],
+                mbtiSize3 = MbtiSize.values()[mbtiSize3]
+            )
+
+            NetworkResult.Success(
+                MbtiTestResultData(mbtiBadgeData, score)
+            )
         } else {
             NetworkResult.Fail("ResultData=$resultData")
         }

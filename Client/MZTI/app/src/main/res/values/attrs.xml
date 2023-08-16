@@ -32,10 +32,10 @@
         </attr>
         <attr name="mbti" />
         <attr name="mbtiSize0" format="enum">
-            <enum name="XL" value="0" />
-            <enum name="L" value="1" />
-            <enum name="M" value="2" />
-            <enum name="S" value="3" />
+            <enum name="XL" value="3" />
+            <enum name="L" value="2" />
+            <enum name="M" value="1" />
+            <enum name="S" value="0" />
         </attr>
         <attr name="mbtiSize1" format="enum">
             <enum name="XL" value="0" />

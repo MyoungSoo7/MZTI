@@ -44,6 +44,27 @@
     <string name="removeFriend_confirm">더 이상 보고 싶지 않아요 :(</string>
     <string name="removeFriend_cancel">취소하기</string>
 
+    <string name="learning_title">MZTI 학습</string>
+    <string name="learning_subTitle_01">#MZTI 학습</string>
+    <string name="learning_content_01">상황별 문답을 통해 해당 MBTI에 대한 자신의 이해도를 테스트할 수 있습니다.</string>
+    <string name="learning_content_02">상황을 읽고 떠오른 생각을 바로 선택해 주세요.\n한 번 선택한 답변은 수정할 수 없습니다.</string>
+    <string name="learning_subTitle_02">#자나깨나 ‘과몰입’ 조심</string>
+    <string name="learning_content_03">MBTI는 16가지 유형으로 자신과 타인을 이해하는데 도움을 주는 \‘도구\'입니다.</string>
+    <string name="learning_content_04">16가지 유형내에서도 다양한 형태로 나타날 수 있으며, 그 형태들은 모두 각각의 아름다움을 가지고 있습니다.</string>
+    <string name="learning_content_05">MBTI는 상황 및 환경에 따라 변경될 수 있고, 이는 이상한 것이 아닙니다. 단지 선천적으로 지닌, 특별한 이유없이 상대적으로 끌리는 것을 알아볼 수 있습니다.</string>
+    <string name="learning_agree">위의 내용을 확인했습니다.</string>
+    <string name="learning_startText">테스트 시작</string>
+    <string name="learning_selectMbti">테스트할 MBTI를 선택하세요</string>
+
+    <string name="test_title">MZTI 학습</string>
+    <string name="testLayout_title">#%1$s 문제</string>
+    <string name="test_mbtiBadgeTitle">#MBTI 뱃지</string>
+    <string name="test_mbtiBadgeInfo_01">MBTI 뱃지는 각 성향별 점수를 반영해요!</string>
+    <string name="test_mbtiBadgeInfo_02">획득한 뱃지는 프로필 화면에서 확인할 수 있어요.</string>
+    <string name="test_totalScoreTitle">#종합 점수</string>
+    <string name="test_totalScore">%1$d점</string>
+    <string name="test_81_to_100">너 MZC 동료가 돼라!</string>
+
     <string name="userProfile_title">프로필</string>
     <string name="mbtiCard_title">#MBTI증</string>
     <string name="mbtiCard_id">ID: %1$s</string>

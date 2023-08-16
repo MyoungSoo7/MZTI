@@ -54,6 +54,9 @@ class MainViewModel(
     private var _removeFriendId: String = ""
     private val removeFriendId: String get() = _removeFriendId
 
+    private val _learningAgree: MutableLiveData<Boolean> = MutableLiveData(false)
+    val learningAgree: LiveData<Boolean> get() = _learningAgree
+
     private val _userProfileData: MutableLiveData<UserProfileData?> = MutableLiveData(null)
     val userProfileData: LiveData<UserProfileData?> get() = _userProfileData
 
@@ -196,6 +199,20 @@ class MainViewModel(
         }
     }
     // endregion Friends Tab
+
+    // region Learning Tab
+    fun setLearningAgree(pLearningAgree: Boolean) {
+        _learningAgree.value = pLearningAgree
+    }
+
+    fun setLearningAgreeClicked() {
+        _learningAgree.value = when (learningAgree.value) {
+            true -> false
+            false -> true
+            else -> false
+        }
+    }
+    // endregion Learning Tab
 
     // region UserProfile Tab
     fun requestSaveBitmap(pBitmap: Bitmap) {
