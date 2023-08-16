@@ -1,9 +1,8 @@
-# MZTI
+# MZC - MZTI
 
 # 소개
 
-#### 💡 MZTI
-**MZ + MBTI** 의 합성어
+#### 💡 MZTI : **MZ + MBTI** 의 합성어
 
 ### 애플리케이션 LOGO
 ![로고움직임](https://github.com/TEAMMZC/MZTI/assets/57055730/f170e070-96ea-4ecb-8109-516b429c9546)
