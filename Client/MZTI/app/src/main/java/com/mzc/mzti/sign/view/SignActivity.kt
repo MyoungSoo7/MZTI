@@ -92,6 +92,7 @@ class SignActivity : BaseActivity() {
                 model.setProgressFlag(false)
                 showToastMsg(getString(R.string.toast_msg_sign_up_success))
                 model.setSignRouter(SignRouter.SIGN_IN)
+                model.clearSignUpState()
             }
         })
     }

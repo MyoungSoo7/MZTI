@@ -161,6 +161,10 @@ class SignViewModel(
         return ret
     }
 
+    fun clearSignUpState() {
+        _signUpState.value = SignUpState.ID
+    }
+
     fun moveToNextSignUpState() {
         _signUpState.value = when (signUpState.value) {
             SignUpState.ID -> SignUpState.PW
