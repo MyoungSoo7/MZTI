@@ -12,6 +12,7 @@ import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.RelativeLayout
+import androidx.core.content.ContextCompat
 import com.mzc.mzti.R
 import com.mzc.mzti.common.util.DLog
 import com.mzc.mzti.databinding.InflateTestLayoutBinding
@@ -46,6 +47,8 @@ class MztiTestLayout : RelativeLayout {
     private val testViewList: ArrayList<View> = arrayListOf()
     private val mbtiAnswerList: ArrayList<MbtiAnswerData> = arrayListOf()
 
+    private var curAnswerData: MbtiAnswerData? = null
+
     private fun createMbtiTestView(pMbtiQuestionData: MbtiQuestionData): View {
         val view =
             LayoutInflater.from(context).inflate(R.layout.inflate_test_layout, this, false).apply {
@@ -60,13 +63,80 @@ class MztiTestLayout : RelativeLayout {
         InflateTestLayoutBinding.bind(view).apply {
             tvTestLayoutTitle.text = context.getString(R.string.testLayout_title, mbti.name)
             tvTestLayoutContent.text = pMbtiQuestionData.questionContent
+            tvTestLayoutContentEnd.text =
+                context.getString(R.string.textLayout_contentEnd, mbti.name)
             tvTestLayoutAnswer01.text = pMbtiQuestionData.answerList[0]
             tvTestLayoutAnswer02.text = pMbtiQuestionData.answerList[1]
             tvTestLayoutAnswer03.text = pMbtiQuestionData.answerList[2]
 
-            tvTestLayoutAnswer01.setOnClickListener(onClickListener)
-            tvTestLayoutAnswer02.setOnClickListener(onClickListener)
-            tvTestLayoutAnswer03.setOnClickListener(onClickListener)
+            tvTestLayoutAnswer01.setOnClickListener {
+                onAnswerClicked(0)
+                tvTestLayoutAnswer01.setBackgroundResource(R.drawable.background_test_answer_button_pressed)
+                tvTestLayoutAnswer02.setBackgroundResource(R.drawable.background_test_answer_button_default)
+                tvTestLayoutAnswer03.setBackgroundResource(R.drawable.background_test_answer_button_default)
+                tvTestLayoutConfirm.setBackgroundResource(R.drawable.background_blue_button_activated)
+
+                tvTestLayoutAnswer01.setTextColor(ContextCompat.getColor(context, R.color.white))
+                tvTestLayoutAnswer02.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.text_black
+                    )
+                )
+                tvTestLayoutAnswer03.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.text_black
+                    )
+                )
+            }
+            tvTestLayoutAnswer02.setOnClickListener {
+                onAnswerClicked(1)
+                tvTestLayoutAnswer01.setBackgroundResource(R.drawable.background_test_answer_button_default)
+                tvTestLayoutAnswer02.setBackgroundResource(R.drawable.background_test_answer_button_pressed)
+                tvTestLayoutAnswer03.setBackgroundResource(R.drawable.background_test_answer_button_default)
+                tvTestLayoutConfirm.setBackgroundResource(R.drawable.background_blue_button_activated)
+
+                tvTestLayoutAnswer01.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.text_black
+                    )
+                )
+                tvTestLayoutAnswer02.setTextColor(ContextCompat.getColor(context, R.color.white))
+                tvTestLayoutAnswer03.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.text_black
+                    )
+                )
+            }
+            tvTestLayoutAnswer03.setOnClickListener {
+                onAnswerClicked(2)
+                tvTestLayoutAnswer01.setBackgroundResource(R.drawable.background_test_answer_button_default)
+                tvTestLayoutAnswer02.setBackgroundResource(R.drawable.background_test_answer_button_default)
+                tvTestLayoutAnswer03.setBackgroundResource(R.drawable.background_test_answer_button_pressed)
+                tvTestLayoutConfirm.setBackgroundResource(R.drawable.background_blue_button_activated)
+
+                tvTestLayoutAnswer01.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.text_black
+                    )
+                )
+                tvTestLayoutAnswer02.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.text_black
+                    )
+                )
+                tvTestLayoutAnswer03.setTextColor(ContextCompat.getColor(context, R.color.white))
+            }
+            tvTestLayoutConfirm.setOnClickListener {
+                if (curAnswerData != null) {
+                    moveToNextQuestion()
+                }
+            }
         }
 
         return view
@@ -86,6 +156,23 @@ class MztiTestLayout : RelativeLayout {
             addView(view)
 
             testViewList.add(view)
+        }
+    }
+
+    fun moveToNextQuestion() {
+        curAnswerData?.let { mbtiAnswerData ->
+            mbtiAnswerList.add(mbtiAnswerData)
+        }
+        curAnswerData = null
+
+        val idx = curQuestionNum
+        // 다음 문제로 이동
+        if (idx < mbtiQuestionList.size - 1) {
+            animateNextQuestion()
+        }
+        // 모든 문제를 다 푼 경우
+        else {
+            mztiTestLayoutListener?.onTestFinish(mbtiAnswerList)
         }
     }
 
@@ -133,47 +220,18 @@ class MztiTestLayout : RelativeLayout {
             val mbtiQuestionData = mbtiQuestionList[idx]
 
             if (mbtiQuestionData.answerIdx == pAnswerIdx) {
-                mbtiAnswerList.add(
-                    MbtiAnswerData(
-                        questionType = mbtiQuestionData.questionType,
-                        answerFlag = true
-                    )
+                curAnswerData = MbtiAnswerData(
+                    questionType = mbtiQuestionData.questionType,
+                    answerFlag = true
                 )
             } else {
-                mbtiAnswerList.add(
-                    MbtiAnswerData(
-                        questionType = mbtiQuestionData.questionType,
-                        answerFlag = false
-                    )
+                curAnswerData = MbtiAnswerData(
+                    questionType = mbtiQuestionData.questionType,
+                    answerFlag = false
                 )
-            }
-
-            // 다음 문제로 이동
-            if (idx < mbtiQuestionList.size - 1) {
-                animateNextQuestion()
-            }
-            // 모든 문제를 다 푼 경우
-            else {
-                mztiTestLayoutListener?.onTestFinish(mbtiAnswerList)
             }
         } else {
             throw IndexOutOfBoundsException("questionSize=${mbtiQuestionList.size}, idx=$idx")
-        }
-    }
-
-    private val onClickListener = OnClickListener { view ->
-        when (view.id) {
-            R.id.tv_testLayout_answer_01 -> {
-                onAnswerClicked(0)
-            }
-
-            R.id.tv_testLayout_answer_02 -> {
-                onAnswerClicked(1)
-            }
-
-            R.id.tv_testLayout_answer_03 -> {
-                onAnswerClicked(2)
-            }
         }
     }
 
