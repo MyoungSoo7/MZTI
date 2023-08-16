@@ -44,6 +44,10 @@
     <string name="removeFriend_confirm">더 이상 보고 싶지 않아요 :(</string>
     <string name="removeFriend_cancel">취소하기</string>
 
+    <string name="friendMbti_title">\'%1$s\'님의 MBTI</string>
+
+    <string name="compare_title">MBTI 유형 비교하기</string>
+
     <string name="learning_title">MZTI 학습</string>
     <string name="learning_subTitle_01">#MZTI 학습</string>
     <string name="learning_content_01">상황별 문답을 통해 해당 MBTI에 대한 자신의 이해도를 테스트할 수 있습니다.</string>

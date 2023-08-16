@@ -11,6 +11,7 @@ import com.mzc.mzti.base.BaseActivity
 import com.mzc.mzti.base.BaseViewModel
 import com.mzc.mzti.common.session.MztiSession
 import com.mzc.mzti.common.util.DLog
+import com.mzc.mzti.compare.view.CompareFragment
 import com.mzc.mzti.databinding.ActivityMainBinding
 import com.mzc.mzti.friends.view.FriendsFragment
 import com.mzc.mzti.intro.viewmodel.IntroViewModel
@@ -36,6 +37,7 @@ class MainActivity : BaseActivity() {
     }
 
     private val friendsFragment: FriendsFragment = FriendsFragment()
+    private val compareFragment: CompareFragment = CompareFragment()
     private val learningFragment: LearningFragment = LearningFragment()
     private val userProfileFragment: UserProfileFragment = UserProfileFragment()
 
@@ -79,7 +81,7 @@ class MainActivity : BaseActivity() {
                 }
 
                 MztiTabRouter.TAB_COMPARE -> {
-
+                    setFragment(R.id.fl_main, compareFragment)
                 }
 
                 MztiTabRouter.TAB_LEARNING -> {

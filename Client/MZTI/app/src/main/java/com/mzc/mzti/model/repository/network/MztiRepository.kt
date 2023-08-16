@@ -5,6 +5,7 @@ import com.mzc.mzti.R
 import com.mzc.mzti.base.BaseNetworkRepository
 import com.mzc.mzti.common.util.DLog
 import com.mzc.mzti.common.util.FileUtil
+import com.mzc.mzti.model.data.compare.CompareMbtiData
 import com.mzc.mzti.model.data.friends.FriendsDataWrapper
 import com.mzc.mzti.model.data.friends.FriendsOtherProfileData
 import com.mzc.mzti.model.data.mbti.MBTI
@@ -458,6 +459,40 @@ class MztiRepository(
                 }
             } else {
                 NetworkResult.Fail("ResultCode=${response.code}")
+            }
+        }
+    }
+
+    suspend fun makeMbtiInfoRequest(
+        pMbti: MBTI,
+        pUserToken: String,
+        pGenerateType: String,
+    ): NetworkResult<List<CompareMbtiData>> {
+        return withContext(Dispatchers.IO) {
+            val hsParams = hashMapOf<String, Any>().apply {
+                put("mbti", pMbti.name)
+            }
+
+            val mbtiInfoUrl = "${BASE_URL}api/info"
+            val message = sendRequestToMztiServer(
+                mbtiInfoUrl,
+                hsParams,
+                GET,
+                authorization = "$pGenerateType $pUserToken"
+            )
+
+            if (message.isNotEmpty()) {
+                try {
+                    val jsonRoot = JSONObject(message)
+                    jsonParserUtil.getMbtiInfoResponse(jsonRoot)
+                } catch (e: JSONException) {
+                    DLog.e(TAG, e.stackTraceToString())
+                    NetworkResult.Error(e)
+                }
+            } else {
+                NetworkResult.Fail(
+                    context.getString(R.string.api_connection_fail_msg)
+                )
             }
         }
     }

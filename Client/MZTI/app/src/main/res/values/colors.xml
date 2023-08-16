@@ -6,9 +6,13 @@
     <color name="dim60">#99000000</color>
 
     <color name="logo_m_purple">#FFC6B0E9</color>
+    <color name="logo_m_purple_opacity50">#80C6B0E9</color>
     <color name="logo_z_orange">#FFFFDDA0</color>
+    <color name="logo_z_orange_opacity50">#80FFDDA0</color>
     <color name="logo_t_green">#FF9ADC99</color>
+    <color name="logo_t_green_opacity50">#809ADC99</color>
     <color name="logo_i_blue">#FFAAD7FF</color>
+    <color name="logo_i_blue_opacity50">#80AAD7FF</color>
 
     <color name="intj">#FFC6B0E9</color>
     <color name="intj_opacity50">#80C6B0E9</color>

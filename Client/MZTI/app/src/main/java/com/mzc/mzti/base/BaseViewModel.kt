@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.mzc.mzti.friends.viewmodel.AddFriendViewModel
+import com.mzc.mzti.friends.viewmodel.FriendMbtiViewModel
 import com.mzc.mzti.intro.viewmodel.IntroViewModel
 import com.mzc.mzti.main.viewmodel.MainViewModel
 import com.mzc.mzti.model.repository.download.DownloadRepository
@@ -100,6 +101,12 @@ open class BaseViewModel : ViewModel() {
             // Test ViewModel
             else if (modelClass.isAssignableFrom(TestViewModel::class.java)) {
                 return TestViewModel(
+                    MztiRepository(application)
+                ) as T
+            }
+            // FriendMbti ViewModel
+            else if (modelClass.isAssignableFrom(FriendMbtiViewModel::class.java)) {
+                return FriendMbtiViewModel(
                     MztiRepository(application)
                 ) as T
             }

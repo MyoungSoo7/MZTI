@@ -1,6 +1,8 @@
 package com.mzc.mzti.common.util
 
 import com.mzc.mzti.common.session.MztiSession
+import com.mzc.mzti.model.data.compare.CompareMbtiData
+import com.mzc.mzti.model.data.compare.getCompareMbtiType
 import com.mzc.mzti.model.data.friends.FriendsDataWrapper
 import com.mzc.mzti.model.data.friends.FriendsLayoutType
 import com.mzc.mzti.model.data.friends.FriendsMyProfileData
@@ -48,6 +50,10 @@ private const val KEY_WRONG_ANSWER: String = "wronganswers"
 
 private const val KEY_MBTI_RESULT: String = "mbtiResult"
 private const val KEY_SCORE: String = "score"
+
+private const val KEY_DATA: String = "data"
+private const val KEY_KEY: String = "key"
+private const val KEY_CONTENT: String = "content"
 
 class JsonParserUtil {
 
@@ -167,7 +173,7 @@ class JsonParserUtil {
             val accessToken: String = getString(resultData, KEY_ACCESS_TOKEN)
             val nickname: String = getString(resultData, KEY_USER_NAME)
             val strMbti: String = getString(resultData, KEY_MBTI)
-            val profileImg: String = getString(resultData, KEY_PROFILE_IMG).replace("https","http")
+            val profileImg: String = getString(resultData, KEY_PROFILE_IMG).replace("https", "http")
 
             UserInfoData(
                 id = loginId,
@@ -195,7 +201,7 @@ class JsonParserUtil {
             val accessToken = getString(resultData, KEY_ACCESS_TOKEN)
             val nickname = getString(resultData, KEY_USER_NAME)
             val mbti = getString(resultData, KEY_MBTI)
-            val profileImg = getString(resultData, KEY_PROFILE_IMG).replace("https","http")
+            val profileImg = getString(resultData, KEY_PROFILE_IMG).replace("https", "http")
 
             UserInfoData(
                 id = loginId,
@@ -264,7 +270,8 @@ class JsonParserUtil {
                         if (obj != null) {
                             val loginId = getString(obj, KEY_LOGIN_ID)
                             val userName = getString(obj, KEY_USER_NAME)
-                            val profileImg = getString(obj, KEY_PROFILE_IMG).replace("https","http")
+                            val profileImg =
+                                getString(obj, KEY_PROFILE_IMG).replace("https", "http")
                             val strMbti = getString(obj, KEY_MBTI)
 
                             otherProfileList.add(
@@ -311,7 +318,7 @@ class JsonParserUtil {
         return if (resultData != null) {
             val loginId = getString(resultData, KEY_LOGIN_ID)
             val userName = getString(resultData, KEY_USER_NAME)
-            val profileImg = getString(resultData, KEY_PROFILE_IMG).replace("https","http")
+            val profileImg = getString(resultData, KEY_PROFILE_IMG).replace("https", "http")
             val strMBTI = getString(resultData, KEY_MBTI)
 
             NetworkResult.Success(
@@ -347,7 +354,7 @@ class JsonParserUtil {
         return if (resultData != null) {
             val loginId = getString(resultData, KEY_LOGIN_ID)
             val userName = getString(resultData, KEY_USER_NAME)
-            val profileImg = getString(resultData, KEY_PROFILE_IMG).replace("https","http")
+            val profileImg = getString(resultData, KEY_PROFILE_IMG).replace("https", "http")
             val strMBTI = getString(resultData, KEY_MBTI)
 
             val mbtiBadgeList = arrayListOf<MbtiBadgeData>()
@@ -552,6 +559,107 @@ class JsonParserUtil {
                     mbti = getMBTI(strMBTI)
                 )
             )
+        } else {
+            NetworkResult.Fail("ResultData=$resultData")
+        }
+    }
+
+    fun getMbtiInfoResponse(jsonRoot: JSONObject): NetworkResult<List<CompareMbtiData>> {
+        val resultCode = getInt(jsonRoot, KEY_RESULT_CODE)
+        if (resultCode != 200) {
+            return NetworkResult.Fail("API Request Fail, resultCode=$resultCode")
+        }
+
+        val resultData = getJsonObject(jsonRoot, KEY_RESULT_DATA)
+        return if (resultData != null) {
+            val dataArray = getJSONArray(resultData, KEY_DATA)
+
+            val mbtiInfoList = arrayListOf<CompareMbtiData>()
+            if (dataArray != null) {
+                for (idx in 0 until dataArray.length()) {
+                    if (!dataArray.isNull(idx)) {
+                        val obj = dataArray.getJSONObject(idx)
+
+                        if (obj != null) {
+                            val key = getString(obj, KEY_KEY)
+                            val contentArray = getJSONArray(obj, KEY_CONTENT)
+
+                            val contentList = arrayListOf<String>()
+                            if (contentArray != null) {
+                                for (idx3 in 0 until contentArray.length()) {
+                                    if (!contentArray.isNull(idx3)) {
+                                        val str = contentArray.getString(idx3)
+                                        contentList.add(str)
+                                    }
+                                }
+                            }
+
+                            mbtiInfoList.add(
+                                CompareMbtiData(
+                                    type = getCompareMbtiType(key),
+                                    content = contentList
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+            NetworkResult.Success(mbtiInfoList)
+        } else {
+            NetworkResult.Fail("ResultData=$resultData")
+        }
+    }
+
+    fun getMbtiCompareResponse(jsonRoot: JSONObject): NetworkResult<List<CompareMbtiData>> {
+        val resultCode = getInt(jsonRoot, KEY_RESULT_CODE)
+        if (resultCode != 200) {
+            return NetworkResult.Fail("API Request Fail, resultCode=$resultCode")
+        }
+
+        val resultData = getJSONArray(jsonRoot, KEY_RESULT_DATA)
+        return if (resultData != null) {
+            val mbtiInfoList = arrayListOf<CompareMbtiData>()
+
+            for (idx in 0 until resultData.length()) {
+                if (!resultData.isNull(idx)) {
+                    val obj = resultData.getJSONObject(idx)
+
+                    if (obj != null) {
+                        val dataArray = getJSONArray(obj, KEY_DATA)
+
+                        if (dataArray != null) {
+                            for (idx2 in 0 until dataArray.length()) {
+                                if (!dataArray.isNull(idx2)) {
+                                    val realObj = dataArray.getJSONObject(idx2)
+
+                                    if (realObj != null) {
+                                        val key = getString(realObj, KEY_KEY)
+                                        val contentArray = getJSONArray(realObj, KEY_CONTENT)
+
+                                        val contentList = arrayListOf<String>()
+                                        if (contentArray != null) {
+                                            for (idx3 in 0 until contentArray.length()) {
+                                                if (!contentArray.isNull(idx3)) {
+                                                    val str = contentArray.getString(idx3)
+                                                    contentList.add(str)
+                                                }
+                                            }
+                                        }
+
+                                        mbtiInfoList.add(
+                                            CompareMbtiData(
+                                                type = getCompareMbtiType(key),
+                                                content = contentList
+                                            )
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            NetworkResult.Success(mbtiInfoList)
         } else {
             NetworkResult.Fail("ResultData=$resultData")
         }

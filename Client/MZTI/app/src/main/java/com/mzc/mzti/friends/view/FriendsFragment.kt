@@ -61,6 +61,7 @@ class FriendsFragment : BaseFragment() {
 
     private lateinit var mAdapter: FriendsAdapter
     private lateinit var addFriendIntentForResult: ActivityResultLauncher<Intent>
+    private lateinit var friendMbtiIntentForResult: ActivityResultLauncher<Intent>
 
     // region Fragment LifeCycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,6 +92,15 @@ class FriendsFragment : BaseFragment() {
                                 )
                             )
                         }
+                    }
+                }
+            }
+
+        friendMbtiIntentForResult =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                when (result.resultCode) {
+                    AppCompatActivity.RESULT_OK -> {
+
                     }
                 }
             }
@@ -137,8 +147,13 @@ class FriendsFragment : BaseFragment() {
             )
         ).apply {
             friendsListener = object : FriendsAdapter.FriendsListener {
-                override fun showMbtiInfo(mbti: MBTI) {
-
+                override fun showMbtiInfo(mbti: MBTI, friendInfoData: FriendsOtherProfileData) {
+                    val friendMbtiIntent =
+                        Intent(requireContext(), FriendMbtiActivity::class.java).apply {
+                            putExtra(KEY_MBTI, mbti)
+                            putExtra(KEY_FRIEND_INFO, friendInfoData)
+                        }
+                    friendMbtiIntentForResult.launch(friendMbtiIntent)
                 }
 
                 override fun showRemoveFriendsDialog(friendId: String) {

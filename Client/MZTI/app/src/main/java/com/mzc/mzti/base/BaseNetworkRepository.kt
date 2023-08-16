@@ -106,7 +106,7 @@ open class BaseNetworkRepository(
             val url: URL =
                 if (urlState == GET) URL("${strUrl}?${getParams(hsParams)}") else URL(strUrl)
 
-            DLog.d(TAG, "strUrl=$strUrl")
+            DLog.d(TAG, "strUrl=$url")
             // Https Protocol Check
             connection = if (url.protocol == "https") {
                 trustAllHosts()

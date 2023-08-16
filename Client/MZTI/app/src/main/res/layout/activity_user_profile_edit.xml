@@ -23,9 +23,9 @@
             android:background="@null"
             android:padding="10dp"
             android:src="@drawable/icon_back"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/tv_userProfileEdit_title"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/tv_userProfileEdit_title" />
 
         <TextView
             android:id="@+id/tv_userProfileEdit_title"
@@ -40,10 +40,10 @@
             android:text="@string/userProfileEdit_title"
             android:textColor="@color/text_black"
             android:textSize="20dp"
-            app:layout_constraintBottom_toBottomOf="@id/ib_userProfileEdit_back"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/ib_userProfileEdit_back"
             app:layout_constraintRight_toLeftOf="@id/tv_userProfileEdit_confirm"
-            app:layout_constraintTop_toTopOf="@id/ib_userProfileEdit_back" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_userProfileEdit_confirm"

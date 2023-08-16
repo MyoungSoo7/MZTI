@@ -35,7 +35,6 @@ class FriendsAdapter(
                 ) { pos ->
                     val data = items[pos].data
                     if (data is FriendsMyProfileData) {
-                        friendsListener?.showMbtiInfo(data.mbti)
                     }
                 }
             }
@@ -62,7 +61,7 @@ class FriendsAdapter(
                     onFriendsItemClicked = { pos ->
                         val data = items[pos].data
                         if (data is FriendsOtherProfileData) {
-                            friendsListener?.showMbtiInfo(data.mbti)
+                            friendsListener?.showMbtiInfo(data.mbti, data)
                         }
                     },
                     onFriendsItemLongClicked = { pos ->
@@ -129,7 +128,7 @@ class FriendsAdapter(
     }
 
     interface FriendsListener {
-        fun showMbtiInfo(mbti: MBTI)
+        fun showMbtiInfo(mbti: MBTI, friendInfoData: FriendsOtherProfileData)
 
         fun showRemoveFriendsDialog(friendId: String)
     }
