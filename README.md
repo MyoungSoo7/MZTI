@@ -1,5 +1,8 @@
 # [MZC팀] MZTI 애플리케이션
 
+# Logo
+![000-MZTI-Logo](https://github.com/TEAMMZC/MZTI/assets/58127442/9793dd25-f22d-49af-8552-424918bb8d35)
+
 # 소개
 
 #### 💡 MZTI : **MZ + MBTI** 의 합성어
@@ -91,8 +94,3 @@
 - <img width="587" alt="image" src="https://github.com/TEAMMZC/MZTI/assets/57055730/73bc01f3-533f-4f58-a2ed-43f434a85d57">
 - <img width="1448" alt="KakaoTalk_Photo_2023-08-17-05-55-48" src="https://github.com/TEAMMZC/MZTI/assets/57055730/ba7c9fb0-c781-4639-9e04-fb5a1e9f23f9">
 - <img width="1451" alt="image" src="https://github.com/TEAMMZC/MZTI/assets/57055730/efb129ae-71fc-4bae-b28c-6327b65af665">
-
-
-
-
-
