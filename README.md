@@ -86,7 +86,7 @@
 
 |파트|이름|
 |----|---|
-|개발|[김태헌(SERVER)](https://github.com/Jake-huen), [김병수(AOS)](https://github.com/](https://github.com/kimbsu00))|
+|개발|[김태헌(SERVER)](https://github.com/Jake-huen), [김병수(AOS)](https://github.com/kimbsu00))|
 |기획, 디자인|정다은|
 
 ## 협업
