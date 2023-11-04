@@ -296,6 +296,5 @@ public class MemberService {
         response.put("result_data", saveMember);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
 }
 
